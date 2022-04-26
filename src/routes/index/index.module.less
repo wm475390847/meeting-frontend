@@ -1,0 +1,46 @@
+.container {
+  position: relative;
+  height: 100%;
+  padding: 0;
+  min-width: @minBodyWidth;
+
+  .wrap {
+    .menus {
+      background: #F8F8F8;
+      padding: 0 10px;
+
+      .item {
+        display: block;
+        color: rgba(0,0,0,0.65);
+        padding: 0 15px 0 30px;
+        font-size: 14px;
+        text-overflow: ellipsis;
+        height: 40px;
+        line-height: 40px;
+        transition: all .3s;
+        border-radius: 4px;
+        text-decoration: none;
+
+        &:hover {
+          color: #4285F4;
+          background: rgba(0,0,0,.05);
+          .name {
+            color: #4285F4;
+          }
+        }
+      }
+
+      .activeItem {
+        color: rgba(0,0,0,0.85);
+        background: #F0F0F0;
+      }
+    }
+  }
+}
+
+.loading {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
