@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import vitePluginImp from 'vite-plugin-imp'
+// import vitePluginImp from 'vite-plugin-imp'
 import lessToJS from 'less-vars-to-js'
 
 const fs = require('fs')
@@ -13,14 +13,17 @@ const themeVariables = lessToJS(
 export default defineConfig({
   plugins: [
     react(),
-    vitePluginImp({
-      libList: [
-        {
-          libName: "antd",
-          style: (name) => `antd/lib/${name}/style/index.less`,
-        },
-      ],
-    })
+    // vitePluginImp({
+    //   libList: [
+    //     {
+    //       libName: "antd",
+    //       style: (name) => {
+    //         console.log(name)
+    //         return `antd/lib/${name}/style/index.less`
+    //       },
+    //     },
+    //   ],
+    // })
   ],
   resolve: {
     alias: {"@": path.resolve(__dirname, "./src")},
@@ -37,4 +40,14 @@ export default defineConfig({
       },
     },
   },
+
+  server: {
+    proxy: {
+      '/sports-backend': {
+        target: 'http://test.qa-sport.xinhuazhiyun.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/sports-backend/, '')
+      },
+    }
+  }
 })
