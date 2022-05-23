@@ -2,7 +2,7 @@ import { MView, PageHeader } from "@/components"
 import { Button } from "antd"
 import React from "react"
 
-const Example: React.FC = () => {
+const Case: React.FC = () => {
   return (
     <MView resize>
       <PageHeader title="用例列表" />
@@ -11,4 +11,4 @@ const Example: React.FC = () => {
   )
 }
 
-export default Example
+export default Case

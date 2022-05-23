@@ -11,7 +11,7 @@ interface ErrorWithResponse extends Error {
   response?: Response;
 }
 
-interface RequestOpt {
+export interface RequestOpt {
   code: string
   data: any
   msg: null | string

@@ -5,18 +5,25 @@ import { Button, Select, Table, Modal } from "antd"
 import { ColumnsType } from "antd/lib/table"
 import moment from "moment"
 import React, { useEffect, useMemo, useState } from "react"
+import MaterialForm from "./components/form"
 import styles from './index.module.less'
 
 const { Option } = Select
 
 const Material: React.FC = () => {
   // const [schoolList, setSchoolList] = useState<SchoolInfo[]>([])
+  // 素材列表
   const [materialList, setMaterialList] = useState<MaterialInfo[]>([])
+  // 素材类型列表
   const [gameDictList, setGameDictList] = useState<GameDictInfo[]>([])
+  // 表格用
   const [total, setTotal] = useState(0)
   const [pageNo, setPageNo] = useState(1)
   const [loading, setLoading] = useState(true)
+  // 弹框播放video的src
   const [videoSrc, setVideoSrc] = useState<string>()
+  // 加入用例的素材信息
+  const [addInfo, setAddInfo] = useState<MaterialInfo>()
   const columns = useMemo<ColumnsType<any>>(() => {
     return [
       {
@@ -72,8 +79,8 @@ const Material: React.FC = () => {
         title: '操作项',
         dataIndex: 'action',
         key: 'action',
-        render: () => (
-          <Button type="primary">加入用例</Button>
+        render: (_, record) => (
+          <Button type="primary" onClick={() => setAddInfo(record)}>加入用例</Button>
         )
       },
     ]
@@ -135,7 +142,7 @@ const Material: React.FC = () => {
         dataSource={materialList}
         className={styles.table}
         rowKey='id'
-        pagination={{ total, current: pageNo }}
+        pagination={{ total, current: pageNo, showSizeChanger: true }}
         loading={loading}
         onChange={onChangeTable}
       />
@@ -150,6 +157,8 @@ const Material: React.FC = () => {
       >
         <Video src={videoSrc} autoPlay />
       </Modal>
+
+      <MaterialForm addInfo={addInfo} setAddInfo={setAddInfo} gameDictList={gameDictList} />
     </MView>
   )
 }
