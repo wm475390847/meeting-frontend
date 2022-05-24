@@ -1,7 +1,3 @@
-interface SchoolInfo {
-  
-}
-
 interface MaterialInfo {
   gameDictId?: number
   gmtCreate?: string

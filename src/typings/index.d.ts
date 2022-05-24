@@ -8,3 +8,7 @@ interface IPageRequest<T> {
   records: T[]
   total: number
 }
+
+interface SchoolInfo {
+  
+}

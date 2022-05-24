@@ -77,7 +77,7 @@ const MaterialForm: React.FC<MaterialFormComponentsProps> = (props) => {
           </div>
         </Form.Item>
         <Form.Item label='用例参考返回值'>
-          <div>120</div>
+          <div>{addInfo?.score || '-'}</div>
         </Form.Item>
         <Form.Item label='用例返回值设置' required>
           <div className={styles.formItem}>

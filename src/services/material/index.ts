@@ -1,3 +1,5 @@
+import store from "@/store"
+import { setGameDictList } from "@/store/material"
 import { request } from "@/utils/tool"
 import { IMaterialsReq } from "./interface"
 
@@ -18,6 +20,7 @@ export const getGameDict: () => Promise<GameDictInfo[]> = () => {
   return new Promise(async (resolve, reject) => {
     const res = await request.get(`/gameDict`)
     if (res.success) {
+      store.dispatch(setGameDictList(res.data))
       resolve(res.data)
     } else {
       reject(res)

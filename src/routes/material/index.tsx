@@ -7,6 +7,8 @@ import moment from "moment"
 import React, { useEffect, useMemo, useState } from "react"
 import MaterialForm from "./components/form"
 import styles from './index.module.less'
+import { useSelector } from 'react-redux'
+import IRootState from "@/store/interface"
 
 const { Option } = Select
 
@@ -15,7 +17,7 @@ const Material: React.FC = () => {
   // 素材列表
   const [materialList, setMaterialList] = useState<MaterialInfo[]>([])
   // 素材类型列表
-  const [gameDictList, setGameDictList] = useState<GameDictInfo[]>([])
+  const gameDictList = useSelector<IRootState, GameDictInfo[]>(state => state.material.gameDictList)
   // 表格用
   const [total, setTotal] = useState(0)
   const [pageNo, setPageNo] = useState(1)
@@ -102,14 +104,8 @@ const Material: React.FC = () => {
     })
   }
 
-  const fetchGameDict = () => {
-    getGameDict().then(data => {
-      setGameDictList(data)
-    })
-  }
-
   useEffect(() => {
-    fetchGameDict()
+    !gameDictList.length && getGameDict()
   }, [])
 
   useEffect(() => {
