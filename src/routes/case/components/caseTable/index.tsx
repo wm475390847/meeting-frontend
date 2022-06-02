@@ -1,35 +1,37 @@
-import { MView, PageHeader } from "@/components"
-import { getGameDict, getMaterials } from "@/services/material"
-import { Button, Select, Table } from "antd"
-import { ColumnsType } from "antd/lib/table"
-import moment from "moment"
-import React, { useEffect, useMemo, useState } from "react"
-import styles from './index.module.less'
+import VideoModal from '@/components/VideoModal'
+import { delCases, getCaseList } from '@/services/case'
+import { getGameDict } from '@/services/material'
+import IRootState from '@/store/interface'
+import { Button, message, Popconfirm, Table } from 'antd'
+import { ColumnsType } from 'antd/lib/table'
+import moment from 'moment'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
-import IRootState from "@/store/interface"
-import VideoModal from "@/components/VideoModal"
-import CaseFormModal from "@/components/CaseFormModal"
+import styles from './index.module.less'
 
+interface CaseTableComponentsProps {
+  loading: boolean
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>
+  setEditInfo: React.Dispatch<React.SetStateAction<CaseInfo | undefined>>
+}
 
-const Material: React.FC = () => {
-  // const [schoolList, setSchoolList] = useState<SchoolInfo[]>([])
-  // 素材列表
-  const [materialList, setMaterialList] = useState<MaterialInfo[]>([])
+const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
+  const { loading, setLoading, setEditInfo } = props
+  // 用例列表
+  const [caseList, setCaseList] = useState<CaseInfo[]>([])
   // 素材类型列表
   const gameDictList = useSelector<IRootState, GameDictInfo[]>(state => state.material.gameDictList)
   // 表格用
   const [total, setTotal] = useState(0)
   const [pageNo, setPageNo] = useState(1)
-  const [loading, setLoading] = useState(true)
   // 弹框播放video的src
   const [videoSrc, setVideoSrc] = useState<string>()
-  // 加入用例的素材信息
-  const [addInfo, setAddInfo] = useState<MaterialInfo>()
   const columns = useMemo<ColumnsType<any>>(() => {
     return [
       {
-        title: '序号',
-        render: (text, record, index) => `${index + 1}`
+        title: '用例id',
+        dataIndex: 'id',
+        key: 'id',
       },
       {
         title: '学校',
@@ -37,9 +39,22 @@ const Material: React.FC = () => {
         key: 'schoolName',
       },
       {
-        title: '素材类型',
+        title: '用例描述',
+        dataIndex: 'caseDesc',
+        key: 'caseDesc',
+      },
+      {
+        title: '返回区间值',
+        dataIndex: 'minValue',
+        key: 'minValue',
+        width: 120,
+        render: (_, record) => <div>{record.minValue} ~ {record.maxValue}</div>
+      },
+      {
+        title: '用例类别',
         dataIndex: 'gameDictId',
         key: 'gameDictId',
+        width: 90,
         render: (text) => {
           const gameDict = (gameDictList || []).find(item => item.id === text)
 
@@ -47,17 +62,17 @@ const Material: React.FC = () => {
         }
       },
       {
-        title: '录制时间',
+        title: '更新时间',
         dataIndex: 'gmtCreate',
         key: 'gmtCreate',
         width: 200,
         render: (text) => <div>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</div>
       },
       {
-        title: 'oss地址',
+        title: '素材oss地址',
         dataIndex: 'material',
         key: 'material',
-        width: '40%',
+        width: '15%',
         ellipsis: true,
         render: (text) => {
           const devices = text ? JSON.parse(text).devices : []
@@ -68,7 +83,8 @@ const Material: React.FC = () => {
                   key={item.id}
                   type='link'
                   className={styles.button}
-                  onClick={() => setVideoSrc(item.pullUrl)}>
+                  onClick={() => setVideoSrc(item.pullUrl)}
+                >
                   {item.pullUrl}
                 </Button>
               ))}
@@ -80,9 +96,18 @@ const Material: React.FC = () => {
         title: '操作项',
         dataIndex: 'action',
         key: 'action',
-        render: (_, record) => (
-          <Button type="primary" onClick={() => setAddInfo(record)}>加入用例</Button>
-        )
+        width: 250,
+        render: (_, record) => {
+          return (
+            <div className={styles.action}>
+              <Button type='primary'>创建任务</Button>
+              <Button onClick={() => setEditInfo(record)}>编辑</Button>
+              <Popconfirm title="确定删除？" okText="是" cancelText="否" onConfirm={() => fetchDelCase(record.id)}>
+                <Button>删除</Button>
+              </Popconfirm>
+            </div>
+          )
+        }
       },
     ]
   }, [gameDictList])
@@ -92,12 +117,19 @@ const Material: React.FC = () => {
     setLoading(true)
   }
 
-  const fetchMaterials = () => {
-    getMaterials({
+  const fetchDelCase = (id: number) => {
+    delCases(id).then(() => {
+      message.success('删除成功')
+      setLoading(true)
+    })
+  }
+
+  const fetchCaseList = () => {
+    getCaseList({
       pageNo,
       pageSize: 10
     }).then(data => {
-      setMaterialList(data.records)
+      setCaseList(data.records)
       setTotal(data.total)
       setLoading(false)
     })
@@ -108,33 +140,14 @@ const Material: React.FC = () => {
   }, [])
 
   useEffect(() => {
-    loading && fetchMaterials()
+    loading && fetchCaseList()
   }, [pageNo, loading])
 
   return (
-    <MView resize>
-      <PageHeader title="素材列表" />
-      {/* <PageOptions
-        left={
-          <>
-            <div className={styles.filterType}>
-              <div className={styles.tag}>学校</div>
-              <Select
-                placeholder='请选择类型'
-                allowClear
-                className={styles.select}
-              >
-                {schoolList.map(item => {
-                  return <Option value={item.type} key={item.type}>{item.type}</Option>
-                })}
-              </Select>
-            </div>
-          </>
-        }
-      /> */}
+    <>
       <Table
         columns={columns}
-        dataSource={materialList}
+        dataSource={caseList}
         className={styles.table}
         rowKey='id'
         pagination={{ total, current: pageNo, showSizeChanger: true }}
@@ -143,10 +156,8 @@ const Material: React.FC = () => {
       />
 
       <VideoModal src={videoSrc} onCancel={() => setVideoSrc(undefined)} />
-
-      <CaseFormModal editInfo={addInfo} onCancel={() => setAddInfo(undefined)} />
-    </MView>
+    </>
   )
 }
 
-export default Material
+export default CaseTable

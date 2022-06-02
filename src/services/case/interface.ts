@@ -5,6 +5,13 @@ export interface IAddCaseReq {
   materialId: string
 }
 
+export interface IEditCaseReq {
+  minValue: string
+  caseDesc: string
+  maxValue: string
+  caseId: string
+}
+
 export interface ICasesReq {
   gameDictIds?: string
   startTime?: string

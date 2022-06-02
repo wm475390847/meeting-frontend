@@ -2,7 +2,7 @@ interface MaterialInfo {
   gameDictId?: number
   gmtCreate?: string
   gmtModified?: string
-  id?: number
+  id: number
   material?: string
   roundStartTime?: number
   schoolName?: string

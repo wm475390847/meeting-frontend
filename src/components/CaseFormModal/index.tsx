@@ -1,59 +1,93 @@
 import { Button, message } from 'antd'
 import { Form, Modal, Input, InputNumber } from 'antd'
 import React, { useEffect, useMemo, useState } from 'react'
-import styles from './form.module.less'
+import styles from './index.module.less'
 import classnames from 'classnames'
-import { addCases } from '@/services/case'
+import { addCases, editCases } from '@/services/case'
+import IRootState from '@/store/interface'
+import { useSelector } from 'react-redux'
 
-type MaterialFormComponentsProps = {
-  addInfo?: MaterialInfo
-  gameDictList: GameDictInfo[]
-  setAddInfo: React.Dispatch<React.SetStateAction<MaterialInfo | undefined>>
+type CaseFormModalComponentsProps = {
+  isEdit?: boolean
+  editInfo?: {
+    gameDictId?: number
+    schoolName?: string
+    id?: number
+    score?: string
+    // 编辑字段
+    caseDesc?: string
+    minValue?: string
+    maxValue?: string
+  }
+  onCancel?: () => void
 }
 
-const MaterialForm: React.FC<MaterialFormComponentsProps> = (props) => {
-  const { addInfo, setAddInfo, gameDictList = [] } = props
+const CaseFormModal: React.FC<CaseFormModalComponentsProps> = (props) => {
+  const { editInfo, onCancel, isEdit } = props
+  // 素材类型列表
+  const gameDictList = useSelector<IRootState, GameDictInfo[]>(state => state.material.gameDictList)
   const [visible, setVisible] = useState(false)
   const [form] = Form.useForm()
   const gameDictName = useMemo(() => {
-    if (addInfo) {
-      const gameDict = (gameDictList || []).find(item => item.id === addInfo.gameDictId)
+    if (editInfo) {
+      const gameDict = (gameDictList || []).find(item => item.id === editInfo.gameDictId)
 
       return gameDict ? gameDict.name : '未知类别'
     }
 
     return undefined
-  } , [addInfo])
-  const schoolName = addInfo?.schoolName || '未知学校'
+  }, [editInfo])
+  const schoolName = editInfo?.schoolName || '未知学校'
 
-  const onCancel = () => {
+  const handleCancel = () => {
     setVisible(false)
-    setAddInfo(undefined)
+    onCancel && onCancel()
   }
 
   const onSubmit = () => {
-    form.validateFields().then(values=> {
-      addCases({ ...values, materialId: addInfo!.id }).then(res => {
-        if (res.success) {
-          message.success('加入成功')
-          onCancel()
-        }
-      })
+    form.validateFields().then(values => {
+      if (isEdit) {
+        editCases({ ...values, caseId: editInfo!.id }).then(res => {
+          if (res.success) {
+            message.success('修改成功')
+            handleCancel()
+          }
+        })
+      } else {
+        addCases({ ...values, materialId: editInfo!.id }).then(res => {
+          if (res.success) {
+            message.success('加入成功')
+            handleCancel()
+          }
+        })
+      }
     })
   }
 
   useEffect(() => {
-    addInfo && setVisible(true)
-  }, [addInfo])
+    editInfo && setVisible(true)
+  }, [editInfo])
+
+  useEffect(() => {
+    if (visible && isEdit && editInfo) {
+      setTimeout(() => {
+        form.setFieldsValue({
+          caseDesc: editInfo.caseDesc,
+          minValue: editInfo.minValue,
+          maxValue: editInfo.maxValue
+        })
+      }, 500);
+    }
+  }, [visible])
 
   return (
     <Modal
       visible={visible}
-      title='加入用例'
-      footer={<Button type='primary' onClick={onSubmit}>加入用例</Button>}
+      title={`${isEdit ? '编辑' : '加入'}用例`}
+      footer={<Button type='primary' onClick={onSubmit}>{isEdit ? '确定' : '加入用例'}</Button>}
       destroyOnClose
       width={510}
-      onCancel={onCancel}
+      onCancel={handleCancel}
     >
       <Form
         preserve={false}
@@ -77,7 +111,7 @@ const MaterialForm: React.FC<MaterialFormComponentsProps> = (props) => {
           </div>
         </Form.Item>
         <Form.Item label='用例参考返回值'>
-          <div>{addInfo?.score || '-'}</div>
+          <div>{editInfo?.score || '-'}</div>
         </Form.Item>
         <Form.Item label='用例返回值设置' required>
           <div className={styles.formItem}>
@@ -109,4 +143,4 @@ const MaterialForm: React.FC<MaterialFormComponentsProps> = (props) => {
   )
 }
 
-export default MaterialForm
+export default CaseFormModal
