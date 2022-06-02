@@ -1,12 +1,13 @@
 {
   "name": "sports-frontend",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "dev": "vite",
     "start": "npm run dev",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "ship": "npm run build && cship dist/* && cship dist/*/**"
   },
   "dependencies": {
     "@ant-design/icons": "^4.7.0",

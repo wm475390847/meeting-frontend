@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 // import vitePluginImp from 'vite-plugin-imp'
 import lessToJS from 'less-vars-to-js'
+const { name, version } = require('./package.json');
 
 const fs = require('fs')
 const path = require('path');
@@ -11,6 +12,7 @@ const themeVariables = lessToJS(
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: `//t.newscdn.cn/${name}/${version}/`,
   plugins: [
     react(),
     // vitePluginImp({
