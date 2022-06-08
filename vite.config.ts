@@ -12,7 +12,7 @@ const themeVariables = lessToJS(
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: `//t.newscdn.cn/${name}/${version}/`,
+  // base: `//t.newscdn.cn/${name}/${version}/`,
   plugins: [
     react(),
     // vitePluginImp({
@@ -28,7 +28,7 @@ export default defineConfig({
     // })
   ],
   resolve: {
-    alias: {"@": path.resolve(__dirname, "./src")},
+    alias: { "@": path.resolve(__dirname, "./src") },
     extensions: ['.js', '.ts', '.jsx', '.tsx']
   },
 
@@ -37,7 +37,7 @@ export default defineConfig({
       less: {
         // 支持内联 JavaScript，支持 less 内联 JS
         javascriptEnabled: true,
-        additionalData:  `@import "${path.resolve(__dirname, './src/styles/variables.less')}";`,
+        additionalData: `@import "${path.resolve(__dirname, './src/styles/variables.less')}";`,
         modifyVars: themeVariables
       },
     },
@@ -46,7 +46,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/sports-backend': {
-        target: 'http://test.qa-sport.xinhuazhiyun.com',
+        target: 'http://test.qa-ai-sports.xinhuazhiyun.com',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/sports-backend/, '')
       },

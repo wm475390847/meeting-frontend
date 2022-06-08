@@ -24,22 +24,24 @@ const Material: React.FC = () => {
   // 弹框播放video的src
   const [videoSrc, setVideoSrc] = useState<string>()
   // 加入用例的素材信息
-  const [addInfo, setAddInfo] = useState<MaterialInfo>()
+  const [addInfo, setAddInfo] = useState<TaskInfo>()
   const columns = useMemo<ColumnsType<any>>(() => {
     return [
       {
         title: '序号',
+        width: '10%',
         render: (text, record, index) => `${index + 1}`
       },
+      // {
+      //   title: '学校',
+      //   dataIndex: 'schoolName',
+      //   key: 'schoolName',
+      // },
       {
-        title: '学校',
-        dataIndex: 'schoolName',
-        key: 'schoolName',
-      },
-      {
-        title: '素材类型',
+        title: '类别',
         dataIndex: 'gameDictId',
         key: 'gameDictId',
+        width: '10%',
         render: (text) => {
           const gameDict = (gameDictList || []).find(item => item.id === text)
 
@@ -57,7 +59,7 @@ const Material: React.FC = () => {
         title: 'oss地址',
         dataIndex: 'material',
         key: 'material',
-        width: '40%',
+        width: '50%',
         ellipsis: true,
         render: (text) => {
           const devices = text ? JSON.parse(text).devices : []

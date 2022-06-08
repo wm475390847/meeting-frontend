@@ -47,16 +47,16 @@ const CaseFormModal: React.FC<CaseFormModalComponentsProps> = (props) => {
   const onSubmit = () => {
     form.validateFields().then(values => {
       if (isEdit) {
-        editCases({ ...values, caseId: editInfo!.id }).then(res => {
+        editCases({ ...values, id: editInfo!.id }).then(res => {
           if (res.success) {
-            message.success('修改成功')
+            message.success(res.data)
             handleCancel()
           }
         })
       } else {
         addCases({ ...values, materialId: editInfo!.id }).then(res => {
           if (res.success) {
-            message.success('加入成功')
+            message.success(res.data)
             handleCancel()
           }
         })

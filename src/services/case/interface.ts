@@ -9,7 +9,7 @@ export interface IEditCaseReq {
   minValue: string
   caseDesc: string
   maxValue: string
-  caseId: string
+  id: number
 }
 
 export interface ICasesReq {

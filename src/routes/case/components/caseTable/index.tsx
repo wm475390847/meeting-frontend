@@ -29,32 +29,40 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
   const columns = useMemo<ColumnsType<any>>(() => {
     return [
       {
+        title: '序号',
+        width: '10%',
+        render: (text, record, index) => `${index + 1}`
+      },
+      {
         title: '用例id',
         dataIndex: 'id',
         key: 'id',
+        width: 80
       },
-      {
-        title: '学校',
-        dataIndex: 'schoolName',
-        key: 'schoolName',
-      },
+      // {
+      //   title: '学校',
+      //   dataIndex: 'schoolName',
+      //   key: 'schoolName',
+      // },
       {
         title: '用例描述',
         dataIndex: 'caseDesc',
         key: 'caseDesc',
+        width: 100,
+        ellipsis: true
       },
       {
-        title: '返回区间值',
+        title: '区间值',
         dataIndex: 'minValue',
         key: 'minValue',
-        width: 120,
+        width: 80,
         render: (_, record) => <div>{record.minValue} ~ {record.maxValue}</div>
       },
       {
-        title: '用例类别',
+        title: '类别',
         dataIndex: 'gameDictId',
         key: 'gameDictId',
-        width: 90,
+        width: 80,
         render: (text) => {
           const gameDict = (gameDictList || []).find(item => item.id === text)
 
@@ -65,11 +73,11 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
         title: '更新时间',
         dataIndex: 'gmtCreate',
         key: 'gmtCreate',
-        width: 200,
+        width: 150,
         render: (text) => <div>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</div>
       },
       {
-        title: '素材oss地址',
+        title: 'oss地址',
         dataIndex: 'material',
         key: 'material',
         width: '15%',

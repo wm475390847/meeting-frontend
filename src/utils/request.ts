@@ -15,6 +15,7 @@ export interface RequestOpt {
   code: string
   data: any
   msg: null | string
+  message?: null | string
   pageNo?: number
   pageSize?: number
   requestId?: null | string | number
@@ -92,7 +93,7 @@ export default function request(_url: string, options?: any): Promise<RequestOpt
       if (err && err.response && err.response.status === 500) {
         // 自定义报错
         return err.response.json()
-          .then((res: any) => {})
+          .then((res: any) => { })
           .catch((e: Error) => {
             console.log(e);
           });
