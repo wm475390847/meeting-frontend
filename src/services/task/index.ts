@@ -1,6 +1,6 @@
 import { RequestOpt } from "@/utils/request"
 import { request } from "@/utils/tool"
-import { IStopTaskReq, ITaskReq } from "./interface"
+import { IStopTaskReq, ITaskReq, ICreateTaskReq, ITaskRepoerReq } from "./interface"
 
 /**
  * 获取任务列表
@@ -49,3 +49,23 @@ export const stopTask: (data: IStopTaskReq) => Promise<RequestOpt> = (data) => {
     }
   })
 }
+
+/**
+ * 创建任务
+ * @param data 请求体
+ * @returns  响应体
+ */
+export const createTask: (data: ICreateTaskReq) => Promise<RequestOpt> = (data) => {
+  return new Promise(async (resolve, reject) => {
+    const res = await request.post(`tasks`, data)
+    if (res.success) {
+      resolve(res)
+    } else {
+      reject(res)
+    }
+  })
+}
+
+// export const getTaskReport: (data: ITaskRepoerReq) => Promise<RequestOpt> = { data }=> {
+
+// }

@@ -52,14 +52,14 @@ const Material: React.FC = () => {
         title: '录制时间',
         dataIndex: 'gmtCreate',
         key: 'gmtCreate',
-        width: 200,
+        width: '20%',
         render: (text) => <div>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</div>
       },
       {
         title: 'oss地址',
         dataIndex: 'material',
         key: 'material',
-        width: '50%',
+        width: '40%',
         ellipsis: true,
         render: (text) => {
           const devices = text ? JSON.parse(text).devices : []
@@ -79,7 +79,7 @@ const Material: React.FC = () => {
         }
       },
       {
-        title: '操作项',
+        title: '操作',
         dataIndex: 'action',
         key: 'action',
         render: (_, record) => (

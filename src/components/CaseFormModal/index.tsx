@@ -3,7 +3,7 @@ import { Form, Modal, Input, InputNumber } from 'antd'
 import React, { useEffect, useMemo, useState } from 'react'
 import styles from './index.module.less'
 import classnames from 'classnames'
-import { addCases, editCases } from '@/services/case'
+import { addCase, editCase } from '@/services/case'
 import IRootState from '@/store/interface'
 import { useSelector } from 'react-redux'
 
@@ -18,11 +18,12 @@ type CaseFormModalComponentsProps = {
     caseDesc?: string
     minValue?: string
     maxValue?: string
-  }
+  },
   onCancel?: () => void
 }
 
 const CaseFormModal: React.FC<CaseFormModalComponentsProps> = (props) => {
+  const [buttonLoading, setButtonLoading] = useState(false)
   const { editInfo, onCancel, isEdit } = props
   // 素材类型列表
   const gameDictList = useSelector<IRootState, GameDictInfo[]>(state => state.material.gameDictList)
@@ -50,8 +51,9 @@ const CaseFormModal: React.FC<CaseFormModalComponentsProps> = (props) => {
    */
   const onSubmit = () => {
     form.validateFields().then(values => {
+      setButtonLoading(true)
       if (isEdit) {
-        editCases({ ...values, id: editInfo!.id }).then(res => {
+        editCase({ ...values, id: editInfo!.id }).then(res => {
           if (res.success) {
             message.success(res.data)
             handleCancel()
@@ -59,16 +61,16 @@ const CaseFormModal: React.FC<CaseFormModalComponentsProps> = (props) => {
         }).catch(err => {
           // 抓取错误抛出
           message.error(err.message)
-        })
+        }).finally(() => setButtonLoading(false))
       } else {
-        addCases({ ...values, materialId: editInfo!.id }).then(res => {
+        addCase({ ...values, materialId: editInfo!.id }).then(res => {
           if (res.success) {
             message.success(res.data)
             handleCancel()
           }
         }).catch(err => {
           message.error(err.message)
-        })
+        }).finally(() => setButtonLoading(false))
       }
     })
   }
@@ -93,7 +95,7 @@ const CaseFormModal: React.FC<CaseFormModalComponentsProps> = (props) => {
     <Modal
       visible={visible}
       title={`${isEdit ? '编辑' : '加入'}用例`}
-      footer={<Button type='primary' onClick={onSubmit}>{isEdit ? '确定' : '加入用例'}</Button>}
+      footer={<Button loading={buttonLoading} type='primary' onClick={onSubmit}>{isEdit ? '确定' : '加入用例'}</Button>}
       destroyOnClose
       width={510}
       onCancel={handleCancel}

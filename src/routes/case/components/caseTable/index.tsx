@@ -1,6 +1,8 @@
 import VideoModal from '@/components/VideoModal'
-import { delCases, getCases } from '@/services/case'
+import { delCase, getCases } from '@/services/case'
+import { ICreateTaskReq } from '@/services/case/interface'
 import { getGameDict } from '@/services/material'
+import { createTask } from '@/services/task'
 import IRootState from '@/store/interface'
 import { Button, message, Popconfirm, Table } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
@@ -10,13 +12,17 @@ import { useSelector } from 'react-redux'
 import styles from './index.module.less'
 
 interface CaseTableComponentsProps {
-  loading: boolean
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>
+  // loading: boolean
+  // setLoading: React.Dispatch<React.SetStateAction<boolean>>
   setEditInfo: React.Dispatch<React.SetStateAction<CaseInfo | undefined>>
+}
+interface ICaseRecord {
+  id: number;
+  caseDesc: string
 }
 
 const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
-  const { loading, setLoading, setEditInfo } = props
+  const { setEditInfo } = props
   // 用例列表
   const [caseList, setCaseList] = useState<CaseInfo[]>([])
   // 素材类型列表
@@ -24,13 +30,14 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
   // 表格用
   const [total, setTotal] = useState(0)
   const [pageNo, setPageNo] = useState(1)
+  const [loading, setLoading] = useState(true)
   // 弹框播放video的src
   const [videoSrc, setVideoSrc] = useState<string>()
   const columns = useMemo<ColumnsType<any>>(() => {
     return [
       {
         title: '序号',
-        width: 60,
+        width: 80,
         render: (text, record, index) => `${index + 1}`
       },
       {
@@ -48,7 +55,7 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
         title: '用例描述',
         dataIndex: 'caseDesc',
         key: 'caseDesc',
-        width: 100,
+        width: 120,
         ellipsis: true
       },
       {
@@ -73,7 +80,7 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
         title: '更新时间',
         dataIndex: 'gmtCreate',
         key: 'gmtCreate',
-        width: 150,
+        width: 180,
         render: (text) => <div>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</div>
       },
       {
@@ -101,14 +108,14 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
         }
       },
       {
-        title: '操作项',
+        title: '操作',
         dataIndex: 'action',
         key: 'action',
         width: 250,
         render: (_, record) => {
           return (
             <div className={styles.action}>
-              <Button type='primary'>创建任务</Button>
+              <Button type='primary' onClick={() => fetchCreateTask(record)}>创建任务</Button>
               <Button onClick={() => setEditInfo(record)}>编辑</Button>
               <Popconfirm title="确定删除？" okText="是" cancelText="否" onConfirm={() => fetchDelCase(record.id)}>
                 <Button>删除</Button>
@@ -118,21 +125,47 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
         }
       },
     ]
-  }, [gameDictList])
+  }, [gameDictList, loading])
 
   const onChangeTable = ({ current }: any) => {
     setPageNo(current)
-    setLoading(true)
   }
 
   const fetchDelCase = (id: number) => {
-    delCases(id).then(() => {
+    delCase(id).then(() => {
       message.success('删除成功')
       setLoading(true)
     })
   }
 
-  const fetchCaseList = () => {
+  /**
+   * 单个用例创建任务
+   * @param data 请求体
+   */
+  const fetchCreateTask = (data: ICaseRecord) => {
+    createTask({
+      caseIds: [data.id],
+      taskName: data.caseDesc
+    }).then(req => {
+      message.success(req.data)
+      setLoading(true)
+    }).catch(err => {
+      message.error(err.message)
+    })
+  }
+
+  /**
+   * 多个用例创建任务
+   */
+  const fetchBatchCreateTask = () => {
+
+  }
+
+  /**
+   * 获取用例列表
+   */
+  const fetchCases = () => {
+    // setLoading(true)
     getCases({
       pageNo,
       pageSize: 10
@@ -144,11 +177,12 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
   }
 
   useEffect(() => {
+    console.log(999)
     !gameDictList.length && getGameDict()
   }, [])
 
   useEffect(() => {
-    loading && fetchCaseList()
+    loading && fetchCases()
   }, [pageNo, loading])
 
   return (
