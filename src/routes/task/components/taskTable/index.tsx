@@ -8,14 +8,11 @@ import React, { useEffect, useMemo, useState } from "react"
 import styles from './index.module.less'
 import { ITaskRepoerReq, IStopTaskReq } from "@/services/task/interface"
 
-interface TaskTableCompontentsProps {
-  loading: boolean
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>
-}
 
-const TaskTable: React.FC<TaskTableCompontentsProps> = (props) => {
-  const { loading, setLoading } = props
-  // 素材列表
+const TaskTable: React.FC = () => {
+
+  // 任务列表
+  const [loading, setLoading] = useState(true)
   const [taskList, setTaskList] = useState<TaskInfo[]>([])
   const [total, setTotal] = useState(0)
   const [pageNo, setPageNo] = useState(1)
@@ -172,6 +169,7 @@ const TaskTable: React.FC<TaskTableCompontentsProps> = (props) => {
 
   return (
     <MView resize>
+      <PageHeader title="任务列表" />
       <Table
         columns={columns}
         dataSource={taskList}
