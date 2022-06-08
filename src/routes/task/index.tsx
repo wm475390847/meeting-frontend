@@ -1,5 +1,5 @@
 import { MView, PageHeader } from "@/components"
-import { getTaskReport, getTasks, rollBackTask, stopTask } from "@/services/task"
+import { getTasks, rollBackTask, stopTask } from "@/services/task"
 import { Button, message, Table } from "antd"
 import { ColumnsType } from "antd/lib/table"
 import { render } from "react-dom"
@@ -89,7 +89,7 @@ const Task: React.FC = () => {
         render: (_, record) => {
           return (
             <div className={styles.action}>
-              <Button disabled={record.status === 3} onClick={() => fetchGetReport(record)}>报告</Button>
+              {/* <Button disabled={record.status === 3} onClick={() => fetchGetReport(record)}>报告</Button> */}
               {/* 运行中和等待中的任务不可以重跑 */}
               <Button disabled={record.status === 2 || record.status === 1} type='primary' onClick={() => fetchRollBackTask(record.id)}>重跑</Button>
               {/* 等待中的任务不可以暂停 */}
@@ -150,28 +150,27 @@ const Task: React.FC = () => {
     })
   }
 
-  /**
-   * 获取报告
-   * @param data 请求体
-   */
-  const fetchGetReport = (data: ICaseHistoryRecord) => {
-    getTaskReport({
-      pageNo,
-      pageSize: 10,
-      id: data.id,
-      caseResult: data.caseResult
-    }).then(req => {
-      message.success(req.data)
-    }).catch(err => {
-      message.error(err.message)
-    })
-  }
+  // /**
+  //  * 获取报告
+  //  * @param data 请求体
+  //  */
+  // const fetchGetReport = (data: ICaseHistoryRecord) => {
+  //   getTaskReport({
+  //     pageNo,
+  //     pageSize: 10,
+  //     id: data.id,
+  //     caseResult: data.caseResult
+  //   }).then(req => {
+  //     message.success(req.data)
+  //   }).catch(err => {
+  //     message.error(err.message)
+  //   })
+  // }
 
   /**
    * 当页码、操作数据有变化时刷新列表
    */
   useEffect(() => {
-    console.log(99)
     fetchFetchTasks()
   }, [pageNo, operationCount])
 

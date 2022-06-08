@@ -1,6 +1,6 @@
 import { RequestOpt } from "@/utils/request"
 import { request } from "@/utils/tool"
-import { IAddCaseReq, ICasesReq, IEditCaseReq, ICreateTaskReq } from "./interface"
+import { IAddCaseReq, ICasesReq, IEditCaseReq } from "./interface"
 
 // 获取用例列表
 export const getCases: (data: ICasesReq) => Promise<IPageRequest<CaseInfo>> = (data) => {

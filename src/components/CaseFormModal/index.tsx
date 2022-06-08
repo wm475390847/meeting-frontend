@@ -20,11 +20,12 @@ type CaseFormModalComponentsProps = {
     maxValue?: string
   },
   onCancel?: () => void
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const CaseFormModal: React.FC<CaseFormModalComponentsProps> = (props) => {
   const [buttonLoading, setButtonLoading] = useState(false)
-  const { editInfo, onCancel, isEdit } = props
+  const { editInfo, onCancel, isEdit, setLoading } = props
   // 素材类型列表
   const gameDictList = useSelector<IRootState, GameDictInfo[]>(state => state.material.gameDictList)
   const [visible, setVisible] = useState(false)
@@ -56,6 +57,7 @@ const CaseFormModal: React.FC<CaseFormModalComponentsProps> = (props) => {
         editCase({ ...values, id: editInfo!.id }).then(res => {
           if (res.success) {
             message.success(res.data)
+            setLoading(true)
             handleCancel()
           }
         }).catch(err => {
@@ -66,6 +68,7 @@ const CaseFormModal: React.FC<CaseFormModalComponentsProps> = (props) => {
         addCase({ ...values, materialId: editInfo!.id }).then(res => {
           if (res.success) {
             message.success(res.data)
+            setLoading(true)
             handleCancel()
           }
         }).catch(err => {

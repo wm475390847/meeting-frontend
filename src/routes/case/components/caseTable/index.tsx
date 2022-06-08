@@ -1,6 +1,6 @@
 import VideoModal from '@/components/VideoModal'
 import { delCase, getCases } from '@/services/case'
-import { ICreateTaskReq } from '@/services/case/interface'
+import { ICreateTaskReq } from '@/services/task/interface'
 import { getGameDict } from '@/services/material'
 import { createTask } from '@/services/task'
 import IRootState from '@/store/interface'
@@ -10,10 +10,9 @@ import moment from 'moment'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import styles from './index.module.less'
-
 interface CaseTableComponentsProps {
-  // loading: boolean
-  // setLoading: React.Dispatch<React.SetStateAction<boolean>>
+  loading: boolean
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>
   setEditInfo: React.Dispatch<React.SetStateAction<CaseInfo | undefined>>
 }
 interface ICaseRecord {
@@ -22,7 +21,7 @@ interface ICaseRecord {
 }
 
 const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
-  const { setEditInfo } = props
+  const { setEditInfo, loading, setLoading } = props
   // 用例列表
   const [caseList, setCaseList] = useState<CaseInfo[]>([])
   // 素材类型列表
@@ -30,7 +29,6 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
   // 表格用
   const [total, setTotal] = useState(0)
   const [pageNo, setPageNo] = useState(1)
-  const [loading, setLoading] = useState(true)
   // 弹框播放video的src
   const [videoSrc, setVideoSrc] = useState<string>()
   const columns = useMemo<ColumnsType<any>>(() => {
@@ -62,7 +60,7 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
         title: '区间值',
         dataIndex: 'minValue',
         key: 'minValue',
-        width: 80,
+        width: 90,
         render: (_, record) => <div>{record.minValue} ~ {record.maxValue}</div>
       },
       {
@@ -115,7 +113,12 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
         render: (_, record) => {
           return (
             <div className={styles.action}>
-              <Button type='primary' onClick={() => fetchCreateTask(record)}>创建任务</Button>
+              <Popconfirm title="创建后任务只含一个case" okText="是" cancelText="否" onConfirm={() => fetchCreateTask(record)}>
+                <Button>
+                  创建任务
+                </Button>
+              </Popconfirm>
+              {/* <Button type='primary' onClick={() => fetchCreateTask(record)}>创建任务</Button> */}
               <Button onClick={() => setEditInfo(record)}>编辑</Button>
               <Popconfirm title="确定删除？" okText="是" cancelText="否" onConfirm={() => fetchDelCase(record.id)}>
                 <Button>删除</Button>
@@ -125,7 +128,7 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
         }
       },
     ]
-  }, [gameDictList, loading])
+  }, [gameDictList])
 
   const onChangeTable = ({ current }: any) => {
     setPageNo(current)
@@ -165,7 +168,6 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
    * 获取用例列表
    */
   const fetchCases = () => {
-    // setLoading(true)
     getCases({
       pageNo,
       pageSize: 10
@@ -177,10 +179,12 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
   }
 
   useEffect(() => {
-    console.log(999)
     !gameDictList.length && getGameDict()
   }, [])
 
+  /**
+   * loading默认是false，此处判断loading是否为true是的话就调用访问列表方法，因此需要刷新的操作都需要setLoading(true)
+   */
   useEffect(() => {
     loading && fetchCases()
   }, [pageNo, loading])
