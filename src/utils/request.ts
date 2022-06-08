@@ -14,7 +14,6 @@ interface ErrorWithResponse extends Error {
 export interface RequestOpt {
   code: string
   data: any
-  msg: null | string
   message?: null | string
   pageNo?: number
   pageSize?: number

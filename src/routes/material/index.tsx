@@ -9,9 +9,9 @@ import { useSelector } from 'react-redux'
 import IRootState from "@/store/interface"
 import VideoModal from "@/components/VideoModal"
 import CaseFormModal from "@/components/CaseFormModal"
+``
+const MaterialTable: React.FC = () => {
 
-
-const Material: React.FC = () => {
   // const [schoolList, setSchoolList] = useState<SchoolInfo[]>([])
   // 素材列表
   const [materialList, setMaterialList] = useState<MaterialInfo[]>([])
@@ -146,9 +146,9 @@ const Material: React.FC = () => {
 
       <VideoModal src={videoSrc} onCancel={() => setVideoSrc(undefined)} />
 
-      <CaseFormModal editInfo={addInfo} onCancel={() => setAddInfo(undefined)} />
+      <CaseFormModal editInfo={addInfo} onCancel={() => setAddInfo(undefined)} setLoading={setLoading} />
     </MView>
   )
 }
 
-export default Material
+export default MaterialTable

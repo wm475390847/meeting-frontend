@@ -21,7 +21,8 @@ interface ICaseRecord {
 }
 
 const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
-  const { setEditInfo, loading, setLoading } = props
+  // 为父类的传参
+  const { loading, setLoading, setEditInfo } = props
   // 用例列表
   const [caseList, setCaseList] = useState<CaseInfo[]>([])
   // 素材类型列表
@@ -113,12 +114,9 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
         render: (_, record) => {
           return (
             <div className={styles.action}>
-              <Popconfirm title="创建后任务只含一个case" okText="是" cancelText="否" onConfirm={() => fetchCreateTask(record)}>
-                <Button>
-                  创建任务
-                </Button>
+              <Popconfirm title="创建后任务只含一个case" okText="是" cancelText="否" onConfirm={() => fetchCaseCreateTask(record)}>
+                <Button>创建任务</Button>
               </Popconfirm>
-              {/* <Button type='primary' onClick={() => fetchCreateTask(record)}>创建任务</Button> */}
               <Button onClick={() => setEditInfo(record)}>编辑</Button>
               <Popconfirm title="确定删除？" okText="是" cancelText="否" onConfirm={() => fetchDelCase(record.id)}>
                 <Button>删除</Button>
@@ -132,11 +130,16 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
 
   const onChangeTable = ({ current }: any) => {
     setPageNo(current)
+    setLoading(true)
   }
 
+  /**
+   * 删除用例
+   * @param id 用例id
+   */
   const fetchDelCase = (id: number) => {
-    delCase(id).then(() => {
-      message.success('删除成功')
+    delCase(id).then(req => {
+      message.success(req.message)
       setLoading(true)
     })
   }
@@ -145,12 +148,12 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
    * 单个用例创建任务
    * @param data 请求体
    */
-  const fetchCreateTask = (data: ICaseRecord) => {
+  const fetchCaseCreateTask = (data: ICaseRecord) => {
     createTask({
       caseIds: [data.id],
       taskName: data.caseDesc
     }).then(req => {
-      message.success(req.data)
+      message.success(req.message)
       setLoading(true)
     }).catch(err => {
       message.error(err.message)
@@ -160,7 +163,7 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
   /**
    * 多个用例创建任务
    */
-  const fetchBatchCreateTask = () => {
+  const fetchBatchCaseCreateTask = () => {
 
   }
 
