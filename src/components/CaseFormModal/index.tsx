@@ -39,11 +39,15 @@ const CaseFormModal: React.FC<CaseFormModalComponentsProps> = (props) => {
   }, [editInfo])
   const schoolName = editInfo?.schoolName || '未知学校'
 
+  // 关闭弹窗
   const handleCancel = () => {
     setVisible(false)
     onCancel && onCancel()
   }
 
+  /**
+   * 确定提交
+   */
   const onSubmit = () => {
     form.validateFields().then(values => {
       if (isEdit) {
@@ -52,6 +56,9 @@ const CaseFormModal: React.FC<CaseFormModalComponentsProps> = (props) => {
             message.success(res.data)
             handleCancel()
           }
+        }).catch(err => {
+          // 抓取错误抛出
+          message.error(err.message)
         })
       } else {
         addCases({ ...values, materialId: editInfo!.id }).then(res => {
@@ -59,6 +66,8 @@ const CaseFormModal: React.FC<CaseFormModalComponentsProps> = (props) => {
             message.success(res.data)
             handleCancel()
           }
+        }).catch(err => {
+          message.error(err.message)
         })
       }
     })

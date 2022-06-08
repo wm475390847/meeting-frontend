@@ -3,3 +3,8 @@ export interface ITaskReq {
   pageSize: number
   pageNo: number
 }
+
+export interface IStopTaskReq {
+  id: number
+  status: number
+}

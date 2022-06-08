@@ -1,5 +1,5 @@
 import VideoModal from '@/components/VideoModal'
-import { delCases, getCaseList } from '@/services/case'
+import { delCases, getCases } from '@/services/case'
 import { getGameDict } from '@/services/material'
 import IRootState from '@/store/interface'
 import { Button, message, Popconfirm, Table } from 'antd'
@@ -30,7 +30,7 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
     return [
       {
         title: '序号',
-        width: '10%',
+        width: 60,
         render: (text, record, index) => `${index + 1}`
       },
       {
@@ -133,7 +133,7 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
   }
 
   const fetchCaseList = () => {
-    getCaseList({
+    getCases({
       pageNo,
       pageSize: 10
     }).then(data => {

@@ -47,3 +47,10 @@ export const PROJECT_HOST = [
   ? location.protocol + `//${IS_DEV ? `dev.${DOMAIN}:8005`
     : `test.${DOMAIN}`}`
   : location.protocol + `//${IS_PRE ? `pre.${DOMAIN}` : `${DOMAIN}`}`;
+
+export enum taskStatusEnum {
+  "删除",
+  "等待中",
+  "运行中",
+  "已完成"
+}
