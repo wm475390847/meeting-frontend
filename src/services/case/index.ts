@@ -1,6 +1,6 @@
 import { RequestOpt } from "@/utils/request"
 import { request } from "@/utils/tool"
-import { IAddCaseReq, ICasesReq, IEditCaseReq } from "./interface"
+import { IAddCaseReq, ICasesReq, IDelCaseReq, IEditCaseReq } from "./interface"
 
 // 获取用例列表
 export const getCases: (data: ICasesReq) => Promise<IPageRequest<CaseInfo>> = (data) => {
@@ -39,9 +39,9 @@ export const editCase: (data: IEditCaseReq) => Promise<RequestOpt> = (data) => {
 }
 
 // 删除用例
-export const delCase: (id: number) => Promise<RequestOpt> = (id) => {
+export const delCase: (data: IDelCaseReq) => Promise<RequestOpt> = (data) => {
   return new Promise(async (resolve, reject) => {
-    const res = await request.delete(`/cases`, { caseIds: [id] })
+    const res = await request.delete(`/cases`, data)
     if (res.success) {
       resolve(res)
     } else {

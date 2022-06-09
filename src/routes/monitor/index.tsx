@@ -9,7 +9,7 @@ import React, { useEffect, useMemo, useState } from "react"
 import styles from './index.module.less'
 import { IStopTaskReq } from "@/services/task/interface"
 
-const Monitor: React.FC = () => {
+const MonitorTable: React.FC = () => {
   // // 操作数量
   // const [operationCount, setOperationCount] = useState(0)
   // // 素材列表
@@ -167,4 +167,4 @@ const Monitor: React.FC = () => {
   )
 }
 
-export default Monitor
+export default MonitorTable

@@ -24,9 +24,9 @@ type CaseFormModalComponentsProps = {
 }
 
 const CaseFormModal: React.FC<CaseFormModalComponentsProps> = (props) => {
-  const [buttonLoading, setButtonLoading] = useState(false)
   const { editInfo, isEdit, onCancel, setLoading } = props
   // 素材类型列表
+  const [buttonLoading, setButtonLoading] = useState(false)
   const gameDictList = useSelector<IRootState, GameDictInfo[]>(state => state.material.gameDictList)
   const [visible, setVisible] = useState(false)
   const [form] = Form.useForm()

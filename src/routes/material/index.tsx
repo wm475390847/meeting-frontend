@@ -1,6 +1,6 @@
 import { MView, PageHeader } from "@/components"
 import { getGameDict, getMaterials } from "@/services/material"
-import { Button, Select, Table } from "antd"
+import { Button, Table } from "antd"
 import { ColumnsType } from "antd/lib/table"
 import moment from "moment"
 import React, { useEffect, useMemo, useState } from "react"
@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux'
 import IRootState from "@/store/interface"
 import VideoModal from "@/components/VideoModal"
 import CaseFormModal from "@/components/CaseFormModal"
-``
+
 const MaterialTable: React.FC = () => {
 
   // const [schoolList, setSchoolList] = useState<SchoolInfo[]>([])
@@ -25,6 +25,7 @@ const MaterialTable: React.FC = () => {
   const [videoSrc, setVideoSrc] = useState<string>()
   // 加入用例的素材信息
   const [addInfo, setAddInfo] = useState<TaskInfo>()
+
   const columns = useMemo<ColumnsType<any>>(() => {
     return [
       {
@@ -32,11 +33,6 @@ const MaterialTable: React.FC = () => {
         width: '10%',
         render: (text, record, index) => `${index + 1}`
       },
-      // {
-      //   title: '学校',
-      //   dataIndex: 'schoolName',
-      //   key: 'schoolName',
-      // },
       {
         title: '类别',
         dataIndex: 'gameDictId',
@@ -82,18 +78,23 @@ const MaterialTable: React.FC = () => {
         title: '操作',
         dataIndex: 'action',
         key: 'action',
-        render: (_, record) => (
-          <Button type="primary" onClick={() => setAddInfo(record)}>加入用例</Button>
-        )
+        render: (_, record) => (<Button type="primary" onClick={() => setAddInfo(record)}>加入用例</Button>)
       },
     ]
   }, [gameDictList])
 
+  /**
+   * 获取当前页码
+   * @param param0 
+   */
   const onChangeTable = ({ current }: any) => {
     setPageNo(current)
     setLoading(true)
   }
 
+  /**
+   * 查询素材列表
+   */
   const fetchMaterials = () => {
     getMaterials({
       pageNo,
@@ -145,7 +146,6 @@ const MaterialTable: React.FC = () => {
       />
 
       <VideoModal src={videoSrc} onCancel={() => setVideoSrc(undefined)} />
-
       <CaseFormModal editInfo={addInfo} onCancel={() => setAddInfo(undefined)} setLoading={setLoading} />
     </MView>
   )

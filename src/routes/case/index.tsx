@@ -1,14 +1,24 @@
 import { MView, PageHeader } from "@/components"
 import CaseFormModal from "@/components/CaseFormModal"
+import CreateTaskModal from "@/components/CrtateTaskModal"
+import { Button } from "antd"
 import React, { useState } from "react"
 import CaseTable from "./components/caseTable"
+import styles from './index.module.less'
 
 const Case: React.FC = () => {
   const [loading, setLoading] = useState(true)
   const [editInfo, setEditInfo] = useState<CaseInfo>()
+  const [visible, setVisible] = useState(false)
+
   return (
     <MView resize>
       <PageHeader title="用例列表" />
+      
+      <div className={styles.action}>
+        <Button type="primary" onClick={() => setVisible(true)}>创建任务</Button>
+      </div>
+
       <CaseTable
         loading={loading}
         setLoading={setLoading}
@@ -21,6 +31,7 @@ const Case: React.FC = () => {
         setLoading={setLoading}
         onCancel={() => setEditInfo(undefined)}
       />
+      <CreateTaskModal visible={visible} onCancel={() => setVisible(false)} />
     </MView>
   )
 }

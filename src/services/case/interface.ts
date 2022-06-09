@@ -20,3 +20,7 @@ export interface ICasesReq {
   pageNo: number
   schoolName?: string
 }
+
+export interface IDelCaseReq {
+  caseIds: number[]
+}

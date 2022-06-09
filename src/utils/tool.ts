@@ -41,9 +41,10 @@ export const request = {
       body: options?.stringify ? JSON.stringify(data) : data,
     });
   },
-  delete: (url: string, data = {}) => {
-    return _request(`${API_PREFIX}${addGetParams(url, data)}`, {
+  delete: (url: string, data = {}, options?: any) => {
+    return _request(`${API_PREFIX}${url}`, {
       method: 'DELETE',
+      body: options?.stringify ? JSON.stringify(data) : data,
     });
   },
 };

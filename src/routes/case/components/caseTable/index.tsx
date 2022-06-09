@@ -1,15 +1,17 @@
-import VideoModal from '@/components/VideoModal'
 import { delCase, getCases } from '@/services/case'
 import { ICreateTaskReq } from '@/services/task/interface'
 import { getGameDict } from '@/services/material'
 import { createTask } from '@/services/task'
-import IRootState from '@/store/interface'
 import { Button, message, Popconfirm, Table } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
+import { useSelector } from 'react-redux'
+import VideoModal from '@/components/VideoModal'
+import IRootState from '@/store/interface'
 import moment from 'moment'
 import React, { useEffect, useMemo, useState } from 'react'
-import { useSelector } from 'react-redux'
 import styles from './index.module.less'
+import { IDelCaseReq } from '@/services/case/interface'
+
 interface CaseTableComponentsProps {
   loading: boolean
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
@@ -30,6 +32,7 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
   // 表格用
   const [total, setTotal] = useState(0)
   const [pageNo, setPageNo] = useState(1)
+
   // 弹框播放video的src
   const [videoSrc, setVideoSrc] = useState<string>()
   const columns = useMemo<ColumnsType<any>>(() => {
@@ -45,11 +48,6 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
         key: 'id',
         width: 80
       },
-      // {
-      //   title: '学校',
-      //   dataIndex: 'schoolName',
-      //   key: 'schoolName',
-      // },
       {
         title: '用例描述',
         dataIndex: 'caseDesc',
@@ -115,10 +113,10 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
           return (
             <div className={styles.action}>
               <Popconfirm title="创建后任务只含一个case" okText="是" cancelText="否" onConfirm={() => fetchCaseCreateTask(record)}>
-                <Button>创建任务</Button>
+                <Button type='primary'>创建任务</Button>
               </Popconfirm>
               <Button onClick={() => setEditInfo(record)}>编辑</Button>
-              <Popconfirm title="确定删除？" okText="是" cancelText="否" onConfirm={() => fetchDelCase(record.id)}>
+              <Popconfirm title="确定删除？" okText="是" cancelText="否" onConfirm={() => fetchDelCase({ caseIds: [record.id] })}>
                 <Button>删除</Button>
               </Popconfirm>
             </div>
@@ -135,12 +133,14 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
 
   /**
    * 删除用例
-   * @param id 用例id
+   * @param data 用例id集合
    */
-  const fetchDelCase = (id: number) => {
-    delCase(id).then(req => {
+  const fetchDelCase = (data: IDelCaseReq) => {
+    delCase(data).then(req => {
       message.success(req.message)
       setLoading(true)
+    }).catch(err => {
+      message.error(err.message)
     })
   }
 
@@ -186,7 +186,7 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
   }, [])
 
   /**
-   * loading默认是false，此处判断loading是否为true是的话就调用访问列表方法，因此需要刷新的操作都需要setLoading(true)
+   * 此处判断loading是否为true是的话就调用访问列表方法，因此需要刷新的操作都需要setLoading(true)
    */
   useEffect(() => {
     loading && fetchCases()
@@ -203,7 +203,6 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
         loading={loading}
         onChange={onChangeTable}
       />
-
       <VideoModal src={videoSrc} onCancel={() => setVideoSrc(undefined)} />
     </>
   )
