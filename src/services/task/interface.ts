@@ -8,8 +8,9 @@ export interface IStopTaskReq {
   status: number
 }
 export interface ICreateTaskReq {
+  gameDictIds?: number[]
   caseIds?: number[]
-  taskName: string
+  taskName?: string
 }
 export interface ITaskRepoerReq {
   pageNo: number

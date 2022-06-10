@@ -57,7 +57,7 @@ export const stopTask: (data: IStopTaskReq) => Promise<RequestOpt> = (data) => {
  */
 export const createTask: (data: ICreateTaskReq) => Promise<RequestOpt> = (data) => {
   return new Promise(async (resolve, reject) => {
-    const res = await request.post(`tasks`, data)
+    const res = await request.post(`/tasks`, data)
     if (res.success) {
       resolve(res)
     } else {

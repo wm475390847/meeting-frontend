@@ -1,3 +1,5 @@
+import exp from "constants"
+
 export interface IAddCaseReq {
   minValue: string
   caseDesc: string
@@ -24,3 +26,4 @@ export interface ICasesReq {
 export interface IDelCaseReq {
   caseIds: number[]
 }
+

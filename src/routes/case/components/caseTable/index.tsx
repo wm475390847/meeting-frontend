@@ -1,5 +1,4 @@
 import { delCase, getCases } from '@/services/case'
-import { ICreateTaskReq } from '@/services/task/interface'
 import { getGameDict } from '@/services/material'
 import { createTask } from '@/services/task'
 import { Button, message, Popconfirm, Table } from 'antd'
@@ -27,20 +26,21 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
   const { loading, setLoading, setEditInfo } = props
   // 用例列表
   const [caseList, setCaseList] = useState<CaseInfo[]>([])
-  // 素材类型列表
-  const gameDictList = useSelector<IRootState, GameDictInfo[]>(state => state.material.gameDictList)
+  // 弹框播放video的src
+  const [videoSrc, setVideoSrc] = useState<string>()
   // 表格用
   const [total, setTotal] = useState(0)
   const [pageNo, setPageNo] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
+  // 素材类型列表
+  const gameDictList = useSelector<IRootState, GameDictInfo[]>(state => state.material.gameDictList)
 
-  // 弹框播放video的src
-  const [videoSrc, setVideoSrc] = useState<string>()
   const columns = useMemo<ColumnsType<any>>(() => {
     return [
       {
         title: '序号',
         width: 80,
-        render: (text, record, index) => `${index + 1}`
+        render: (text, record, index) => (pageNo - 1) * pageSize + index + 1
       },
       {
         title: '用例id',
@@ -124,10 +124,12 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
         }
       },
     ]
-  }, [gameDictList])
+  }, [gameDictList, pageNo, pageSize])
 
-  const onChangeTable = ({ current }: any) => {
+  const onChangeTable = (value: any) => {
+    const { current, pageSize } = value
     setPageNo(current)
+    setPageSize(pageSize)
     setLoading(true)
   }
 
@@ -159,21 +161,14 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
       message.error(err.message)
     })
   }
-
-  /**
-   * 多个用例创建任务
-   */
-  const fetchBatchCaseCreateTask = () => {
-
-  }
-
+  
   /**
    * 获取用例列表
    */
   const fetchCases = () => {
     getCases({
       pageNo,
-      pageSize: 10
+      pageSize: pageSize
     }).then(data => {
       setCaseList(data.records)
       setTotal(data.total)

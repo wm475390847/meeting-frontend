@@ -8,10 +8,6 @@ import React, { useEffect, useMemo, useState } from "react"
 import styles from './index.module.less'
 import { ITaskRepoerReq, IStopTaskReq } from "@/services/task/interface"
 
-interface ICaseHistoryRecord {
-
-}
-
 const TaskTable: React.FC = () => {
 
   // 任务列表
@@ -19,6 +15,7 @@ const TaskTable: React.FC = () => {
   const [taskList, setTaskList] = useState<TaskInfo[]>([])
   const [total, setTotal] = useState(0)
   const [pageNo, setPageNo] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
 
   // 执行任务
   const columns = useMemo<ColumnsType<any>>(() => {
@@ -26,7 +23,7 @@ const TaskTable: React.FC = () => {
       {
         title: '序号',
         width: 60,
-        render: (text, record, index) => `${index + 1}`
+        render: (text, record, index) => (pageNo - 1) * pageSize + index + 1
       },
       {
         title: '任务名称',
@@ -99,10 +96,12 @@ const TaskTable: React.FC = () => {
       }
     ]
     // 需要把operationCount添加到 useMemo 中，useMemo会缓存结果，如果监听的值(operationCount)没有发生变化，即使组件重新渲染，也不会重新发生计算，这个行为有助于避免在每个渲染上进行昂贵的计算 
-  }, [loading])
+  }, [loading, pageNo, pageSize])
 
-  const onChangeTable = ({ current }: any) => {
+  const onChangeTable = (value: any) => {
+    const { current, pageSize } = value
     setPageNo(current)
+    setPageSize(pageSize)
     setLoading(true)
   }
 

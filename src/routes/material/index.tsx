@@ -20,6 +20,7 @@ const MaterialTable: React.FC = () => {
   // 表格用
   const [total, setTotal] = useState(0)
   const [pageNo, setPageNo] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
   const [loading, setLoading] = useState(true)
   // 弹框播放video的src
   const [videoSrc, setVideoSrc] = useState<string>()
@@ -31,7 +32,7 @@ const MaterialTable: React.FC = () => {
       {
         title: '序号',
         width: '10%',
-        render: (text, record, index) => `${index + 1}`
+        render: (text, record, index) => (pageNo as number - 1) * (pageSize as number) + index + 1
       },
       {
         title: '类别',
@@ -81,14 +82,16 @@ const MaterialTable: React.FC = () => {
         render: (_, record) => (<Button type="primary" onClick={() => setAddInfo(record)}>加入用例</Button>)
       },
     ]
-  }, [gameDictList])
+  }, [gameDictList, pageNo, pageSize])
 
   /**
    * 获取当前页码
    * @param param0 
    */
-  const onChangeTable = ({ current }: any) => {
+  const onChangeTable = (value: any) => {
+    const { current, pageSize } = value
     setPageNo(current)
+    setPageSize(pageSize)
     setLoading(true)
   }
 
@@ -98,7 +101,7 @@ const MaterialTable: React.FC = () => {
   const fetchMaterials = () => {
     getMaterials({
       pageNo,
-      pageSize: 10
+      pageSize: pageSize
     }).then(data => {
       setMaterialList(data.records)
       setTotal(data.total)

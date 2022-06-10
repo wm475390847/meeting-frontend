@@ -10,5 +10,10 @@ interface IPageRequest<T> {
 }
 
 interface SchoolInfo {
-  
+
+}
+
+interface IPage {
+  pageNo: number
+  pageSize: number
 }

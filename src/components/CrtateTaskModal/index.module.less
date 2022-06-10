@@ -3,27 +3,45 @@
     align-items: center;
 
     .inlineFormItem {
-        margin-bottom: 0;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        height: 25px;
         flex: 1;
-        height: 32px;
     }
 
+    .checkbox {
+        margin-top: 7px;
+    }
+
+    // 输入样式
     .input {
-        top: 20;
-        width: 100%;
+        width: 150px;
+        height: 25px;
         flex: 1;
     }
 
+    // 文本样式
     .text {
         flex-shrink: 0;
     }
 
+    // 全局样式
     :global {
         .ant-form-item-with-help .ant-form-item-explain {
             position: absolute;
             bottom: 0;
             transform: translateY(100%);
         }
+
+        .ant-row {
+            width: 400px;
+        }
+    }
+}
+
+.radioGroup {
+    .inlineRadioGroup {
+        margin-bottom: 12xp;
     }
 }
 
@@ -42,6 +60,12 @@
     }
 }
 
+// 模式的样式
 .modal {
     top: 30%;
+}
+
+// 单选框样式
+.radio {
+    width: 280px;
 }
