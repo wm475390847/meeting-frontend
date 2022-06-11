@@ -1,5 +1,7 @@
 import { RequestOpt } from "@/utils/request"
 import { request } from "@/utils/tool"
+import { rejects } from "assert"
+import { resolve } from "path"
 import { IStopTaskReq, ITaskReq, ICreateTaskReq, ITaskRepoerReq } from "./interface"
 
 /**
@@ -66,6 +68,19 @@ export const createTask: (data: ICreateTaskReq) => Promise<RequestOpt> = (data) 
   })
 }
 
-// export const getTaskReport: (data: ITaskRepoerReq) => Promise<RequestOpt> = { data }=> {
+/**
+ * 获取任务报告
+ * @param data 请求体
+ * @returns 响应体
+ */
+export const getTaskReport: (data: ITaskRepoerReq) => Promise<IPageRequest<ReportInfo>> = (data) => {
+  return new Promise(async (resolve, reject) => {
+    const res = await request.get(`/tasks/report`, data)
+    if (res.success) {
+      resolve(res.data)
+    } else {
+      reject(res)
+    }
+  })
 
-// }
+}

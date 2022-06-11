@@ -161,7 +161,7 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
       message.error(err.message)
     })
   }
-  
+
   /**
    * 获取用例列表
    */

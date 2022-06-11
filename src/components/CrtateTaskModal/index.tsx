@@ -1,7 +1,6 @@
 import { getGameDict } from '@/services/material';
 import { createTask } from '@/services/task';
 import { Button, Checkbox, Form, Input, message, Modal, Radio, RadioChangeEvent, Row, Select, Space } from 'antd';
-import { CheckboxOptionType, CheckboxValueType } from 'antd/lib/checkbox/Group';
 import React, { useEffect, useState } from 'react';
 import styles from './index.module.less'
 
@@ -37,16 +36,9 @@ const CreateTaskModal: React.FC<CreateTaskModalComponentsProps> = (props) => {
     onCancel && onCancel()
   }
 
-  /**
-  * 清空所有数据
-  */
-  const cleanData = () => {
-    setGameDictIdList([])
-    setTaskName(undefined)
-  }
-
   useEffect(() => {
-    value && cleanData()
+    value && setGameDictIdList([])
+    setTaskName(undefined)
   }, [value])
 
   useEffect(() => {
@@ -66,7 +58,6 @@ const CreateTaskModal: React.FC<CreateTaskModalComponentsProps> = (props) => {
 
   const onSubmit = () => {
     form.validateFields().then(values => {
-
       setButtonLoading(true)
       createTask({
         gameDictIds: value === 1 ? gameDictList.map(item => item.value) : gameDictIdList,

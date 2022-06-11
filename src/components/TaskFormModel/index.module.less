@@ -1,42 +1,17 @@
-.formItem {
-  display: flex;
-  align-items: center;
+// 模式的样式
+.modal {
+  top: 30%;
 
-  .inlineFormItem {
-    margin-bottom: 0;
-    flex: 1;
-    height: 32px;
-  }
-
-  .input {
+  .collapse {
     width: 100%;
-    flex: 1;
-  }
-
-  .text {
-    flex-shrink: 0;
   }
 
   :global {
-    .ant-form-item-with-help .ant-form-item-explain {
-      position: absolute;
-      bottom: 0;
-      transform: translateY(100%);
+    .ant-modal-content {
+      width: 1200px;
+      top: 50%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%)
     }
-  }
-}
-
-.textAlign {
-  text-align: center;
-}
-
-.videoGroup {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  .video {
-    width: calc(50% - 15px);
   }
 }

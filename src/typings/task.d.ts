@@ -10,3 +10,11 @@ interface TaskInfo {
   executeSuccess: number
   nonExecute: number
 }
+
+interface ReportInfo {
+  minValue: string
+  maxValue: string
+  caseDesc: string
+  caseMessage: string
+  score: string
+}

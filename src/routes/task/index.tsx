@@ -6,7 +6,8 @@ import { taskStatusEnum } from '../../constants'
 import moment from "moment"
 import React, { useEffect, useMemo, useState } from "react"
 import styles from './index.module.less'
-import { ITaskRepoerReq, IStopTaskReq } from "@/services/task/interface"
+import { IStopTaskReq } from "@/services/task/interface"
+import TaskReportModal from "@/components/TaskFormModel"
 
 const TaskTable: React.FC = () => {
 
@@ -16,6 +17,7 @@ const TaskTable: React.FC = () => {
   const [total, setTotal] = useState(0)
   const [pageNo, setPageNo] = useState(1)
   const [pageSize, setPageSize] = useState(10)
+  const [taskInfo, setTaskInfo] = useState<TaskInfo>()
 
   // 执行任务
   const columns = useMemo<ColumnsType<any>>(() => {
@@ -89,7 +91,7 @@ const TaskTable: React.FC = () => {
               {record.status !== 1 && <Button disabled={record.status === 3} onClick={() => fetchStopTask({ id: record.id, status: 1 })}>暂停</Button>}
               {/* 运行中和已完成的任务不能继续 */}
               {record.status === 1 && <Button onClick={() => fetchStopTask({ id: record.id, status: 2 })}>继续</Button>}
-              <Button disabled={record.status === 3}>报告</Button>
+              <Button disabled={record.status === 3} onClick={() => setTaskInfo(record)}>报告</Button>
             </div >
           )
         }
@@ -145,23 +147,6 @@ const TaskTable: React.FC = () => {
     })
   }
 
-  // /**
-  //  * 获取报告
-  //  * @param data 请求体
-  //  */
-  // const fetchGetReport = (data: ICaseHistoryRecord) => {
-  //   getTaskReport({
-  //     pageNo,
-  //     pageSize: 10,
-  //     id: data.id,
-  //     caseResult: data.caseResult
-  //   }).then(req => {
-  //     message.success(req.data)
-  //   }).catch(err => {
-  //     message.error(err.message)
-  //   })
-  // }
-
   /**
    * 当loading为true时自动刷新页面
    */
@@ -181,6 +166,7 @@ const TaskTable: React.FC = () => {
         loading={loading}
         onChange={onChangeTable}
       />
+      <TaskReportModal taskInfo={taskInfo} onCancel={() => setTaskInfo(undefined)} />
     </MView>
   )
 }

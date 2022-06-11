@@ -1,7 +1,6 @@
 import { MView, PageHeader } from "@/components"
 import CaseFormModal from "@/components/CaseFormModal"
 import CreateTaskModal from "@/components/CrtateTaskModal"
-import { getGameDict } from "@/services/material"
 import { Button } from "antd"
 import React, { useEffect, useState } from "react"
 import CaseTable from "./components/caseTable"
