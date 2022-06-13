@@ -11,45 +11,60 @@ const themeVariables = lessToJS(
 )
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  // base: `//t.newscdn.cn/${name}/${version}/`,
-  plugins: [
-    react(),
-    // vitePluginImp({
-    //   libList: [
-    //     {
-    //       libName: "antd",
-    //       style: (name) => {
-    //         console.log(name)
-    //         return `antd/lib/${name}/style/index.less`
-    //       },
-    //     },
-    //   ],
-    // })
-  ],
-  resolve: {
-    alias: { "@": path.resolve(__dirname, "./src") },
-    extensions: ['.js', '.ts', '.jsx', '.tsx']
-  },
+export default defineConfig(({ command }) => {
+  return {
+    base: command === 'build' ? `//t.newscdn.cn/${name}/${version}/` : '',
+    build: {
+      rollupOptions: {
+        output: {
+          // 入口文件名
+          entryFileNames: 'assets/[name].js',
+          // 块文件名
+          chunkFileNames: 'assets/[name].js',
+          // 资源文件名 css 图片等等
+          assetFileNames: 'assets/[name].[ext]',
+        },
+      },
+      minify: false
+    },
+    plugins: [
+      react(),
+      // vitePluginImp({
+      //   libList: [
+      //     {
+      //       libName: "antd",
+      //       style: (name) => {
+      //         console.log(name)
+      //         return `antd/lib/${name}/style/index.less`
+      //       },
+      //     },
+      //   ],
+      // })
+    ],
+    resolve: {
+      alias: { "@": path.resolve(__dirname, "./src") },
+      extensions: ['.js', '.ts', '.jsx', '.tsx']
+    },
 
-  css: {
-    preprocessorOptions: {
-      less: {
-        // 支持内联 JavaScript，支持 less 内联 JS
-        javascriptEnabled: true,
-        additionalData: `@import "${path.resolve(__dirname, './src/styles/variables.less')}";`,
-        modifyVars: themeVariables
+    css: {
+      preprocessorOptions: {
+        less: {
+          // 支持内联 JavaScript，支持 less 内联 JS
+          javascriptEnabled: true,
+          additionalData: `@import "${path.resolve(__dirname, './src/styles/variables.less')}";`,
+          modifyVars: themeVariables
+        },
       },
     },
-  },
 
-  server: {
-    proxy: {
-      '/sports-backend': {
-        target: 'http://test.qa-ai-sports.xinhuazhiyun.com',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/sports-backend/, '')
-      },
+    server: {
+      proxy: {
+        '/sports-backend': {
+          target: 'http://test.qa-sports.xinhuazhiyun.com',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/sports-backend/, '')
+        },
+      }
     }
   }
 })

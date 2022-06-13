@@ -1,4 +1,3 @@
-import { message } from 'antd';
 import fetch from 'isomorphic-fetch';
 
 export type IRequestMethod = 'GET' | 'PUT' | 'POST' | 'DELETE';
