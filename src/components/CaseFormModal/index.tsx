@@ -27,9 +27,9 @@ const CaseFormModal: React.FC<CaseFormModalComponentsProps> = (props) => {
   const { editInfo, isEdit, onCancel, setLoading } = props
   // 素材类型列表
   const [buttonLoading, setButtonLoading] = useState(false)
-  const gameDictList = useSelector<IRootState, GameDictInfo[]>(state => state.material.gameDictList)
   const [visible, setVisible] = useState(false)
   const [form] = Form.useForm()
+  const gameDictList = useSelector<IRootState, GameDictInfo[]>(state => state.material.gameDictList)
   const gameDictName = useMemo(() => {
     if (editInfo) {
       const gameDict = (gameDictList || []).find(item => item.id === editInfo.gameDictId)

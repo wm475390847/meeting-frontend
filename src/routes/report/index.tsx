@@ -1,7 +1,8 @@
 import { getTaskReport } from '@/services/task';
-import { Button, Collapse, Modal, Table } from 'antd';
+import { Table } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import { ColumnsType } from 'antd/lib/table';
+import { caseHistoryEnum } from '@/constants';
 
 type TaskReportTableComponentsProps = {
   taskId: number
@@ -36,7 +37,8 @@ const TaskReportTable: React.FC<TaskReportTableComponentsProps> = (props) => {
         title: '用例结果',
         dataIndex: 'caseResult',
         key: 'caseResult',
-        width: '20%'
+        width: '20%',
+        render: (status) => <div>{caseHistoryEnum[status]}</div>
       },
       {
         title: '错误原因',
@@ -60,6 +62,9 @@ const TaskReportTable: React.FC<TaskReportTableComponentsProps> = (props) => {
     ]
   }, [pageNo, pageSize])
 
+  console.log('taskId :', taskId);
+
+
   /**
    * 获取报告
    */
@@ -76,9 +81,9 @@ const TaskReportTable: React.FC<TaskReportTableComponentsProps> = (props) => {
     })
   }
 
-  useEffect(() => {
-    loading && fetchReportList()
-  }, [loading])
+  // useEffect(() => {
+  //   loading && fetchReportList()
+  // }, [loading])
 
   /**
    *  监听pageNo变化时刷新列表

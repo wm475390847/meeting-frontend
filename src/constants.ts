@@ -54,3 +54,10 @@ export enum taskStatusEnum {
   "运行中",
   "已完成"
 }
+
+export enum caseHistoryEnum {
+  "删除",
+  "成功",
+  "失败",
+  "未执行"
+}
