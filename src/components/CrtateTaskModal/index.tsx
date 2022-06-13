@@ -36,6 +36,22 @@ const CreateTaskModal: React.FC<CreateTaskModalComponentsProps> = (props) => {
     onCancel && onCancel()
   }
 
+  const onSubmit = () => {
+    form.validateFields().then(values => {
+      setButtonLoading(true)
+      createTask({
+        gameDictIds: value === 1 ? gameDictList.map(item => item.value) : gameDictIdList,
+        taskName: taskName
+      }).then(res => {
+        message.success(res.message)
+        setLoading(true)
+        handleCancel()
+      }).catch(err => {
+        message.error(err.message)
+      }).finally(() => setButtonLoading(false))
+    })
+  }
+
   useEffect(() => {
     value && setGameDictIdList([])
     setTaskName(undefined)
@@ -56,22 +72,6 @@ const CreateTaskModal: React.FC<CreateTaskModalComponentsProps> = (props) => {
     })
   }, [visible])
 
-  const onSubmit = () => {
-    form.validateFields().then(values => {
-      setButtonLoading(true)
-      createTask({
-        gameDictIds: value === 1 ? gameDictList.map(item => item.value) : gameDictIdList,
-        taskName: taskName
-      }).then(res => {
-        message.success(res.message)
-        setLoading(true)
-        handleCancel()
-      }).catch(err => {
-        message.error(err.message)
-      }).finally(() => setButtonLoading(false))
-    })
-  }
-
   return (
     <>
       <Modal className={styles.modal}
@@ -84,13 +84,13 @@ const CreateTaskModal: React.FC<CreateTaskModalComponentsProps> = (props) => {
         <Form form={form} className={styles.formItem}>
           <Radio.Group onChange={onChange} value={value}>
             <Space direction="vertical">
-              <Radio value={1} className={styles.radio} >所有用例创建 {value === 1 &&
+              <Radio className={styles.radio} value={1}>所有用例创建 {value === 1 &&
                 <Form.Item label='任务名称' name='taskName' className={styles.inlineFormItem} rules={[{ required: true, message: '任务名称不能为空' }]}>
                   <Input onChange={e => setTaskName(e.target.value)} className={styles.input} placeholder='请填写任务名称' />
                 </Form.Item>
               }
               </Radio>
-              <Radio value={2} className={styles.radio} >自定义类型用例创建 {value === 2 &&
+              <Radio className={styles.radio} value={2}>自定义类型用例创建 {value === 2 &&
                 <>
                   <Form.Item label='任务名称' name='taskName' className={styles.inlineFormItem} rules={[{ required: true, message: '任务名称不能为空' }]}>
                     <Input onChange={e => setTaskName(e.target.value)} className={styles.input} placeholder='请填写任务名称' />

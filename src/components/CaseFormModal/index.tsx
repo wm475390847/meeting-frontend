@@ -33,10 +33,8 @@ const CaseFormModal: React.FC<CaseFormModalComponentsProps> = (props) => {
   const gameDictName = useMemo(() => {
     if (editInfo) {
       const gameDict = (gameDictList || []).find(item => item.id === editInfo.gameDictId)
-
       return gameDict ? gameDict.name : '未知类别'
     }
-
     return undefined
   }, [editInfo])
   const schoolName = editInfo?.schoolName || '未知学校'

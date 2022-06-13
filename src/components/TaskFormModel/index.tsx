@@ -1,33 +1,20 @@
-import { getTaskReport } from '@/services/task';
-import { Avatar, Collapse, Grid, List, message, Modal } from 'antd';
-import React, { ReactNode, useEffect, useState } from 'react';
+import { Button, Collapse, Modal, Table } from 'antd';
+import React, { useEffect, useMemo, useState } from 'react';
 import styles from './index.module.less'
-import VirtualList from 'rc-virtual-list';
+import TaskReportTable from '../../routes/report';
 
 type TaskReportMoalComponentsProps = {
   taskInfo?: TaskInfo
   onCancel?: () => void
-  // setLoading: React.Dispatch<React.SetStateAction<boolean>>
-}
-
-interface ICaseHistory {
-  caseResult: number
-  taskId: number
 }
 
 const TaskReportModal: React.FC<TaskReportMoalComponentsProps> = (props) => {
   const { taskInfo, onCancel } = props
   const { Panel } = Collapse;
-  const text = 'sssssss'
-
-  const [reportList, setReportList] = useState<ReportInfo[]>([])
-  const [pageNo, setPageNo] = useState(1)
   const [visible, setVisible] = useState(false)
-  const ContainerHeight = 400;
 
   const onChange = (key: string | string[]) => {
-    console.log(taskInfo);
-    console.log(key);
+    console.log("key :", key);
   };
 
   /**
@@ -39,23 +26,11 @@ const TaskReportModal: React.FC<TaskReportMoalComponentsProps> = (props) => {
   }
 
   useEffect(() => {
-    taskInfo && setVisible(true)
+    if (!taskInfo) {
+      return
+    }
+    setVisible(true)
   }, [taskInfo])
-
-  /**
-   * 获取报告
-   * @param data 请求体
-   */
-  const fetchGetReport = (data: ICaseHistory) => {
-    getTaskReport({
-      pageNo,
-      pageSize: 10,
-      id: data.taskId,
-      caseResult: data.caseResult
-    }).then(data => {
-      setReportList(data.records)
-    })
-  }
 
   return (
     <>
@@ -64,43 +39,32 @@ const TaskReportModal: React.FC<TaskReportMoalComponentsProps> = (props) => {
         className={styles.modal}
         title="用例执行记录"
         onCancel={handleCancel}
+        footer={<Button type='primary' onClick={() => handleCancel()}>确定</Button>}
         destroyOnClose
       >
-        <Collapse className={styles.collapse} destroyInactivePanel={true} defaultActiveKey={['1']} onChange={onChange} >
+        <Collapse className={styles.collapse} destroyInactivePanel={true} defaultActiveKey={['1']} onChange={onChange} bordered={true}>
           <Panel header="成功" key="1">
-            <List >
-            
+            <TaskReportTable
+              taskId={taskInfo?.id as number}
+              caseResult={1}
+            />
 
-
-
-
-              {/* <VirtualList
-                data={data}
-                // height={ContainerHeight}
-                itemHeight={47}
-                itemKey="email"
-              // onScroll={onScroll}
-              > */}
-              {/* {(item: UserItem) => (
-                  <List.Item key={item.email}>
-                    <List.Item.Meta
-                      avatar={<Avatar src={item.picture.large} />}
-                      title={<a href="https://ant.design">{item.name.last}</a>}
-                      description={reportList as ReactNode}
-                    />
-                    <div>Content</div>
-                  </List.Item>
-                )} */}
-              {/* </VirtualList> */}
-            </List>
           </Panel>
           <Panel header="失败" key="2">
+            <TaskReportTable
+              taskId={taskInfo?.id as number}
+              caseResult={2}
+            />
           </Panel>
+
           <Panel header="未执行" key="3">
+            <TaskReportTable
+              taskId={taskInfo?.id as number}
+              caseResult={3}
+            />
           </Panel>
         </Collapse>
-
-      </Modal>
+      </Modal >
     </>
   );
 };
