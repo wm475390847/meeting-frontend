@@ -81,10 +81,6 @@ const TaskReportTable: React.FC<TaskReportTableComponentsProps> = (props) => {
     })
   }
 
-  // useEffect(() => {
-  //   loading && fetchReportList()
-  // }, [loading])
-
   /**
    *  监听pageNo变化时刷新列表
    */
@@ -104,6 +100,7 @@ const TaskReportTable: React.FC<TaskReportTableComponentsProps> = (props) => {
       onChange={onChangeTable}
       pagination={{ total, current: pageNo, showSizeChanger: true }}
       loading={loading}
+      rowKey="id"
     >
     </Table>
   );
