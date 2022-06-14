@@ -14,7 +14,7 @@ const TaskReportModal: React.FC<TaskReportMoalComponentsProps> = (props) => {
   const [visible, setVisible] = useState(false)
 
   const onChange = (key: string | string[]) => {
-    console.log("key :", key);
+
   };
 
   /**
@@ -43,26 +43,29 @@ const TaskReportModal: React.FC<TaskReportMoalComponentsProps> = (props) => {
         destroyOnClose
       >
         <Collapse className={styles.collapse} destroyInactivePanel={true} defaultActiveKey={['1']} onChange={onChange} bordered={true}>
-          <Panel header="成功" key="1">
-            <TaskReportTable
-              taskId={taskInfo?.id as number}
-              caseResult={1}
-            />
+          {/* <div > */}
+            <Panel header="成功" key="1">
+              <TaskReportTable
+                taskId={taskInfo?.id as number}
+                caseResult={1}
+              />
 
-          </Panel>
-          <Panel header="失败" key="2">
-            <TaskReportTable
-              taskId={taskInfo?.id as number}
-              caseResult={2}
-            />
-          </Panel>
+            </Panel>
+            <Panel header="失败" key="2">
+              <TaskReportTable
+                taskId={taskInfo?.id as number}
+                caseResult={2}
+              />
+            </Panel>
 
-          <Panel header="未执行" key="3">
-            <TaskReportTable
-              taskId={taskInfo?.id as number}
-              caseResult={3}
-            />
-          </Panel>
+            <Panel header="未执行" key="3">
+              <TaskReportTable
+                taskId={taskInfo?.id as number}
+                caseResult={3}
+              />
+            </Panel>
+          {/* </div> */}
+
         </Collapse>
       </Modal >
     </>

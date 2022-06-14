@@ -13,7 +13,7 @@ type TaskReportTableComponentsProps = {
 const TaskReportTable: React.FC<TaskReportTableComponentsProps> = (props) => {
   const { caseResult, taskId, onCancel } = props
   const [reportList, setReportList] = useState<ReportInfo[]>([])
-  const [pageNo, setPageNo] = useState(0)
+  const [pageNo, setPageNo] = useState(1)
   const [pageSize, setPageSize] = useState(10)
   const [loading, setLoading] = useState(false)
   const [total, setTotal] = useState(0)
@@ -61,17 +61,14 @@ const TaskReportTable: React.FC<TaskReportTableComponentsProps> = (props) => {
       }
     ]
   }, [pageNo, pageSize])
-
-  console.log('taskId :', taskId);
-
-
+  
   /**
    * 获取报告
    */
   const fetchReportList = () => {
     getTaskReport({
       pageNo: pageNo,
-      pageSize: 10,
+      pageSize: pageSize,
       id: taskId,
       caseResult: caseResult
     }).then(data => {
@@ -89,9 +86,9 @@ const TaskReportTable: React.FC<TaskReportTableComponentsProps> = (props) => {
     pageNo && fetchReportList()
   }, [pageNo])
 
-  useEffect(() => {
-    setPageNo(1)
-  }, [])
+  // useEffect(() => {
+  //   setPageNo(1)
+  // }, [])
 
   return (
     <Table

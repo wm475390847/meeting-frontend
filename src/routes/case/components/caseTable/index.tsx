@@ -38,11 +38,6 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
   const columns = useMemo<ColumnsType<any>>(() => {
     return [
       {
-        title: '序号',
-        width: 80,
-        render: (text, record, index) => (pageNo - 1) * pageSize + index + 1
-      },
-      {
         title: '用例id',
         dataIndex: 'id',
         key: 'id',
@@ -59,7 +54,7 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
         title: '区间值',
         dataIndex: 'minValue',
         key: 'minValue',
-        width: 90,
+        width: 80,
         render: (_, record) => <div>{record.minValue} ~ {record.maxValue}</div>
       },
       {
@@ -77,7 +72,7 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
         title: '更新时间',
         dataIndex: 'gmtCreate',
         key: 'gmtCreate',
-        width: 180,
+        width: 130,
         render: (text) => <div>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</div>
       },
       {
@@ -108,11 +103,11 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
         title: '操作',
         dataIndex: 'action',
         key: 'action',
-        width: 250,
+        width: '22%',
         render: (_, record) => {
           return (
             <div className={styles.action}>
-              <Popconfirm title="创建后任务只含一个case" okText="是" cancelText="否" onConfirm={() => fetchCaseCreateTask(record)}>
+              <Popconfirm title="单个用例创建任务" okText="是" cancelText="否" onConfirm={() => fetchCaseCreateTask(record)}>
                 <Button type='primary'>创建任务</Button>
               </Popconfirm>
               <Button onClick={() => setEditInfo(record)}>编辑</Button>
