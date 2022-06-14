@@ -121,10 +121,10 @@ const CaseFormModal: React.FC<CaseFormModalComponentsProps> = (props) => {
             </Form.Item>
           </div>
         </Form.Item>
-        <Form.Item label='用例参考返回值'>
+        <Form.Item label='算法返回参考值'>
           <div>{editInfo?.score || '-'}</div>
         </Form.Item>
-        <Form.Item label='用例返回值设置' required>
+        <Form.Item label='预期结果阈值设置' required>
           <div className={styles.formItem}>
             <Form.Item name='minValue' className={styles.inlineFormItem} rules={[{ required: true, message: '最小值不能为空' }]}>
               <InputNumber className={classnames(styles.input, styles.textAlign)} placeholder="请输入最小值" />
