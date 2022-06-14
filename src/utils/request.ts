@@ -47,7 +47,6 @@ function parseJSON(response: Response) {
   return response.json();
 }
 
-
 /**
  * Requests a URL, returning a promise.
  *
@@ -91,7 +90,12 @@ export default function request(_url: string, options?: any): Promise<RequestOpt
       if (err && err.response && err.response.status === 500) {
         // 自定义报错
         return err.response.json()
-          .then((res: any) => { })
+          .then((data: any) => {
+            console.log(data)
+            if (data && data.code === 'SW-GW-1003') {
+              window.location.href = 'https://sso.xinhuazhiyun.com/login.html?redirectUri=' + encodeURIComponent(window.location.href);
+            }
+          })
           .catch((e: Error) => {
             console.log(e);
           });

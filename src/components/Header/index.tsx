@@ -22,7 +22,7 @@ class Header extends Component<IHeaderProps & IHeaderOwnProps, IHeaderState> {
     return (
       <div className={styles.header + ` ${this.props.className}`}>
         {/* <p>体育质量保障平台</p> */}
-        <img src="https://t.newscdn.cn/physical-education-boss/logo.png" />
+        <img src="https://s.newscdn.cn/x/mT6J4-CnR.png" />
       </div>
     );
   }
