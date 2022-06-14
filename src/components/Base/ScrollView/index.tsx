@@ -4,7 +4,7 @@ import ScrollView from 'react-custom-scrollbars';
 import styles from './index.module.less';
 
 export interface MScrollViewProps {
-  children?: React.ReactNode;
+  children?: any;
   onScroll?: (event: React.UIEvent<any>) => void;
   className?: string;
 }
