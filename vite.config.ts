@@ -62,7 +62,6 @@ export default defineConfig(({ command }) => {
         '/sports-backend': {
           target: 'http://test.qa-sports.xinhuazhiyun.com',
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/sports-backend/, '')
         },
       }
     }
