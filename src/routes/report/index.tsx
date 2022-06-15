@@ -61,7 +61,7 @@ const TaskReportTable: React.FC<TaskReportTableComponentsProps> = (props) => {
       }
     ]
   }, [pageNo, pageSize])
-  
+
   /**
    * 获取报告
    */
@@ -85,10 +85,6 @@ const TaskReportTable: React.FC<TaskReportTableComponentsProps> = (props) => {
     console.log('pageNo', pageNo)
     pageNo && fetchReportList()
   }, [pageNo])
-
-  // useEffect(() => {
-  //   setPageNo(1)
-  // }, [])
 
   return (
     <Table

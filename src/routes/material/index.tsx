@@ -1,6 +1,6 @@
 import { MView, PageHeader } from "@/components"
 import { getGameDict, getMaterials } from "@/services/material"
-import { Button, Table } from "antd"
+import { Button, DatePicker, Input, Radio, RadioChangeEvent, Space, Table } from "antd"
 import { ColumnsType } from "antd/lib/table"
 import moment from "moment"
 import React, { useEffect, useMemo, useState } from "react"
@@ -9,14 +9,16 @@ import { useSelector } from 'react-redux'
 import IRootState from "@/store/interface"
 import VideoModal from "@/components/VideoModal"
 import CaseFormModal from "@/components/CaseFormModal"
+import { SizeType } from "antd/lib/config-provider/SizeContext"
 
 const MaterialTable: React.FC = () => {
 
-  // const [schoolList, setSchoolList] = useState<SchoolInfo[]>([])
   // 素材列表
   const [materialList, setMaterialList] = useState<MaterialInfo[]>([])
   // 素材类型列表
   const gameDictList = useSelector<IRootState, GameDictInfo[]>(state => state.material.gameDictList)
+  const RangePicker: any = DatePicker.RangePicker;
+
   // 表格用
   const [total, setTotal] = useState(0)
   const [pageNo, setPageNo] = useState(1)
@@ -26,6 +28,13 @@ const MaterialTable: React.FC = () => {
   const [videoSrc, setVideoSrc] = useState<string>()
   // 加入用例的素材信息
   const [addInfo, setAddInfo] = useState<TaskInfo>()
+  const onSearch = (value: string) => console.log(value);
+
+  const [size, setSize] = useState<SizeType>('middle');
+
+  const handleSizeChange = (e: RadioChangeEvent) => {
+    setSize(e.target.value);
+  };
 
   const columns = useMemo<ColumnsType<any>>(() => {
     return [
@@ -120,24 +129,10 @@ const MaterialTable: React.FC = () => {
   return (
     <MView resize>
       <PageHeader title="素材列表" />
-      {/* <PageOptions
-        left={
-          <>
-            <div className={styles.filterType}>
-              <div className={styles.tag}>学校</div>
-              <Select
-                placeholder='请选择类型'
-                allowClear
-                className={styles.select}
-              >
-                {schoolList.map(item => {
-                  return <Option value={item.type} key={item.type}>{item.type}</Option>
-                })}
-              </Select>
-            </div>
-          </>
-        }
-      /> */}
+      {/* <Space className={styles.space} direction="vertical" size={12}>
+        <RangePicker size={size} />
+      </Space> */}
+
       <Table
         columns={columns}
         dataSource={materialList}

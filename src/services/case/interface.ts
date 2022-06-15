@@ -16,11 +16,12 @@ export interface IEditCaseReq {
 
 export interface ICasesReq {
   gameDictIds?: string
-  startTime?: string
-  endTime?: string
+  startTime?: number
+  endTime?: number
   pageSize: number
   pageNo: number
   schoolName?: string
+  caseDesc?: string
 }
 
 export interface IDelCaseReq {

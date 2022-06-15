@@ -1,21 +1,27 @@
+import { IDelCaseReq } from '@/services/case/interface'
 import { delCase, getCases } from '@/services/case'
 import { getGameDict } from '@/services/material'
 import { createTask } from '@/services/task'
-import { Button, message, Popconfirm, Table } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
 import { useSelector } from 'react-redux'
 import VideoModal from '@/components/VideoModal'
 import IRootState from '@/store/interface'
+import styles from './index.module.less'
 import moment from 'moment'
 import React, { useEffect, useMemo, useState } from 'react'
-import styles from './index.module.less'
-import { IDelCaseReq } from '@/services/case/interface'
+import { Button, message, Popconfirm, Table } from 'antd'
 
 interface CaseTableComponentsProps {
+  searchCaseInfo?: {
+    caseDesc?: string
+    startTime?: number
+    endTime?: number
+  }
   loading: boolean
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
   setEditInfo: React.Dispatch<React.SetStateAction<CaseInfo | undefined>>
 }
+
 interface ICaseRecord {
   id: number;
   caseDesc: string
@@ -23,7 +29,7 @@ interface ICaseRecord {
 
 const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
   // 为父类的传参
-  const { loading, setLoading, setEditInfo } = props
+  const { searchCaseInfo, loading, setLoading, setEditInfo } = props
   // 用例列表
   const [caseList, setCaseList] = useState<CaseInfo[]>([])
   // 弹框播放video的src
@@ -41,7 +47,7 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
         title: '用例id',
         dataIndex: 'id',
         key: 'id',
-        width: 80
+        width: 50
       },
       {
         title: '用例描述',
@@ -54,17 +60,16 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
         title: '区间值',
         dataIndex: 'minValue',
         key: 'minValue',
-        width: 80,
+        width: 70,
         render: (_, record) => <div>{record.minValue} ~ {record.maxValue}</div>
       },
       {
         title: '类别',
         dataIndex: 'gameDictId',
         key: 'gameDictId',
-        width: 80,
+        width: 70,
         render: (text) => {
           const gameDict = (gameDictList || []).find(item => item.id === text)
-
           return <div>{gameDict ? gameDict.name : ''}</div>
         }
       },
@@ -72,7 +77,7 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
         title: '更新时间',
         dataIndex: 'gmtCreate',
         key: 'gmtCreate',
-        width: 130,
+        width: 110,
         render: (text) => <div>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</div>
       },
       {
@@ -86,14 +91,7 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
           return (
             <div className={styles.buttonGroup}>
               {devices.map((item: any) => (
-                <Button
-                  key={item.id}
-                  type='link'
-                  className={styles.button}
-                  onClick={() => setVideoSrc(item.pullUrl)}
-                >
-                  {item.pullUrl}
-                </Button>
+                <Button key={item.id} type='link' className={styles.button} onClick={() => setVideoSrc(item.pullUrl)}>{item.pullUrl}</Button>
               ))}
             </div>
           )
@@ -103,7 +101,7 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
         title: '操作',
         dataIndex: 'action',
         key: 'action',
-        width: '22%',
+        width: '23%',
         render: (_, record) => {
           return (
             <div className={styles.action}>
@@ -123,9 +121,9 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
 
   const onChangeTable = (value: any) => {
     const { current, pageSize } = value
+    setLoading(true)
     setPageNo(current)
     setPageSize(pageSize)
-    setLoading(true)
   }
 
   /**
@@ -163,7 +161,10 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
   const fetchCases = () => {
     getCases({
       pageNo,
-      pageSize: pageSize
+      pageSize: pageSize,
+      caseDesc: searchCaseInfo?.caseDesc,
+      startTime: searchCaseInfo?.startTime,
+      endTime: searchCaseInfo?.endTime
     }).then(data => {
       setCaseList(data.records)
       setTotal(data.total)
@@ -181,6 +182,13 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
   useEffect(() => {
     loading && fetchCases()
   }, [pageNo, loading])
+
+  /**
+   * 此处判断信息是否变化，如果变化则刷新列表
+   */
+  useEffect(() => {
+    setLoading(true)
+  }, [searchCaseInfo?.caseDesc, searchCaseInfo?.endTime, searchCaseInfo?.startTime])
 
   return (
     <>

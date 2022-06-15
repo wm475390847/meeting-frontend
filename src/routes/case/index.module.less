@@ -2,12 +2,30 @@
     display: flex;
     align-items: center;
 
-    button {
+    .button {
         margin-bottom: 1.5%;
-        margin-left: 90%;
+        margin-left: 45%;
 
         &:last-child {
             margin-right: 0;
+        }
+    }
+
+    .space {
+        margin-bottom: 1.5%;
+        margin-left: 10%;
+
+        :global .ant-space-item {
+            width: 250px;
+        }
+    }
+
+    .search {
+        width: 150px;
+        margin-bottom: 1.5%;
+
+        :global .ant-input {
+            width: 150px;
         }
     }
 }

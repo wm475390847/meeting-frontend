@@ -10,6 +10,7 @@ import { IStopTaskReq } from "@/services/task/interface"
 import TaskReportModal from "@/components/TaskFormModel"
 import { LoadingOutlined } from "@ant-design/icons"
 
+
 const TaskTable: React.FC = () => {
 
   // 任务列表
@@ -34,7 +35,7 @@ const TaskTable: React.FC = () => {
         title: '任务名称',
         dataIndex: 'taskName',
         key: 'taskName',
-        width: 80,
+        width: 100,
         ellipsis: true
       },
       {
@@ -60,7 +61,7 @@ const TaskTable: React.FC = () => {
         title: '未执行',
         dataIndex: 'nonExecute',
         key: 'nonExecute',
-        width: 55
+        width: 50
       },
       {
         title: '总数',
@@ -72,10 +73,10 @@ const TaskTable: React.FC = () => {
         title: '通过率',
         dataIndex: 'percentage',
         key: 'percentage',
-        width: 55
+        width: 50
       },
       {
-        title: '进度',
+        title: '执行进度',
         dataIndex: 'elapsedTime',
         key: 'elapsedTime',
         width: '15%',
