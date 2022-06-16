@@ -1,9 +1,9 @@
 import { RequestOpt } from "@/utils/request"
 import { request } from "@/utils/tool"
-import { IAddCaseReq, ICasesReq, IDelCaseReq, IEditCaseReq } from "./interface"
+import { IAddCaseReq, ICaseReq, IDelCaseReq, IEditCaseReq } from "./interface"
 
 // 获取用例列表
-export const getCases: (data: ICasesReq) => Promise<IPageRequest<CaseInfo>> = (data) => {
+export const getCases: (data: ICaseReq) => Promise<IPageRequest<CaseInfo>> = (data) => {
   return new Promise(async (resolve, reject) => {
     const res = await request.get(`/cases`, data)
     if (res.success) {

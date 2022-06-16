@@ -1,14 +1,14 @@
+import ReportTable from '@/routes/report';
 import { Button, Collapse, Modal, Table } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import styles from './index.module.less'
-import TaskReportTable from '../../routes/report';
 
-type TaskReportMoalComponentsProps = {
+type TaskReportModalComponentsProps = {
   taskInfo?: TaskInfo
   onCancel?: () => void
 }
 
-const TaskReportModal: React.FC<TaskReportMoalComponentsProps> = (props) => {
+const TaskReportModal: React.FC<TaskReportModalComponentsProps> = (props) => {
   const { taskInfo, onCancel } = props
   const { Panel } = Collapse;
   const [visible, setVisible] = useState(false)
@@ -42,29 +42,28 @@ const TaskReportModal: React.FC<TaskReportMoalComponentsProps> = (props) => {
         footer={<Button type='primary' onClick={() => handleCancel()}>确定</Button>}
         destroyOnClose
       >
-        <Collapse className={styles.collapse} destroyInactivePanel={true} defaultActiveKey={['1']} onChange={onChange} bordered={true}>
-          {/* <div > */}
-            <Panel header="成功" key="1">
-              <TaskReportTable
-                taskId={taskInfo?.id as number}
-                caseResult={1}
-              />
+        <Collapse className={styles.collapse} ghost destroyInactivePanel={true} defaultActiveKey={['1']} onChange={onChange} bordered={true}>
 
-            </Panel>
-            <Panel header="失败" key="2">
-              <TaskReportTable
-                taskId={taskInfo?.id as number}
-                caseResult={2}
-              />
-            </Panel>
+          <Panel header="成功" key="1" className={styles.table}>
+            <ReportTable
+              taskId={taskInfo?.id as number}
+              caseResult={1}
+            />
 
-            <Panel header="未执行" key="3">
-              <TaskReportTable
-                taskId={taskInfo?.id as number}
-                caseResult={3}
-              />
-            </Panel>
-          {/* </div> */}
+          </Panel>
+          <Panel header="失败" key="2">
+            <ReportTable
+              taskId={taskInfo?.id as number}
+              caseResult={2}
+            />
+          </Panel>
+
+          <Panel header="未执行" key="3">
+            <ReportTable
+              taskId={taskInfo?.id as number}
+              caseResult={3}
+            />
+          </Panel>
 
         </Collapse>
       </Modal >

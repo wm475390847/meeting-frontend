@@ -3,20 +3,24 @@ import { Table } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import { ColumnsType } from 'antd/lib/table';
 import { caseHistoryEnum } from '@/constants';
+import { useSelector } from 'react-redux';
+import IRootState from '@/store/interface';
+import { getGameDict } from '@/services/material';
 
-type TaskReportTableComponentsProps = {
+type ReportTableComponentsProps = {
   taskId: number
   caseResult: number
   onCancel?: () => void
 }
 
-const TaskReportTable: React.FC<TaskReportTableComponentsProps> = (props) => {
+const ReportTable: React.FC<ReportTableComponentsProps> = (props) => {
   const { caseResult, taskId, onCancel } = props
   const [reportList, setReportList] = useState<ReportInfo[]>([])
   const [pageNo, setPageNo] = useState(1)
   const [pageSize, setPageSize] = useState(10)
   const [loading, setLoading] = useState(false)
   const [total, setTotal] = useState(0)
+  const gameDictList = useSelector<IRootState, GameDictInfo[]>(state => state.material.gameDictList)
 
   const onChangeTable = (value: any) => {
     const { current, pageSize } = value
@@ -32,6 +36,16 @@ const TaskReportTable: React.FC<TaskReportTableComponentsProps> = (props) => {
         dataIndex: 'caseDesc',
         key: 'caseDesc',
         width: '20%'
+      },
+      {
+        title: '类型',
+        dataIndex: 'gameDictId',
+        key: 'gameDictId',
+        width: '20%',
+        render: (text) => {
+          const gameDict = (gameDictList || []).find(item => item.id === text)
+          return <div>{gameDict ? gameDict.name : '未知'}</div>
+        }
       },
       {
         title: '用例结果',
@@ -82,9 +96,12 @@ const TaskReportTable: React.FC<TaskReportTableComponentsProps> = (props) => {
    *  监听pageNo变化时刷新列表
    */
   useEffect(() => {
-    console.log('pageNo', pageNo)
     pageNo && fetchReportList()
   }, [pageNo])
+
+  useEffect(() => {
+    !gameDictList.length && getGameDict()
+  }, [])
 
   return (
     <Table
@@ -99,4 +116,4 @@ const TaskReportTable: React.FC<TaskReportTableComponentsProps> = (props) => {
   );
 };
 
-export default TaskReportTable;
+export default ReportTable;

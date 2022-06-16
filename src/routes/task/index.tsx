@@ -1,5 +1,5 @@
 import { MView, PageHeader } from "@/components"
-import { getTasks, rollBackTask, stopTask } from "@/services/task"
+import { getTaskList, rollBackTask, stopTask } from "@/services/task"
 import { Button, message, Progress, Spin, Table } from "antd"
 import { ColumnsType } from "antd/lib/table"
 import { taskStatusEnum } from '../../constants'
@@ -7,9 +7,8 @@ import moment from "moment"
 import React, { useEffect, useMemo, useState } from "react"
 import styles from './index.module.less'
 import { IStopTaskReq } from "@/services/task/interface"
-import TaskReportModal from "@/components/TaskFormModel"
+import TaskReportModal from "@/components/TaskReportModel"
 import { LoadingOutlined } from "@ant-design/icons"
-
 
 const TaskTable: React.FC = () => {
 
@@ -26,11 +25,6 @@ const TaskTable: React.FC = () => {
   // 执行任务
   const columns = useMemo<ColumnsType<any>>(() => {
     return [
-      // {
-      //   title: '序号',
-      //   width: 50,
-      //   render: (text, record, index) => (pageNo - 1) * pageSize + index + 1
-      // },
       {
         title: '任务名称',
         dataIndex: 'taskName',
@@ -100,7 +94,7 @@ const TaskTable: React.FC = () => {
               {/* 运行中和等待中的任务不可以重跑 */}
               <Button loading={buttonLoading} disabled={record.status === 2 || record.status === 1} type="primary" onClick={() => fetchRollBackTask(record.id)}>重跑</Button>
               {/* 等待中的任务不可以暂停 */}
-              {record.status !== 1 && <Button disabled={record.status === 3} onClick={() => fetchStopTask({ id: record.id, status: 1 })}>暂停</Button>}
+              {record.status !== 1 && <Button loading={buttonLoading} disabled={record.status === 3} onClick={() => fetchStopTask({ id: record.id, status: 1 })}>暂停</Button>}
               {/* 运行中和已完成的任务不能继续 */}
               {record.status === 1 && <Button onClick={() => fetchStopTask({ id: record.id, status: 2 })}>继续</Button>}
               <Button onClick={() => setTaskInfo(record)}>报告</Button>
@@ -123,7 +117,7 @@ const TaskTable: React.FC = () => {
    * 查询任务列表
    */
   const fetchTasks = () => {
-    getTasks({
+    getTaskList({
       pageNo,
       pageSize: pageSize
     }).then(data => {
@@ -138,11 +132,14 @@ const TaskTable: React.FC = () => {
    * @param id 任务id
    */
   const fetchRollBackTask = (id: number) => {
+    setButtonLoading(true)
     rollBackTask(id).then(req => {
       message.success(req.message)
       setLoading(true)
     }).catch(err => {
       message.error(err.message)
+    }).finally(() => {
+      setButtonLoading(false)
     })
   }
 
@@ -167,7 +164,7 @@ const TaskTable: React.FC = () => {
    */
   useEffect(() => {
     loading && fetchTasks()
-  }, [pageNo, loading])
+  }, [loading, pageNo])
 
   return (
     <MView resize>

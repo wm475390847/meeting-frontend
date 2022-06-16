@@ -1,5 +1,5 @@
 import { MView, PageHeader } from "@/components"
-import { getTasks, rollBackTask, stopTask } from "@/services/task"
+import { getTaskList, rollBackTask, stopTask } from "@/services/task"
 import { Button, message, Table } from "antd"
 import { ColumnsType } from "antd/lib/table"
 import { render } from "react-dom"

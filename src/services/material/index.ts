@@ -1,10 +1,10 @@
 import store from "@/store"
 import { setGameDictList } from "@/store/material"
 import { request } from "@/utils/tool"
-import { IMaterialsReq } from "./interface"
+import { IMaterialReq } from "./interface"
 
 // 获取素材列表
-export const getMaterials: (data: IMaterialsReq) => Promise<IPageRequest<MaterialInfo>> = (data) => {
+export const getMaterialList: (data: IMaterialReq) => Promise<IPageRequest<MaterialInfo>> = (data) => {
   return new Promise(async (resolve, reject) => {
     const res = await request.get(`/materials`, data)
     if (res.success) {

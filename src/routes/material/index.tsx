@@ -1,5 +1,5 @@
 import { MView, PageHeader } from "@/components"
-import { getGameDict, getMaterials } from "@/services/material"
+import { getGameDict, getMaterialList } from "@/services/material"
 import { Button, DatePicker, Input, Radio, RadioChangeEvent, Space, Table } from "antd"
 import { ColumnsType } from "antd/lib/table"
 import moment from "moment"
@@ -108,7 +108,7 @@ const MaterialTable: React.FC = () => {
    * 查询素材列表
    */
   const fetchMaterials = () => {
-    getMaterials({
+    getMaterialList({
       pageNo,
       pageSize: pageSize
     }).then(data => {

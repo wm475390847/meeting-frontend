@@ -1,4 +1,4 @@
-export interface IMaterialsReq {
+export interface IMaterialReq {
   gameDictIds?: string
   startTime?: string
   endTime?: string
