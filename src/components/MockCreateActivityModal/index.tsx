@@ -3,13 +3,13 @@ import { Button, Modal, Form, Input, message } from "antd";
 import { useState, ChangeEvent } from "react";
 import styles from './index.module.less'
 
-type MockActivityModalComponentsProps = {
+type MockCreteActivityModalComponentsProps = {
     visible: boolean
     onCancel?: () => void
     setLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const MockActivityModal: React.FC<MockActivityModalComponentsProps> = (props) => {
+const MockCreateActivityModal: React.FC<MockCreteActivityModalComponentsProps> = (props) => {
     const { visible, onCancel, setLoading } = (props)
     const [form] = Form.useForm()
     const [buttonLoading, setButtonLoading] = useState(false)
@@ -19,6 +19,7 @@ const MockActivityModal: React.FC<MockActivityModalComponentsProps> = (props) =>
      * 关闭弹窗
      */
     const handleCancel = () => {
+        setOrderId(undefined)
         onCancel && onCancel()
     }
 
@@ -28,7 +29,6 @@ const MockActivityModal: React.FC<MockActivityModalComponentsProps> = (props) =>
     }
 
     const onSubmit = () => {
-
         setButtonLoading(true)
         if (orderId) {
             createActivity(orderId).then(res => {
@@ -60,4 +60,4 @@ const MockActivityModal: React.FC<MockActivityModalComponentsProps> = (props) =>
     );
 }
 
-export default MockActivityModal
+export default MockCreateActivityModal

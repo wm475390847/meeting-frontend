@@ -8,7 +8,7 @@ type MockStreamModalComponentsProps = {
     onCancel?: () => void
 }
 
-const MockStreamModal: React.FC<MockStreamModalComponentsProps> = (props) => {
+const MockViewStreamModal: React.FC<MockStreamModalComponentsProps> = (props) => {
     const { streamInfoList, onCancel } = (props)
     const [visible, setVisible] = useState(false)
 
@@ -71,4 +71,4 @@ const MockStreamModal: React.FC<MockStreamModalComponentsProps> = (props) => {
     );
 };
 
-export default MockStreamModal;
+export default MockViewStreamModal;

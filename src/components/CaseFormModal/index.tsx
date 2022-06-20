@@ -30,6 +30,8 @@ const CaseFormModal: React.FC<CaseFormModalComponentsProps> = (props) => {
   const [visible, setVisible] = useState(false)
   const [form] = Form.useForm()
   const gameDictList = useSelector<IRootState, GameDictInfo[]>(state => state.material.gameDictList)
+  const schoolName = editInfo?.schoolName || '未知学校'
+
   const gameDictName = useMemo(() => {
     if (editInfo) {
       const gameDict = (gameDictList || []).find(item => item.id === editInfo.gameDictId)
@@ -37,7 +39,6 @@ const CaseFormModal: React.FC<CaseFormModalComponentsProps> = (props) => {
     }
     return undefined
   }, [editInfo])
-  const schoolName = editInfo?.schoolName || '未知学校'
 
   // 关闭弹窗
   const handleCancel = () => {
