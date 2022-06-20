@@ -3,7 +3,7 @@ import MockCreateActivityModal from "@/components/MockCreateActivityModal"
 import MockReplaceStreamModal from "@/components/MockReplaceStreamModal"
 import MockViewStreamModal from "@/components/MockViewStreamModal"
 import { getActivityList } from "@/services/activity"
-import { Button, Table, Form } from "antd"
+import { Button, Table, Form, Input, InputNumber } from "antd"
 import { ColumnsType } from "antd/lib/table"
 import React, { useEffect, useMemo, useState } from "react"
 import styles from './index.module.less'
@@ -20,6 +20,11 @@ const MockActivityTable: React.FC = () => {
     const [loading, setLoading] = useState(true)
     const [visible, setVisible] = useState(false)
     const [orderId, setOrderId] = useState<number>()
+    const [realCount, setRealCount] = useState<number>()
+
+    const onChange = (value: number) => {
+        setRealCount(value)
+    }
 
     const columns = useMemo<ColumnsType<any>>(() => {
         return [
@@ -32,25 +37,25 @@ const MockActivityTable: React.FC = () => {
                 title: '活动id',
                 dataIndex: 'orderId',
                 key: 'orderId',
-                width: '20%',
+                width: '15%',
             },
             {
                 title: '类型',
                 dataIndex: 'venueType',
                 key: 'venueType',
-                width: '20%',
+                width: '15%',
             },
             {
                 title: '场地',
                 dataIndex: 'venueName',
                 key: 'venueName',
-                width: '20%',
+                width: '15%',
             },
             {
                 title: '活动时长（h）',
                 dataIndex: 'duration',
                 key: 'duration',
-                width: '20%',
+                width: '15%',
                 render: (text) => {
                     return (text / 1000 / 60 / 60).toFixed(2)
                 }
@@ -59,8 +64,21 @@ const MockActivityTable: React.FC = () => {
                 title: '片段数量',
                 dataIndex: 'eventCount',
                 key: 'eventCount',
-                width: '20%',
+                width: '15%',
             },
+            // {
+            //     title: '真实数量',
+            //     dataIndex: 'realCount',
+            //     key: 'realCount',
+            //     width: '15%',
+            //     render: (_, record) => (
+            //         <div>
+            //             <Input.Group className={styles.inputGroup}>
+            //                 <InputNumber className={styles.inputNumber} defaultValue={record.realCount} onChange={onChange} />
+            //             </Input.Group>
+            //         </div>
+            //     )
+            // },
             {
                 title: '操作',
                 dataIndex: 'action',
@@ -73,6 +91,13 @@ const MockActivityTable: React.FC = () => {
             }
         ]
     }, [pageNo, pageSize])
+
+
+    // const onSubmit = (data: IUpdateActivityReq) => {
+    //     updateActivity(data).then(() => {
+    //     })
+    // }
+
 
     /**
      * 判断是url是否全为空
@@ -129,7 +154,7 @@ const MockActivityTable: React.FC = () => {
                 onChange={onChangeTable}
             />
             <MockViewStreamModal streamInfoList={streamInfoList} onCancel={() => setStreamInfoList(undefined)} />
-            <MockCreateActivityModal visible={visible} onCancel={() => setVisible(false)} setLoading={setLoading} />
+            <MockCreateActivityModal visible={visible} setLoading={setLoading} onCancel={() => setVisible(false)} />
             <MockReplaceStreamModal orderId={orderId} setLoading={setLoading} onCancel={() => setOrderId(undefined)} />
         </MView >
     )

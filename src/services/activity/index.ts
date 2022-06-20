@@ -1,6 +1,6 @@
 import { RequestOpt } from "@/utils/request"
 import { request } from "@/utils/tool"
-import { IActivityReq, IUpdateStreamReq } from "./interface"
+import { IActivityReq, IUpdateActivityReq, IUpdateStreamReq } from "./interface"
 
 export const getActivityList: (data: IActivityReq) => Promise<IPageRequest<ActivityInfo>> = (data) => {
     return new Promise(async (resolve, reject) => {
@@ -27,6 +27,18 @@ export const createActivity: (id: number) => Promise<RequestOpt> = (id) => {
 export const updateStream: (data: IUpdateStreamReq) => Promise<RequestOpt> = (data) => {
     return new Promise(async (resolve, reject) => {
         const res = await request.put(`/mock/devices`, data)
+        if (res.success) {
+            resolve(res)
+        } else {
+            reject(res)
+        }
+    })
+}
+
+
+export const updateActivity: (data: IUpdateActivityReq) => Promise<RequestOpt> = (data) => {
+    return new Promise(async (resolve, reject) => {
+        const res = await request.put(`/mock/activities`, data)
         if (res.success) {
             resolve(res)
         } else {

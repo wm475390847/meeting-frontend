@@ -9,7 +9,6 @@ import { useSelector } from 'react-redux'
 import IRootState from "@/store/interface"
 import VideoModal from "@/components/VideoModal"
 import CaseFormModal from "@/components/CaseFormModal"
-import { SizeType } from "antd/lib/config-provider/SizeContext"
 
 const MaterialTable: React.FC = () => {
 
@@ -28,20 +27,13 @@ const MaterialTable: React.FC = () => {
   const [videoSrc, setVideoSrc] = useState<string>()
   // 加入用例的素材信息
   const [addInfo, setAddInfo] = useState<TaskInfo>()
-  const onSearch = (value: string) => console.log(value);
-
-  const [size, setSize] = useState<SizeType>('middle');
-
-  const handleSizeChange = (e: RadioChangeEvent) => {
-    setSize(e.target.value);
-  };
 
   const columns = useMemo<ColumnsType<any>>(() => {
     return [
       {
         title: '序号',
         width: '10%',
-        render: (text, record, index) => (pageNo as number - 1) * (pageSize as number) + index + 1
+        render: (_text, _record, index) => (pageNo as number - 1) * (pageSize as number) + index + 1
       },
       {
         title: '类别',
@@ -50,7 +42,6 @@ const MaterialTable: React.FC = () => {
         width: '10%',
         render: (text) => {
           const gameDict = (gameDictList || []).find(item => item.id === text)
-
           return <div>{gameDict ? gameDict.name : ''}</div>
         }
       },
@@ -129,10 +120,6 @@ const MaterialTable: React.FC = () => {
   return (
     <MView resize>
       <PageHeader title="素材列表" />
-      {/* <Space className={styles.space} direction="vertical" size={12}>
-        <RangePicker size={size} />
-      </Space> */}
-
       <Table
         columns={columns}
         dataSource={materialList}

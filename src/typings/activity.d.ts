@@ -5,6 +5,7 @@ interface ActivityInfo {
     venueType: string
     venueName: string
     eventCount: number
+    realCount: number
     mockStreamResponseList: StreamInfo[]
 }
 

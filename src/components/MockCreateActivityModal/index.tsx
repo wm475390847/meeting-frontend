@@ -1,6 +1,6 @@
 import { createActivity } from "@/services/activity";
-import { Button, Modal, Form, Input, message } from "antd";
-import { useState, ChangeEvent } from "react";
+import { Button, Modal, message, InputNumber } from "antd";
+import { useState } from "react";
 import styles from './index.module.less'
 
 type MockCreteActivityModalComponentsProps = {
@@ -11,7 +11,6 @@ type MockCreteActivityModalComponentsProps = {
 
 const MockCreateActivityModal: React.FC<MockCreteActivityModalComponentsProps> = (props) => {
     const { visible, onCancel, setLoading } = (props)
-    const [form] = Form.useForm()
     const [buttonLoading, setButtonLoading] = useState(false)
     const [orderId, setOrderId] = useState<number>()
 
@@ -23,9 +22,8 @@ const MockCreateActivityModal: React.FC<MockCreteActivityModalComponentsProps> =
         onCancel && onCancel()
     }
 
-    const onChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const orderId = event.target.value
-        setOrderId(orderId as unknown as number)
+    const onChange = (value: number) => {
+        setOrderId(value)
     }
 
     const onSubmit = () => {
@@ -48,13 +46,13 @@ const MockCreateActivityModal: React.FC<MockCreteActivityModalComponentsProps> =
         <>
             <Modal
                 visible={visible}
-                title="获取录播流"
+                title="通过活动id获取录播流"
                 onCancel={handleCancel}
-                footer={<Button loading={buttonLoading} className={styles.button} type='primary' onClick={onSubmit}>确定</Button>}
+                footer={<Button loading={buttonLoading} type='primary' onClick={onSubmit}>确定</Button>}
                 destroyOnClose
                 width={300}
             >
-                <Input className={styles.input} placeholder="请输入活动id" onChange={onChange} required={true} />
+                <InputNumber className={styles.inputNumber} min={1} placeholder="请输入活动id" onChange={onChange} />
             </Modal >
         </>
     );

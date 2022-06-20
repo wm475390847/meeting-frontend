@@ -7,3 +7,8 @@ export interface IUpdateStreamReq {
   orderId: number
   deviceName: string
 }
+
+export interface IUpdateActivityReq {
+  id: number
+  realCount: number
+}

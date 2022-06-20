@@ -49,7 +49,6 @@ const MockReplaceStreamModal: React.FC<MoclkReplaceStreamModalComponentsProps> =
     }
 
     useEffect(() => {
-        console.log('orderId', orderId)
         orderId && setVisible(true)
     }, [orderId])
 
@@ -59,7 +58,7 @@ const MockReplaceStreamModal: React.FC<MoclkReplaceStreamModalComponentsProps> =
                 visible={visible}
                 title="替换后台设备组的标注和拉流地址"
                 onCancel={handleCancel}
-                footer={<Button loading={buttonLoading} className={styles.button} type='primary' onClick={onSubmit}>确定</Button>}
+                footer={<Button loading={buttonLoading} type='primary' onClick={onSubmit}>确定</Button>}
                 destroyOnClose
                 width={500}
             >

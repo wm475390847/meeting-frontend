@@ -40,15 +40,15 @@ const TaskTable: React.FC = () => {
         render: (status) => <div>{taskStatusEnum[status]} {status === 2 && < Spin indicator={antIcon} />}</div>
       },
       {
-        title: '失败',
-        dataIndex: 'executeFail',
-        key: 'executeFail',
-        width: 45
-      },
-      {
         title: '成功',
         dataIndex: 'executeSuccess',
         key: 'executeSuccess',
+        width: 45
+      },
+      {
+        title: '失败',
+        dataIndex: 'executeFail',
+        key: 'executeFail',
         width: 45
       },
       {
@@ -67,13 +67,13 @@ const TaskTable: React.FC = () => {
         title: '通过率',
         dataIndex: 'percentage',
         key: 'percentage',
-        width: 50
+        width: 65
       },
       {
         title: '执行进度',
         dataIndex: 'elapsedTime',
         key: 'elapsedTime',
-        width: '15%',
+        width: '13%',
         render: (text, record) => <div><Progress strokeColor={{ '0%': '#108ee9', '100%': '#87d068' }} percent={(record.executeSuccess + record.executeFail) / record.total * 100} /></div>
       },
       {
