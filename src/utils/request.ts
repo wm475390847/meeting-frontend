@@ -20,7 +20,6 @@ export interface RequestOpt {
   requestId?: null | string | number
   success: boolean
   total?: number
-  msg?: string
 }
 
 function checkStatus({ response, options, url }: ICheckStatusProps): Response {
@@ -83,24 +82,30 @@ export default function request(_url: string, options?: any): Promise<RequestOpt
       response,
       options: newOptions,
       url: _url,
-    }))
-    .then(parseJSON)
-    .then(data => {
+    })).then(parseJSON).then(data => {
       return data;
-    })
-    .catch((err: any) => {
-      if (err && err.response && err.response.status === 500) {
-        // 自定义报错
-        return err.response.json()
-          .then((data: any) => {
-            console.log(data)
-            if (data && data.code === 'SW-GW-1003') {
-              window.location.href = 'https://sso.xinhuazhiyun.com/login.html?redirectUri=' + encodeURIComponent(window.location.href);
-            }
-          })
-          .catch((e: Error) => {
-            console.log(e);
-          });
+    }).catch((err: any) => {
+      if (err) {
+        const response = err.response
+        if (response.status === 504) {
+          return err.response.json()
+            .then((data: any) => {
+              message.error(data.msg)
+            })
+        }
+        if (response.status === 500) {
+          // 自定义报错
+          return err.response.json()
+            .then((data: any) => {
+              console.log(data)
+              if (data && data.code === 'SW-GW-1003') {
+                window.location.href = 'https://sso.xinhuazhiyun.com/login.html?redirectUri=' + encodeURIComponent(window.location.href);
+              }
+            })
+            .catch((e: Error) => {
+              console.log(e);
+            });
+        }
       }
       return ({
         data: null,

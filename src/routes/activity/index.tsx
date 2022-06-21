@@ -30,7 +30,7 @@ const MockActivityTable: React.FC = () => {
     const onPressEnter = (e: any, id: number) => {
         // 缓存一下
         e.persist()
-        onSubmit({ id: id, realCount: e.target.value })
+        onSubmit({ id: id, realCount: e.target.value as number })
     }
 
     const columns = useMemo<ColumnsType<any>>(() => {
@@ -97,7 +97,6 @@ const MockActivityTable: React.FC = () => {
             }
         ]
     }, [pageNo, pageSize])
-
 
     /**
      * 修改活动
