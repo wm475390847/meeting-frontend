@@ -41,36 +41,29 @@ const ReportTable: React.FC<ReportTableComponentsProps> = (props) => {
         title: '类型',
         dataIndex: 'gameDictId',
         key: 'gameDictId',
-        width: '20%',
+        width: '15%',
         render: (text) => {
           const gameDict = (gameDictList || []).find(item => item.id === text)
           return <div>{gameDict ? gameDict.name : '未知'}</div>
         }
       },
       {
-        title: '用例结果',
-        dataIndex: 'caseResult',
-        key: 'caseResult',
-        width: '20%',
-        render: (status) => <div>{caseHistoryEnum[status]}</div>
-      },
-      {
-        title: '错误原因',
-        dataIndex: 'caseMessage',
-        key: 'caseMessage',
-        width: '20%'
+        title: '计算结果',
+        dataIndex: 'score',
+        key: 'score',
+        width: '15%'
       },
       {
         title: '区间值',
         dataIndex: 'minValue',
         key: 'minValue',
-        width: '20%',
+        width: '15%',
         render: (_, record) => <div>{record.minValue} ~ {record.maxValue}</div>
       },
       {
-        title: '计算结果',
-        dataIndex: 'score',
-        key: 'score',
+        title: '错误原因',
+        dataIndex: 'caseMessage',
+        key: 'caseMessage',
         width: '20%'
       }
     ]

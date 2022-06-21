@@ -46,3 +46,14 @@ export const updateActivity: (data: IUpdateActivityReq) => Promise<RequestOpt> =
         }
     })
 }
+
+export const deleteActivity: (id: number) => Promise<RequestOpt> = (id) => {
+    return new Promise(async (resolve, reject) => {
+        const res = await request.delete(`/mock/activities/${id}`, id)
+        if (res.success) {
+            resolve(res)
+        } else {
+            reject(res)
+        }
+    })
+}

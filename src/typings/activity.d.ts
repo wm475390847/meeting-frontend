@@ -1,4 +1,5 @@
 interface ActivityInfo {
+    id: number
     duration: number
     orderId: number
     venueId: number

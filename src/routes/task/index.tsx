@@ -74,7 +74,10 @@ const TaskTable: React.FC = () => {
         dataIndex: 'elapsedTime',
         key: 'elapsedTime',
         width: '13%',
-        render: (text, record) => <div><Progress strokeColor={{ '0%': '#108ee9', '100%': '#87d068' }} percent={(record.executeSuccess + record.executeFail) / record.total * 100} /></div>
+        render: (text, record) =>
+          <div>
+            <Progress strokeColor={{ '0%': '#108ee9', '100%': '#87d068' }} size="small" status="active" percent={(record.executeSuccess + record.executeFail) / record.total * 100} />
+          </div>
       },
       {
         title: '执行时间',

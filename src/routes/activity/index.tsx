@@ -2,8 +2,9 @@ import { MView, PageHeader } from "@/components"
 import MockCreateActivityModal from "@/components/MockCreateActivityModal"
 import MockReplaceStreamModal from "@/components/MockReplaceStreamModal"
 import MockViewStreamModal from "@/components/MockViewStreamModal"
-import { getActivityList } from "@/services/activity"
-import { Button, Table, Form, Input, InputNumber } from "antd"
+import { deleteActivity, getActivityList, updateActivity } from "@/services/activity"
+import { IUpdateActivityReq } from "@/services/activity/interface"
+import { Button, Table, InputNumber, message } from "antd"
 import { ColumnsType } from "antd/lib/table"
 import React, { useEffect, useMemo, useState } from "react"
 import styles from './index.module.less'
@@ -20,10 +21,16 @@ const MockActivityTable: React.FC = () => {
     const [loading, setLoading] = useState(true)
     const [visible, setVisible] = useState(false)
     const [orderId, setOrderId] = useState<number>()
-    const [realCount, setRealCount] = useState<number>()
+    const [buttonLoading, setButtonLoading] = useState(false)
 
-    const onChange = (value: number) => {
-        setRealCount(value)
+    /**
+     * 按下回车进行保存
+     * @param e 
+     */
+    const onPressEnter = (e: any, id: number) => {
+        // 缓存一下
+        e.persist()
+        onSubmit({ id: id, realCount: e.target.value })
     }
 
     const columns = useMemo<ColumnsType<any>>(() => {
@@ -43,7 +50,7 @@ const MockActivityTable: React.FC = () => {
                 title: '类型',
                 dataIndex: 'venueType',
                 key: 'venueType',
-                width: '15%',
+                width: '10%',
             },
             {
                 title: '场地',
@@ -64,21 +71,19 @@ const MockActivityTable: React.FC = () => {
                 title: '片段数量',
                 dataIndex: 'eventCount',
                 key: 'eventCount',
-                width: '15%',
+                width: '10%',
             },
-            // {
-            //     title: '真实数量',
-            //     dataIndex: 'realCount',
-            //     key: 'realCount',
-            //     width: '15%',
-            //     render: (_, record) => (
-            //         <div>
-            //             <Input.Group className={styles.inputGroup}>
-            //                 <InputNumber className={styles.inputNumber} defaultValue={record.realCount} onChange={onChange} />
-            //             </Input.Group>
-            //         </div>
-            //     )
-            // },
+            {
+                title: '真实数量',
+                dataIndex: 'realCount',
+                key: 'realCount',
+                width: '10%',
+                render: (_, record: ActivityInfo) => (
+                    <div>
+                        <InputNumber className={styles.inputNumber} defaultValue={record.realCount} min={0} onPressEnter={(e) => onPressEnter(e, record.id)} />
+                    </div>
+                )
+            },
             {
                 title: '操作',
                 dataIndex: 'action',
@@ -87,17 +92,25 @@ const MockActivityTable: React.FC = () => {
                     <div className={styles.action} >
                         <Button type="primary" onClick={() => setStreamInfoList(record.mockStreamResponseList)}>查看录播流</Button>
                         <Button disabled={allUrlIsNull(record.mockStreamResponseList)} onClick={() => setOrderId(record.orderId)} >替换设备流</Button>
+                        <Button loading={buttonLoading} onClick={() => fetchDelectActivity(record.id)}>删除</Button>
                     </div >)
             }
         ]
     }, [pageNo, pageSize])
 
 
-    // const onSubmit = (data: IUpdateActivityReq) => {
-    //     updateActivity(data).then(() => {
-    //     })
-    // }
-
+    /**
+     * 修改活动
+     * @param data 修改活动请求
+     */
+    const onSubmit = (data: IUpdateActivityReq) => {
+        updateActivity(data).then(res => {
+            message.success(res.message)
+            setLoading(true)
+        }).catch(err => {
+            message.error(err.message)
+        })
+    }
 
     /**
      * 判断是url是否全为空
@@ -132,6 +145,17 @@ const MockActivityTable: React.FC = () => {
             setTotal(data.total)
             setLoading(false)
         })
+    }
+
+    const fetchDelectActivity = (id: number) => {
+        setButtonLoading(true)
+        deleteActivity(id)
+            .then(res => {
+                message.info(res.message)
+                setLoading(true)
+            }).catch(err => {
+                message.error(err.message)
+            }).finally(() => { setButtonLoading(false) })
     }
 
     useEffect(() => {

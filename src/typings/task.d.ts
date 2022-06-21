@@ -17,4 +17,5 @@ interface ReportInfo {
   caseDesc: string
   caseMessage: string
   score: string
+  caseId: number
 }

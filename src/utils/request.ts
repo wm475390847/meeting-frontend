@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import fetch from 'isomorphic-fetch';
 
 export type IRequestMethod = 'GET' | 'PUT' | 'POST' | 'DELETE';
@@ -19,6 +20,7 @@ export interface RequestOpt {
   requestId?: null | string | number
   success: boolean
   total?: number
+  msg?: string
 }
 
 function checkStatus({ response, options, url }: ICheckStatusProps): Response {
