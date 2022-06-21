@@ -3,8 +3,7 @@ import MockCreateActivityModal from "@/components/MockCreateActivityModal"
 import MockReplaceStreamModal from "@/components/MockReplaceStreamModal"
 import MockViewStreamModal from "@/components/MockViewStreamModal"
 import { deleteActivity, getActivityList, updateActivity } from "@/services/activity"
-import { IUpdateActivityReq } from "@/services/activity/interface"
-import { Button, Table, InputNumber, message } from "antd"
+import { Button, Table, InputNumber, message, Select } from "antd"
 import { ColumnsType } from "antd/lib/table"
 import React, { useEffect, useMemo, useState } from "react"
 import styles from './index.module.less'
@@ -22,16 +21,8 @@ const MockActivityTable: React.FC = () => {
     const [visible, setVisible] = useState(false)
     const [orderId, setOrderId] = useState<number>()
     const [buttonLoading, setButtonLoading] = useState(false)
-
-    /**
-     * 按下回车进行保存
-     * @param e 
-     */
-    const onPressEnter = (e: any, id: number) => {
-        // 缓存一下
-        e.persist()
-        onSubmit({ id: id, realCount: e.target.value as number })
-    }
+    const [venueType, setVenueType] = useState<string>()
+    const { Option } = Select;
 
     const columns = useMemo<ColumnsType<any>>(() => {
         return [
@@ -99,11 +90,13 @@ const MockActivityTable: React.FC = () => {
     }, [pageNo, pageSize])
 
     /**
-     * 修改活动
-     * @param data 修改活动请求
+     * 按下回车进行保存
+     * @param e 
      */
-    const onSubmit = (data: IUpdateActivityReq) => {
-        updateActivity(data).then(res => {
+    const onPressEnter = (e: any, id: number) => {
+        // 缓存一下
+        e.persist()
+        updateActivity({ id: id, realCount: e.target.value as number }).then(res => {
             message.success(res.message)
             setLoading(true)
         }).catch(err => {
@@ -138,7 +131,8 @@ const MockActivityTable: React.FC = () => {
     const fetchActivityList = () => {
         getActivityList({
             pageNo,
-            pageSize: pageSize
+            pageSize: pageSize,
+            venueType: venueType
         }).then(data => {
             setActivityList(data.records)
             setTotal(data.total)
@@ -157,6 +151,12 @@ const MockActivityTable: React.FC = () => {
             }).finally(() => { setButtonLoading(false) })
     }
 
+    const handleChange = (value: string) => {
+        console.log(value);
+        setVenueType(value)
+        setLoading(true)
+    };
+
     useEffect(() => {
         loading && fetchActivityList()
     }, [pageNo, loading])
@@ -164,7 +164,14 @@ const MockActivityTable: React.FC = () => {
     return (
         <MView resize>
             <PageHeader title="录播活动列表" />
-            <div className={styles.button}>
+            <div >
+                <Select className={styles.select} defaultValue="全部" onChange={handleChange}>
+                    <Option value="">全部</Option>
+                    <Option value="篮球">篮球</Option>
+                    <Option value="足球">足球</Option>
+                    <Option value="羽毛球">羽毛球</Option>
+                    <Option value="乒乓球">乒乓球</Option>
+                </Select>
                 <Button className={styles.button} type="primary" onClick={() => setVisible(true)} >创建录播活动</Button>
             </div>
 

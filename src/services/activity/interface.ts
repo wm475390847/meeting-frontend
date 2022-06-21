@@ -1,6 +1,7 @@
 export interface IActivityReq {
   pageNo: number
   pageSize: number
+  venueType?: string
 }
 
 export interface IUpdateStreamReq {
