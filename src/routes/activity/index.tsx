@@ -24,6 +24,11 @@ const MockActivityTable: React.FC = () => {
     const [venueType, setVenueType] = useState<string>()
     const { Option } = Select;
 
+    const setParam = (orderId: number | undefined, venueType: string | undefined) => {
+        setVenueType(venueType)
+        setOrderId(orderId)
+    }
+
     const columns = useMemo<ColumnsType<any>>(() => {
         return [
             {
@@ -82,7 +87,7 @@ const MockActivityTable: React.FC = () => {
                 render: (_, record: ActivityInfo) => (
                     <div className={styles.action} >
                         <Button type="primary" onClick={() => setStreamInfoList(record.mockStreamResponseList)}>查看录播流</Button>
-                        <Button disabled={allUrlIsNull(record.mockStreamResponseList)} onClick={() => setOrderId(record.orderId)} >替换设备流</Button>
+                        <Button disabled={allUrlIsNull(record.mockStreamResponseList)} onClick={() => setParam(record.orderId, record.venueType)} >替换设备流</Button>
                         <Button loading={buttonLoading} onClick={() => fetchDelectActivity(record.id)}>删除</Button>
                     </div >)
             }
@@ -185,7 +190,7 @@ const MockActivityTable: React.FC = () => {
             />
             <MockViewStreamModal streamInfoList={streamInfoList} onCancel={() => setStreamInfoList(undefined)} />
             <MockCreateActivityModal visible={visible} setLoading={setLoading} onCancel={() => setVisible(false)} />
-            <MockReplaceStreamModal orderId={orderId} setLoading={setLoading} onCancel={() => setOrderId(undefined)} />
+            <MockReplaceStreamModal venueType={venueType} orderId={orderId} setLoading={setLoading} onCancel={() => setParam(undefined, undefined)} />
         </MView >
     )
 }

@@ -7,6 +7,7 @@ export interface IActivityReq {
 export interface IUpdateStreamReq {
   orderId: number
   deviceName: string
+  venueType: string
 }
 
 export interface IUpdateActivityReq {

@@ -4,13 +4,14 @@ import { useState, ChangeEvent, useEffect } from "react";
 import styles from './index.module.less'
 
 type MoclkReplaceStreamModalComponentsProps = {
+    venueType?: string
     orderId?: number
     onCancel?: () => void
     setLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const MockReplaceStreamModal: React.FC<MoclkReplaceStreamModalComponentsProps> = (props) => {
-    const { orderId, onCancel, setLoading } = (props)
+    const { venueType, orderId, onCancel, setLoading } = (props)
     const [buttonLoading, setButtonLoading] = useState(false)
     const [deviceName, setDeviceName] = useState<string>()
     const [visible, setVisible] = useState(false)
@@ -31,8 +32,8 @@ const MockReplaceStreamModal: React.FC<MoclkReplaceStreamModalComponentsProps> =
 
     const onSubmit = () => {
         setButtonLoading(true)
-        if (orderId && deviceName) {
-            updateStream({ orderId: orderId, deviceName: deviceName })
+        if (orderId && deviceName && venueType) {
+            updateStream({ orderId: orderId, deviceName: deviceName, venueType: venueType })
                 .then(res => {
                     message.success(res.message)
                     setLoading(true)
