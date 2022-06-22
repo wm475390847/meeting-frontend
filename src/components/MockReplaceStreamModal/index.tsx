@@ -57,7 +57,7 @@ const MockReplaceStreamModal: React.FC<MoclkReplaceStreamModalComponentsProps> =
         <>
             <Modal
                 visible={visible}
-                title="替换后台设备组的标注和拉流地址"
+                title="替换BOSS设备组的标注和拉流地址"
                 onCancel={handleCancel}
                 footer={<Button loading={buttonLoading} type='primary' onClick={onSubmit}>确定</Button>}
                 destroyOnClose
