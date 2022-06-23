@@ -19,7 +19,6 @@ const Case: React.FC = () => {
   const RangePicker: any = DatePicker.RangePicker;
 
   const onSearch = (value: string) => {
-    console.log("搜索值：", value);
     setCaseDesc(value)
   }
 

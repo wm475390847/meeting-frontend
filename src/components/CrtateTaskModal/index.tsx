@@ -25,7 +25,6 @@ const CreateTaskModal: React.FC<CreateTaskModalComponentsProps> = (props) => {
   const [form] = Form.useForm()
 
   const onChange = (e: RadioChangeEvent) => {
-    console.log('选择的单选框：', e.target.value);
     setValue(e.target.value);
   };
 

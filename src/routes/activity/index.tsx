@@ -86,8 +86,8 @@ const MockActivityTable: React.FC = () => {
                 key: 'action',
                 render: (_, record: ActivityInfo) => (
                     <div className={styles.action} >
-                        <Button type="primary" onClick={() => setStreamInfoList(record.mockStreamResponseList)}>查看录播流</Button>
-                        <Button disabled={allUrlIsNull(record.mockStreamResponseList)} onClick={() => setParam(record.orderId, record.venueType)} >替换设备流</Button>
+                        <Button type="primary" onClick={() => setStreamInfoList(record.mockStreamRespList)}>查看录播流</Button>
+                        <Button disabled={allUrlIsNull(record.mockStreamRespList)} onClick={() => setParam(record.orderId, record.venueType)} >替换设备流</Button>
                         <Button loading={buttonLoading} onClick={() => fetchDelectActivity(record.id)}>删除</Button>
                     </div >)
             }
