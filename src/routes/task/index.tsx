@@ -33,7 +33,7 @@ const TaskTable: React.FC = () => {
         key: 'taskName',
         width: 100,
         ellipsis: true,
-        render: (text) => <ToolTipModal text={text}></ToolTipModal>
+        render: (text) => <ToolTipModal text={text} />
       },
       {
         title: '状态',
