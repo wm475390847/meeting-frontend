@@ -2,6 +2,7 @@ import { MView, PageHeader } from "@/components"
 import MockCreateActivityModal from "@/components/MockCreateActivityModal"
 import MockReplaceStreamModal from "@/components/MockReplaceStreamModal"
 import MockViewStreamModal from "@/components/MockViewStreamModal"
+import ToolTipModal from "@/components/ToolTip"
 import { deleteActivity, getActivityList, updateActivity } from "@/services/activity"
 import { Button, Table, InputNumber, message, Select } from "antd"
 import { ColumnsType } from "antd/lib/table"
@@ -53,6 +54,7 @@ const MockActivityTable: React.FC = () => {
                 dataIndex: 'venueName',
                 key: 'venueName',
                 width: '15%',
+                render: (text) => <ToolTipModal text={text} />
             },
             {
                 title: '活动时长（h）',
@@ -157,7 +159,6 @@ const MockActivityTable: React.FC = () => {
     }
 
     const handleChange = (value: string) => {
-        console.log(value);
         setVenueType(value)
         setLoading(true)
     };

@@ -1,19 +1,24 @@
-import { Button, PageHeader, Popconfirm, Progress, Table } from 'antd';
+import { Button, Popconfirm, Progress, Select, Table, Tooltip } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import { ColumnsType } from 'antd/lib/table';
 import { getCommonCases } from '@/services/commonCase';
-import { MView } from '@/components';
+import { MView, PageHeader } from '@/components';
 import styles from './index.module.less'
 import CommonCasseReasonModal from '@/components/CommonCaseModal';
 import moment from 'moment';
+import { text } from 'stream/consumers';
+import ToolTipReportModal from '@/components/ToolTip';
 
 const CommonCaseTable: React.FC = (props) => {
   const [pageNo, setPageNo] = useState(1)
   const [pageSize, setPageSize] = useState(10)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [total, setTotal] = useState(0)
   const [commonCaseList, setCommonCaseList] = useState<CommonCaseInfo[]>()
   const [reason, setReason] = useState()
+  const [caseResult, setCaseResult] = useState<boolean>()
+
+  const { Option } = Select;
 
   const onChangeTable = (value: any) => {
     const { current, pageSize } = value
@@ -35,14 +40,16 @@ const CommonCaseTable: React.FC = (props) => {
         key: "caseName",
         dataIndex: "caseName",
         width: '15%',
-        ellipsis: true
+        ellipsis: true,
+        render: (text) => <ToolTipReportModal text={text} />
       },
       {
         title: "Desc",
         key: "caseDesc",
         dataIndex: "caseDesc",
         width: '15%',
-        ellipsis: true
+        ellipsis: true,
+        render: (text) => <ToolTipReportModal text={text} />
       },
       {
         title: "Result",
@@ -105,7 +112,8 @@ const CommonCaseTable: React.FC = (props) => {
   const fetchCommonCaseList = () => {
     getCommonCases({
       pageNo: pageNo,
-      pageSize: pageSize
+      pageSize: pageSize,
+      caseResult: caseResult
     }).then(data => {
       setCommonCaseList(data.records)
       setTotal(data.total)
@@ -113,19 +121,32 @@ const CommonCaseTable: React.FC = (props) => {
     })
   }
 
+  const handleChange = (value: string) => {
+    setCaseResult(value as unknown as boolean)
+    setLoading(true)
+  };
+
   /**
    *  监听pageNo变化时刷新列表
    */
   useEffect(() => {
-    pageNo && fetchCommonCaseList()
-  }, [pageNo])
+    loading && fetchCommonCaseList()
+  }, [pageNo, loading])
 
 
   return (
     <MView resize>
       <PageHeader title="用例列表" />
+
+      <div >
+        <Select className={styles.select} defaultValue="全部" onChange={handleChange}>
+          <Option value="">全部</Option>
+          <Option value="true">成功</Option>
+          <Option value="false">失败</Option>
+        </Select>
+      </div>
+
       <Table
-        className={styles.table}
         columns={columns}
         dataSource={commonCaseList}
         onChange={onChangeTable}
@@ -134,6 +155,7 @@ const CommonCaseTable: React.FC = (props) => {
         rowKey="id"
       >
       </Table>
+
       <CommonCasseReasonModal reason={reason} onCancel={() => setReason(undefined)} />
     </MView>
   );

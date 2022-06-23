@@ -87,6 +87,12 @@ export default function request(_url: string, options?: any): Promise<RequestOpt
     }).catch((err: any) => {
       if (err) {
         const response = err.response
+        if (response.status === 502) {
+          return err.response.json()
+            .then((data: any) => {
+              message.error("系统错误请联系技术支持")
+            })
+        }
         if (response.status === 504) {
           return err.response.json()
             .then((data: any) => {

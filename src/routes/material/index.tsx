@@ -1,6 +1,6 @@
 import { MView, PageHeader } from "@/components"
 import { getGameDict, getMaterialList } from "@/services/material"
-import { Button, DatePicker, Input, Radio, RadioChangeEvent, Space, Table } from "antd"
+import { Button, DatePicker, Input, Radio, RadioChangeEvent, Space, Table, Tooltip } from "antd"
 import { ColumnsType } from "antd/lib/table"
 import moment from "moment"
 import React, { useEffect, useMemo, useState } from "react"
@@ -63,13 +63,9 @@ const MaterialTable: React.FC = () => {
           return (
             <div className={styles.buttonGroup}>
               {devices.map((item: any) => (
-                <Button
-                  key={item.id}
-                  type='link'
-                  className={styles.button}
-                  onClick={() => setVideoSrc(item.pullUrl)}>
-                  {item.pullUrl}
-                </Button>
+                <Tooltip title={item.pullUrl}>
+                  <Button key={item.id} type='link' className={styles.button} onClick={() => setVideoSrc(item.pullUrl)}>{item.pullUrl}</Button>
+                </Tooltip>
               ))}
             </div>
           )

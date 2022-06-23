@@ -9,7 +9,8 @@ import IRootState from '@/store/interface'
 import styles from './index.module.less'
 import moment from 'moment'
 import React, { useEffect, useMemo, useState } from 'react'
-import { Button, message, Popconfirm, Table } from 'antd'
+import { Button, message, Popconfirm, Table, Tooltip } from 'antd'
+import ToolTipModal from '@/components/ToolTip'
 
 interface CaseTableComponentsProps {
   searchCaseInfo?: {
@@ -54,7 +55,8 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
         dataIndex: 'caseDesc',
         key: 'caseDesc',
         width: 120,
-        ellipsis: true
+        ellipsis: true,
+        render: (text) => <ToolTipModal text={text} />
       },
       {
         title: '区间值',
@@ -91,9 +93,12 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
           return (
             <div className={styles.buttonGroup}>
               {devices.map((item: any) => (
-                <Button key={item.id} type='link' className={styles.button} onClick={() => setVideoSrc(item.pullUrl)}>{item.pullUrl}</Button>
-              ))}
-            </div>
+                <Tooltip title={item.pullUrl}>
+                  <Button key={item.id} type='link' className={styles.button} onClick={() => setVideoSrc(item.pullUrl)}>{item.pullUrl}</Button>
+                </Tooltip>
+              ))
+              }
+            </div >
           )
         }
       },
