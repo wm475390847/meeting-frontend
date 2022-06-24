@@ -1,4 +1,4 @@
-import { Button, Checkbox, Form, Input, message, Modal, Radio, RadioChangeEvent, Row, Select, Space } from 'antd';
+import { Button, Form, Modal } from 'antd';
 import React, { useEffect, useState } from 'react';
 import styles from './index.module.less'
 
@@ -10,6 +10,7 @@ type CommonCaseReasonModalComponentsProps = {
 const CommonCasseReasonModal: React.FC<CommonCaseReasonModalComponentsProps> = (props) => {
   const { reason, onCancel } = props
   const [visible, setVisible] = useState(false)
+  const [split, setSplit] = useState<string[]>([])
 
   /**
    * 关闭弹窗，父组件传入onCancel(setVisible=false)
@@ -34,7 +35,9 @@ const CommonCasseReasonModal: React.FC<CommonCaseReasonModalComponentsProps> = (
         width={1000}
       >
         <Form className={styles.formItem}>{
-          reason && <div className="msg" dangerouslySetInnerHTML={{ __html: reason }} />}
+          reason &&
+          reason.split("#").map((item: string) => <div>{item}</div>)
+        }
         </Form>
       </Modal >
     </>
