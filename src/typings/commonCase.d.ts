@@ -9,3 +9,13 @@ interface CommonCaseInfo {
     product: string
     env: string
 }
+
+interface Business {
+    desc: string
+    products: Product[]
+}
+
+interface Product {
+    desc: string
+    name: string
+}

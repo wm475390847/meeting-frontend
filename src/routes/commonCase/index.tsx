@@ -1,31 +1,28 @@
-import { Button, Popconfirm, Progress, Select, Table, Tooltip } from 'antd';
+import { Button, Popconfirm, Progress, Select, Table } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import { ColumnsType } from 'antd/lib/table';
-import { getCommonCases } from '@/services/commonCase';
+import { getCommonCases, getProdects } from '@/services/commonCase';
 import { MView, PageHeader } from '@/components';
 import styles from './index.module.less'
 import CommonCasseReasonModal from '@/components/CommonCaseModal';
 import moment from 'moment';
-import { text } from 'stream/consumers';
 import ToolTipReportModal from '@/components/ToolTip';
 
+interface caseProperty {
+  product?: string
+  caseResult?: boolean
+}
+
 const CommonCaseTable: React.FC = (props) => {
+  const { Option, OptGroup } = Select;
   const [pageNo, setPageNo] = useState(1)
   const [pageSize, setPageSize] = useState(10)
   const [loading, setLoading] = useState(true)
   const [total, setTotal] = useState(0)
   const [commonCaseList, setCommonCaseList] = useState<CommonCaseInfo[]>()
   const [reason, setReason] = useState()
-  const [caseResult, setCaseResult] = useState<boolean>()
-
-  const { Option } = Select;
-
-  const onChangeTable = (value: any) => {
-    const { current, pageSize } = value
-    setPageNo(current)
-    setPageSize(pageSize)
-    setLoading(true)
-  }
+  const [caseProperty, setCaseProperty] = useState<caseProperty>()
+  const [businessList, setBusinessList] = useState<Business[]>([])
 
   const columns = useMemo<ColumnsType<any>>(() => {
     return [
@@ -106,6 +103,13 @@ const CommonCaseTable: React.FC = (props) => {
     ]
   }, [pageNo, pageSize])
 
+  const onChangeTable = (value: any) => {
+    const { current, pageSize } = value
+    setPageNo(current)
+    setPageSize(pageSize)
+    setLoading(true)
+  }
+
   /**
    * 获取报告
    */
@@ -113,7 +117,8 @@ const CommonCaseTable: React.FC = (props) => {
     getCommonCases({
       pageNo: pageNo,
       pageSize: pageSize,
-      caseResult: caseResult
+      caseResult: caseProperty?.caseResult,
+      product: caseProperty?.product,
     }).then(data => {
       setCommonCaseList(data.records)
       setTotal(data.total)
@@ -121,10 +126,27 @@ const CommonCaseTable: React.FC = (props) => {
     })
   }
 
-  const handleChange = (value: string) => {
-    setCaseResult(value as unknown as boolean)
+  const fetchProductList = () => {
+    getProdects()
+      .then(data => {
+        setBusinessList(data)
+        setLoading(false)
+      })
+  }
+
+  const setProduct = (value: string) => {
+    setCaseProperty({ ...caseProperty, product: value })
     setLoading(true)
   };
+
+  const setResult = (value: string) => {
+    setCaseProperty({ ...caseProperty, caseResult: value as unknown as boolean })
+    setLoading(true)
+  }
+
+  useEffect(() => {
+    businessList.length === 0 && fetchProductList()
+  }, [businessList])
 
   /**
    *  监听pageNo变化时刷新列表
@@ -139,10 +161,28 @@ const CommonCaseTable: React.FC = (props) => {
       <PageHeader title="用例列表" />
 
       <div >
-        <Select className={styles.select} defaultValue="全部" onChange={handleChange}>
+        <Select className={styles.select} defaultValue="全部" onChange={setResult}>
           <Option value="">全部</Option>
           <Option value="true">成功</Option>
           <Option value="false">失败</Option>
+        </Select>
+        <Select defaultValue="全部" className={styles.select} onChange={setProduct} >
+          <OptGroup label="全部">
+            <Option value="">全部</Option>
+          </OptGroup>
+          {
+            businessList?.map((business: Business) => (
+              <OptGroup label={business.desc}>
+                {
+                  business.products.map((product: Product) => (
+                    <Option value={product.name}>{product.desc}</Option>)
+                  )
+                }
+              </OptGroup>
+            )
+
+            )
+          }
         </Select>
       </div>
 
@@ -157,7 +197,7 @@ const CommonCaseTable: React.FC = (props) => {
       </Table>
 
       <CommonCasseReasonModal reason={reason} onCancel={() => setReason(undefined)} />
-    </MView>
+    </MView >
   );
 };
 
