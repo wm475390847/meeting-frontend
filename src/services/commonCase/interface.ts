@@ -4,3 +4,5 @@ export interface ICommonCaseReq {
   caseResult?: boolean
   product?: string
 }
+
+

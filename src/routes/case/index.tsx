@@ -1,6 +1,6 @@
 import { MView, PageHeader } from "@/components"
 import CaseFormModal from "@/components/CaseFormModal"
-import CreateTaskModal from "@/components/CrtateTaskModal"
+import CreateTaskModal from "@/components/CreateTaskModal"
 import { Button, DatePicker, Input, Space } from "antd"
 import moment from "moment"
 import React, { useState } from "react"
