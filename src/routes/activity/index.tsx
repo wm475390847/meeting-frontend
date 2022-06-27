@@ -114,7 +114,7 @@ const MockActivityTable: React.FC = () => {
      * @param streamInfoList 流信息列表
      * @returns true/false
      */
-    const allUrlIsNull = (streamInfoList: StreamInfo[]) => {
+    const allUrlIsNull = (streamInfoList: StreamInfo[] = []) => {
         const pre = streamInfoList.reduce((pre, data) => {
             data.pullUrl === null && pre++
             return pre
