@@ -1,6 +1,6 @@
 import { MView, PageHeader } from "@/components"
 import CaseFormModal from "@/components/CaseFormModal"
-import CreateTaskModal from "@/components/CrtateTaskModal"
+import CreateTaskModal from "@/components/CreateTaskModal"
 import { Button, DatePicker, Input, Space } from "antd"
 import moment from "moment"
 import React, { useState } from "react"
@@ -19,7 +19,6 @@ const Case: React.FC = () => {
   const RangePicker: any = DatePicker.RangePicker;
 
   const onSearch = (value: string) => {
-    console.log("搜索值：", value);
     setCaseDesc(value)
   }
 

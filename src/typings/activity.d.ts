@@ -7,7 +7,7 @@ interface ActivityInfo {
     venueName: string
     eventCount: number
     realCount: number
-    mockStreamResponseList: StreamInfo[]
+    mockStreamRespList: StreamInfo[]
 }
 
 interface StreamInfo {

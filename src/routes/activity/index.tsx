@@ -2,6 +2,7 @@ import { MView, PageHeader } from "@/components"
 import MockCreateActivityModal from "@/components/MockCreateActivityModal"
 import MockReplaceStreamModal from "@/components/MockReplaceStreamModal"
 import MockViewStreamModal from "@/components/MockViewStreamModal"
+import ToolTipModal from "@/components/ToolTip"
 import { deleteActivity, getActivityList, updateActivity } from "@/services/activity"
 import { Button, Table, InputNumber, message, Select } from "antd"
 import { ColumnsType } from "antd/lib/table"
@@ -53,6 +54,7 @@ const MockActivityTable: React.FC = () => {
                 dataIndex: 'venueName',
                 key: 'venueName',
                 width: '15%',
+                render: (text) => <ToolTipModal text={text} />
             },
             {
                 title: '活动时长（h）',
@@ -86,8 +88,8 @@ const MockActivityTable: React.FC = () => {
                 key: 'action',
                 render: (_, record: ActivityInfo) => (
                     <div className={styles.action} >
-                        <Button type="primary" onClick={() => setStreamInfoList(record.mockStreamResponseList)}>查看录播流</Button>
-                        <Button disabled={allUrlIsNull(record.mockStreamResponseList)} onClick={() => setParam(record.orderId, record.venueType)} >替换设备流</Button>
+                        <Button type="primary" onClick={() => setStreamInfoList(record.mockStreamRespList)}>查看录播流</Button>
+                        <Button disabled={allUrlIsNull(record.mockStreamRespList)} onClick={() => setParam(record.orderId, record.venueType)} >替换设备流</Button>
                         <Button loading={buttonLoading} onClick={() => fetchDelectActivity(record.id)}>删除</Button>
                     </div >)
             }
@@ -157,7 +159,6 @@ const MockActivityTable: React.FC = () => {
     }
 
     const handleChange = (value: string) => {
-        console.log(value);
         setVenueType(value)
         setLoading(true)
     };

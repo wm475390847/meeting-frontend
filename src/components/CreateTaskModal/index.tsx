@@ -1,6 +1,6 @@
 import { getGameDict } from '@/services/material';
 import { createTask } from '@/services/task';
-import { Button, Checkbox, Form, Input, message, Modal, Radio, RadioChangeEvent, Row, Select, Space } from 'antd';
+import { Button, Checkbox, Form, Input, message, Modal, Radio, RadioChangeEvent, Space } from 'antd';
 import React, { useEffect, useState } from 'react';
 import styles from './index.module.less'
 
@@ -25,7 +25,6 @@ const CreateTaskModal: React.FC<CreateTaskModalComponentsProps> = (props) => {
   const [form] = Form.useForm()
 
   const onChange = (e: RadioChangeEvent) => {
-    console.log('选择的单选框：', e.target.value);
     setValue(e.target.value);
   };
 
