@@ -2,7 +2,6 @@ import { getTaskReport } from '@/services/task';
 import { Table } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import { ColumnsType } from 'antd/lib/table';
-import { caseHistoryEnum } from '@/constants';
 import { useSelector } from 'react-redux';
 import IRootState from '@/store/interface';
 import { getGameDict } from '@/services/material';

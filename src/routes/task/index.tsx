@@ -9,7 +9,6 @@ import styles from './index.module.less'
 import { IStopTaskReq } from "@/services/task/interface"
 import TaskReportModal from "@/components/TaskReportModel"
 import { LoadingOutlined } from "@ant-design/icons"
-import { text } from "stream/consumers"
 import ToolTipModal from "@/components/ToolTip"
 
 const TaskTable: React.FC = () => {

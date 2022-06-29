@@ -16,7 +16,6 @@ const MaterialTable: React.FC = () => {
   const [materialList, setMaterialList] = useState<MaterialInfo[]>([])
   // 素材类型列表
   const gameDictList = useSelector<IRootState, GameDictInfo[]>(state => state.material.gameDictList)
-  const RangePicker: any = DatePicker.RangePicker;
 
   // 表格用
   const [total, setTotal] = useState(0)
