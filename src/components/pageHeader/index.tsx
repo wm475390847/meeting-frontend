@@ -21,13 +21,13 @@ const PageHeader: React.FC<PageHeaderProps> = props => {
   return (
     <MHeader
       title={title}
-      // right={
-      //   <Dropdown overlay={menu}>
-      //     <div className={styles.name}>{userInfo.name || '未知场馆'}
-      //       <Icon type="down" style={{ marginLeft: '4px' }} />
-      //     </div>
-      //   </Dropdown>
-      // }
+    // right={
+    //   <Dropdown overlay={menu}>
+    //     <div className={styles.name}>{userInfo.name || '未知场馆'}
+    //       <Icon type="down" style={{ marginLeft: '4px' }} />
+    //     </div>
+    //   </Dropdown>
+    // }
     />
   )
 }

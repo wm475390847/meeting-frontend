@@ -6,5 +6,5 @@ export { default as MHeader } from './Base/Header';
 
 // 业务组件
 export { default as Header } from './Header';
-export { default as PageHeader } from './pageHeader'
-export { default as PageOptions } from './pageOptions'
+export { default as PageHeader } from './PageHeader'
+export { default as PageOptions } from './PageOptions'
