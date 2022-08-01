@@ -96,8 +96,7 @@ const CaseTable: React.FC<CaseTableComponentsProps> = (props) => {
                 <Tooltip title={item.pullUrl}>
                   <Button key={item.id} type='link' className={styles.button} onClick={() => setVideoSrc(item.pullUrl)}>{item.pullUrl}</Button>
                 </Tooltip>
-              ))
-              }
+              ))}
             </div >
           )
         }

@@ -1,4 +1,4 @@
-export const API_PREFIX = '/sports-backend'
+export const API_PREFIX = '/meeting-backend'
 
 export const DOMAIN = 'stadium.shuwen.com'; // 项目主域名
 export const DOMAIN_ACCOUNT = 'account.shuwen.com'; // 账号中心主域名
