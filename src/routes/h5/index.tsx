@@ -7,8 +7,9 @@ import { Button, DatePicker, Input, message, Popconfirm, Space, Table, Tooltip }
 import styles from './index.module.less'
 import moment from "moment"
 import CreateH5Modal from "@/components/CreateH5"
+import UpdateH5Modal from "@/components/UpdateH5"
 
-interface H5DataListReq {
+interface SearchH5Data {
     meetingName?: string
     h5Name?: string
     meetingStartTime?: number
@@ -24,8 +25,8 @@ const H5DataTable: React.FC = () => {
     const [total, setTotal] = useState(0)
     const [h5DataList, setH5DataList] = useState<H5Data[]>()
     const [buttonLoading, setButtongLoading] = useState(false)
-    const [h5DataListReq, setH5DataListReq] = useState<H5DataListReq>()
-
+    const [searchH5Data, setSearchH5Data] = useState<SearchH5Data>()
+    const [updateH5Data, setUpdataH5Data] = useState<H5Data>()
     // 控制子组件开启
     const [visible, setVisible] = useState(false)
 
@@ -41,7 +42,8 @@ const H5DataTable: React.FC = () => {
                 dataIndex: 'meetingName',
                 key: 'meetingName',
                 width: 50,
-                ellipsis: true
+                ellipsis: true,
+                render: (text) => <ToolTipModal text={text} />
             },
             {
                 title: '会议id',
@@ -97,7 +99,7 @@ const H5DataTable: React.FC = () => {
                 render: (_, record) => {
                     return (
                         <div className={styles.action}>
-                            {<Button disabled={record.caseResult} type="primary" onClick={() => undefined}>查看</Button>}
+                            {<Button disabled={record.caseResult} type="primary" onClick={() => setUpdataH5Data(record)}>编辑</Button>}
                             <Popconfirm title="确定删除？" okText="是" cancelText="否" onConfirm={() => fetchDelectH5(record.id)}>
                                 <Button loading={buttonLoading}>删除</Button>
                             </Popconfirm>
@@ -142,10 +144,10 @@ const H5DataTable: React.FC = () => {
         getH5DataList({
             pageNo: pageNo,
             pageSize: pageSize,
-            h5Name: h5DataListReq?.h5Name,
-            meetingName: h5DataListReq?.meetingName,
-            meetingStartTime: h5DataListReq?.meetingStartTime,
-            meetingEndTime: h5DataListReq?.meetingEndTime
+            h5Name: searchH5Data?.h5Name,
+            meetingName: searchH5Data?.meetingName,
+            meetingStartTime: searchH5Data?.meetingStartTime,
+            meetingEndTime: searchH5Data?.meetingEndTime
         }).then(data => {
             setH5DataList(data.records)
             setTotal(data.total)
@@ -154,21 +156,22 @@ const H5DataTable: React.FC = () => {
     }
 
     const setMeetingName = (value: string) => {
-        console.log("log:", value);
-        setH5DataListReq({ ...h5DataListReq, meetingName: value })
-        setLoading(true)
+        setSearchH5Data({ ...searchH5Data, meetingName: value })
     }
 
     const setH5Name = (value: string) => {
-        setH5DataListReq({ ...h5DataListReq, h5Name: value })
-        setLoading(true)
+        setSearchH5Data({ ...searchH5Data, h5Name: value })
     }
 
     const onChange = (value: string) => {
         if (!Array.isArray(value)) {
+            setSearchH5Data({
+                meetingStartTime: undefined,
+                meetingEndTime: undefined
+            })
             return
         }
-        setH5DataListReq({
+        setSearchH5Data({
             meetingStartTime: moment(value[0]).valueOf(),
             meetingEndTime: moment(value[1]).valueOf()
         })
@@ -178,13 +181,20 @@ const H5DataTable: React.FC = () => {
         loading && fetchH5DataList()
     }, [pageNo, loading])
 
+    /**
+     * 时间搜索
+     */
+    useEffect(() => {
+        setLoading(true)
+    }, [searchH5Data])
+
     return (
         <MView resize>
             <PageHeader title={"H5保障"} />
 
             <Input.Group className={styles.inputgroup}>
                 <Search className={styles.search} placeholder="H5名称" onSearch={setH5Name} enterButton />
-                <Space className={styles.space} direction="vertical" size={12}><RangePicker onChange={onChange} /></Space>
+                <Space className={styles.space} direction="vertical" size={12} ><RangePicker onChange={onChange} /> </Space>
                 <Button className={styles.button} type="primary" onClick={() => setVisible(true)} >新增H5</Button>
             </Input.Group>
 
@@ -196,7 +206,10 @@ const H5DataTable: React.FC = () => {
                 loading={loading}
                 onChange={onChangeTable}
             />
+            {/* 创建h5组件 */}
             <CreateH5Modal visible={visible} setLoading={setLoading} onCancel={() => setVisible(false)} />
+            {/* 修改h5组件 */}
+            <UpdateH5Modal setLoading={setLoading} onCancel={() => setUpdataH5Data(undefined)} updateH5Data={updateH5Data} />
         </MView >
     )
 }

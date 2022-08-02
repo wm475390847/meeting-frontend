@@ -24,4 +24,19 @@ export interface ICreateH5Req {
   password: string
 }
 
+/**
+ * 修改h5请求
+ */
+export interface IUpdateH5Req {
+  meetingName: string
+  meetingId: string
+  meetingStartTime: number
+  meetingEndTime: number
+  h5Name: string
+  h5Url: string
+  username: string
+  password: string
+  id: number
+}
+
 
