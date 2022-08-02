@@ -24,3 +24,14 @@ export const createH5: (data: ICreateH5Req) => Promise<RequestOpt> = (data) => {
     })
 }
 
+export const deleteH5: (id: number) => Promise<RequestOpt> = (id) => {
+    return new Promise(async (resolve, reject) => {
+        const res = await request.delete(`/material/h5/${id}`, id)
+        if (res.success) {
+            resolve(res)
+        } else {
+            reject(res)
+        }
+    })
+}
+

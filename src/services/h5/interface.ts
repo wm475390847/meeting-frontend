@@ -5,6 +5,9 @@ export interface IH5DataListReq {
   pageNo: number
   pageSize: number
   h5Name?: string
+  meetingName?: string
+  meetingStartTime?: number
+  meetingEndTime?: number
 }
 
 /**

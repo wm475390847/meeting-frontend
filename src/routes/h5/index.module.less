@@ -3,7 +3,38 @@
     align-items: center;
 
     button {
-        margin-right: 8px;
+        margin-right: 10px;
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+}
+
+.inputgroup {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5%;
+
+    .search {
+        width: 150px;
+
+        :global .ant-input {
+            width: 150px;
+        }
+    }
+
+    .space {
+        margin-left: 100px;
+
+        :global .ant-space-item {
+            width: 300px;
+        }
+    }
+
+    .button {
+        margin-left: 55%;
+        margin-right: 0;
 
         &:last-child {
             margin-right: 0;
@@ -18,20 +49,4 @@
     .span {
         width: 100%;
     }
-}
-
-
-.button {
-    margin-bottom: 1.5%;
-    margin-left: 85%;
-
-    &:last-child {
-        margin-right: 0;
-    }
-}
-
-.select {
-    margin-bottom: 1.5%;
-    width: 120px;
-    margin-right: 8px;
 }
