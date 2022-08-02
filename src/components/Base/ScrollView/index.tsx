@@ -9,22 +9,6 @@ export interface MScrollViewProps {
   className?: string;
 }
 
-// const MScrollView: React.FC<MScrollViewProps> = props => {
-//   const {
-//     children,
-//     onScroll,
-//     className,
-//     ref,
-//   } = props;
-//   return (
-//     <div className={classnames(styles.container, className)}>
-//       <ScrollView autoHide onScroll={onScroll} ref={ref}>
-//         {children}
-//       </ScrollView>
-//     </div>
-//   );
-// };
-
 const MScrollView = React.forwardRef((props: MScrollViewProps, ref: React.Ref<any>) => {
   const {
     children,

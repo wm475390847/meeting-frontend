@@ -6,15 +6,19 @@ import { useEffect, useMemo, useState } from "react"
 import { Button, Popconfirm, Table, Tooltip } from 'antd'
 import styles from './index.module.less'
 import moment from "moment"
+import CreateH5Modal from "@/components/CreateH5"
 
 const H5DataTable: React.FC = () => {
 
-    const [loading, setLoading] = useState<boolean>(true)
+    const [loading, setLoading] = useState(true)
     const [pageNo, setPageNo] = useState(1)
     const [pageSize, setPageSize] = useState(10)
     const [total, setTotal] = useState(0)
     const [h5Name, setH5Name] = useState()
     const [h5DataList, setH5DataList] = useState<H5Data[]>()
+
+    // 控制子组件开启
+    const [visible, setVisible] = useState(false)
 
     const columns = useMemo<ColumnsType<any>>(() => {
         return [
@@ -30,16 +34,19 @@ const H5DataTable: React.FC = () => {
                 width: 80,
                 ellipsis: true,
                 render: (text) => (
-                    <Tooltip title={text}  >
-                        <Button className={styles.button} key={text} type='link'>{text}</Button>
+                    <Tooltip title={text} color='#2db7f5' >
+                        <Button className={styles.url} key={text} type='link' onClick={() => window.open(text)}>
+                            <span className={styles.span}>{text}</span>
+                        </Button>
                     </Tooltip>
                 )
             },
             {
-                title: '名称',
+                title: 'H5名称',
                 dataIndex: 'h5Name',
                 key: 'h5Name',
                 width: 50,
+                ellipsis: true,
                 render: (text) => <ToolTipModal text={text} />
             },
             {
@@ -47,6 +54,7 @@ const H5DataTable: React.FC = () => {
                 dataIndex: 'meetingId',
                 key: 'meetingId',
                 width: 50,
+                ellipsis: true,
                 render: (text) => <ToolTipModal text={text} />
             },
             {
@@ -61,10 +69,16 @@ const H5DataTable: React.FC = () => {
                 dataIndex: 'meetingStartTime',
                 key: 'meetingStartTime',
                 width: 50,
-                render: (_, record) => <div>
-                    {moment(record.meetingStartTime).format('YYYY-MM-DD')}
-                    ~ {moment(record.meetingEndTime).format('YYYY-MM-DD')}
-                </div>
+                render: (_, record) =>
+                    moment(record.meetingStartTime).format('YYYY-MM-DD') ===
+                        moment(record.meetingEndTime).format('YYYY-MM-DD') ?
+                        <div >
+                            {moment(record.meetingStartTime).format('YYYY-MM-DD')}
+                        </div>
+                        :
+                        <div>
+                            {moment(record.meetingStartTime).format('YYYY-MM-DD')}~{moment(record.meetingEndTime).format('YYYY-MM-DD')}
+                        </div>
             },
             {
                 title: '操作',
@@ -82,14 +96,6 @@ const H5DataTable: React.FC = () => {
                     )
                 }
             }
-
-
-
-
-
-
-
-
         ]
     }, [pageNo, pageSize])
 
@@ -105,6 +111,9 @@ const H5DataTable: React.FC = () => {
         setLoading(true)
     }
 
+    /**
+     * 获取h5数据列表
+     */
     const fetchH5DataList = () => {
         getH5DataList({
             pageNo: pageNo,
@@ -124,6 +133,7 @@ const H5DataTable: React.FC = () => {
     return (
         <MView resize>
             <PageHeader title={"H5保障"} />
+            <Button className={styles.button} type="primary" onClick={() => setVisible(true)} >新增H5</Button>
             <Table
                 columns={columns}
                 dataSource={h5DataList}
@@ -132,7 +142,7 @@ const H5DataTable: React.FC = () => {
                 loading={loading}
                 onChange={onChangeTable}
             />
-
+            <CreateH5Modal visible={visible} setLoading={setLoading} onCancel={() => setVisible(false)} />
         </MView>
     )
 }

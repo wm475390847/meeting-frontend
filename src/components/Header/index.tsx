@@ -21,7 +21,7 @@ class Header extends Component<IHeaderProps & IHeaderOwnProps, IHeaderState> {
   render() {
     return (
       <div className={styles.header + ` ${this.props.className}`}>
-        {/* <p>体育质量保障平台</p> */}
+        {/* <p>会议质量保障平台</p> */}
         <img src="https://s.newscdn.cn/x/mT6J4-CnR.png" />
       </div>
     );
