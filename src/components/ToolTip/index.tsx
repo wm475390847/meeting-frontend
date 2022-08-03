@@ -1,5 +1,5 @@
 import { Button, Tooltip } from 'antd';
-import React, { } from 'react';
+import React from 'react';
 import styles from './index.module.less'
 
 type ToolTipProps = {

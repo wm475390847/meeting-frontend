@@ -184,29 +184,33 @@ const H5DataTable: React.FC = () => {
 
     return (
         <MView resize>
-            <PageHeader title={"H5保障"} />
-            <Input.Group className={styles.inputgroup}>
+            <div>
+                <PageHeader title={"H5保障"} />
+                <Input.Group className={styles.inputgroup}>
 
-                <Space className={styles.space} direction="vertical" size={12}>  <RangePicker onChange={onChange} /> </Space>
+                    <Space className={styles.space} direction="vertical" size={12}>  <RangePicker onChange={onChange} /> </Space>
 
-                <Search className={styles.search} placeholder="H5名称" onSearch={setH5Name} enterButton />
+                    <Search className={styles.search} placeholder="H5名称" onSearch={setH5Name} enterButton />
 
-                <Button className={styles.button} type="primary" onClick={() => setVisible(true)} >新增H5</Button>
+                    <Button className={styles.button} type="primary" onClick={() => setVisible(true)} >新增H5</Button>
 
-            </Input.Group>
+                </Input.Group>
 
-            <Table
-                columns={columns}
-                dataSource={h5DataList}
-                rowKey='id'
-                pagination={{ total, current: pageNo, showSizeChanger: true }}
-                loading={loading}
-                onChange={onChangeTable}
-            />
-            {/* 创建h5组件 */}
-            <CreateH5Modal visible={visible} setLoading={setLoading} onCancel={() => setVisible(false)} />
-            {/* 修改h5组件 */}
-            <UpdateH5Modal updateH5Data={updateH5Data} setLoading={setLoading} onCancel={() => setUpdataH5Data(undefined)} />
+                <Table
+                    columns={columns}
+                    dataSource={h5DataList}
+                    rowKey='id'
+                    pagination={{ total, current: pageNo, showSizeChanger: true }}
+                    loading={loading}
+                    onChange={onChangeTable}
+                />
+                {/* 创建h5组件 */}
+                <CreateH5Modal visible={visible} setLoading={setLoading} onCancel={() => setVisible(false)} />
+                {/* 修改h5组件 */}
+                <UpdateH5Modal updateH5Data={updateH5Data} setLoading={setLoading} onCancel={() => setUpdataH5Data(undefined)} />
+
+            </div>
+
         </MView >
     )
 }

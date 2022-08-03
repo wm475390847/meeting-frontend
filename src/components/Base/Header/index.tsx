@@ -1,4 +1,3 @@
-import * as React from 'react';
 import classnames from 'classnames';
 import { clickBack } from './script';
 import styles from './index.module.less';

@@ -1,8 +1,8 @@
-import * as React from 'react';
 import classnames from 'classnames';
 import MRowTable from './rowTable';
 import MColTable from './colTable';
 import styles from './index.module.less';
+import React from 'react';
 
 export interface MViewProps {
   children?: React.ReactNode;
