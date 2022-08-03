@@ -17,7 +17,7 @@ interface SearchH5Data {
 }
 
 const H5DataTable: React.FC = () => {
-    const RangePicker: any = DatePicker.RangePicker;
+    const { RangePicker } = DatePicker;
     const { Search } = Input
     const [loading, setLoading] = useState(true)
     const [pageNo, setPageNo] = useState(1)
@@ -59,13 +59,7 @@ const H5DataTable: React.FC = () => {
                 key: 'h5Url',
                 width: 80,
                 ellipsis: true,
-                render: (text) => (
-                    <Tooltip title={text} color='#2db7f5' >
-                        <Button className={styles.url} key={text} type='link' onClick={() => window.open(text)}>
-                            <span className={styles.span}>{text}</span>
-                        </Button>
-                    </Tooltip>
-                )
+                render: (text) => <ToolTipModal text={text} isWindowOpen={true} />
             },
             {
                 title: 'H5名称',
@@ -191,10 +185,14 @@ const H5DataTable: React.FC = () => {
     return (
         <MView resize>
             <PageHeader title={"H5保障"} />
-
             <Input.Group className={styles.inputgroup}>
+
+                <Space className={styles.space} direction="vertical" size={12}>
+                    <RangePicker />
+                </Space>
                 <Search className={styles.search} placeholder="H5名称" onSearch={setH5Name} enterButton />
-                <Space className={styles.space} direction="vertical" size={12} ><RangePicker onChange={onChange} /> </Space>
+
+
                 <Button className={styles.button} type="primary" onClick={() => setVisible(true)} >新增H5</Button>
             </Input.Group>
 
@@ -209,7 +207,7 @@ const H5DataTable: React.FC = () => {
             {/* 创建h5组件 */}
             <CreateH5Modal visible={visible} setLoading={setLoading} onCancel={() => setVisible(false)} />
             {/* 修改h5组件 */}
-            <UpdateH5Modal setLoading={setLoading} onCancel={() => setUpdataH5Data(undefined)} updateH5Data={updateH5Data} />
+            <UpdateH5Modal updateH5Data={updateH5Data} setLoading={setLoading} onCancel={() => setUpdataH5Data(undefined)} />
         </MView >
     )
 }
