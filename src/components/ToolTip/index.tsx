@@ -11,20 +11,11 @@ const ToolTipModal: React.FC<ToolTipProps> = (props) => {
     const { text, isWindowOpen } = props
 
     return (
-        <Tooltip title={text} color={'#2db7f5'} placement={"topLeft"}>
+        <Tooltip overlayClassName={styles.tooltip} title={text} color={'#2db7f5'} placement={"topLeft"}>
             {
                 isWindowOpen === true ?
-                    <Button
-                        className={styles.url}
-                        key={text} type='link'
-                        onClick={() => window.open(text)}
-                    >
-                        {text}
-                    </Button>
-                    :
-                    <span>
-                        {text}
-                    </span>
+                    <Button className={styles.url} key={text} type='link' onClick={() => window.open(text)}>{text} </Button>
+                    : <span> {text}  </span>
             }
         </Tooltip >
     );

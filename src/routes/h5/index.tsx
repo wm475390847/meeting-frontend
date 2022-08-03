@@ -6,8 +6,8 @@ import { useEffect, useMemo, useState } from "react"
 import { Button, DatePicker, Input, message, Popconfirm, Space, Table, Tooltip } from 'antd'
 import styles from './index.module.less'
 import moment from "moment"
-import CreateH5Modal from "@/components/CreateH5"
-import UpdateH5Modal from "@/components/UpdateH5"
+import CreateH5Modal from "@/components/H5Create"
+import UpdateH5Modal from "@/components/H5Update"
 
 interface SearchH5Data {
     meetingName?: string
@@ -17,7 +17,7 @@ interface SearchH5Data {
 }
 
 const H5DataTable: React.FC = () => {
-    const { RangePicker } = DatePicker;
+    const RangePicker: any = DatePicker.RangePicker;
     const { Search } = Input
     const [loading, setLoading] = useState(true)
     const [pageNo, setPageNo] = useState(1)
@@ -187,13 +187,12 @@ const H5DataTable: React.FC = () => {
             <PageHeader title={"H5保障"} />
             <Input.Group className={styles.inputgroup}>
 
-                <Space className={styles.space} direction="vertical" size={12}>
-                    <RangePicker />
-                </Space>
+                <Space className={styles.space} direction="vertical" size={12}>  <RangePicker onChange={onChange} /> </Space>
+
                 <Search className={styles.search} placeholder="H5名称" onSearch={setH5Name} enterButton />
 
-
                 <Button className={styles.button} type="primary" onClick={() => setVisible(true)} >新增H5</Button>
+
             </Input.Group>
 
             <Table
