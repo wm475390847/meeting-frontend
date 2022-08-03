@@ -46,3 +46,14 @@ export const updateH5: (data: IUpdateH5Req) => Promise<RequestOpt> = (data) => {
     })
 }
 
+export const executeH5: () => Promise<RequestOpt> = () => {
+    return new Promise(async (resolve, reject) => {
+        const res = await request.post(`/material/h5/execute`)
+        if (res.success) {
+            resolve(res)
+        } else {
+            reject(res)
+        }
+    })
+}
+

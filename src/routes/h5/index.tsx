@@ -1,9 +1,9 @@
 import { MView, PageHeader } from "@/components"
 import ToolTipModal from "@/components/ToolTip"
-import { deleteH5, getH5DataList } from "@/services/h5"
+import { deleteH5, executeH5, getH5DataList } from "@/services/h5"
 import { ColumnsType } from "antd/lib/table"
 import { useEffect, useMemo, useState } from "react"
-import { Button, DatePicker, Input, message, Popconfirm, Space, Table, Tooltip } from 'antd'
+import { Button, DatePicker, Input, message, Popconfirm, Space, Table } from 'antd'
 import styles from './index.module.less'
 import moment from "moment"
 import CreateH5Modal from "@/components/H5Create"
@@ -41,7 +41,7 @@ const H5DataTable: React.FC = () => {
                 title: '会议名称',
                 dataIndex: 'meetingName',
                 key: 'meetingName',
-                width: 50,
+                width: 45,
                 ellipsis: true,
                 render: (text) => <ToolTipModal text={text} />
             },
@@ -49,7 +49,7 @@ const H5DataTable: React.FC = () => {
                 title: '会议id',
                 dataIndex: 'meetingId',
                 key: 'meetingId',
-                width: 50,
+                width: 45,
                 ellipsis: true,
                 render: (text) => <ToolTipModal text={text} />
             },
@@ -57,7 +57,7 @@ const H5DataTable: React.FC = () => {
                 title: 'url',
                 dataIndex: 'h5Url',
                 key: 'h5Url',
-                width: 80,
+                width: 60,
                 ellipsis: true,
                 render: (text) => <ToolTipModal text={text} isWindowOpen={true} />
             },
@@ -65,7 +65,7 @@ const H5DataTable: React.FC = () => {
                 title: 'H5名称',
                 dataIndex: 'h5Name',
                 key: 'h5Name',
-                width: 50,
+                width: 45,
                 ellipsis: true,
                 render: (text) => <ToolTipModal text={text} />
             },
@@ -73,7 +73,7 @@ const H5DataTable: React.FC = () => {
                 title: '会议时间',
                 dataIndex: 'meetingStartTime',
                 key: 'meetingStartTime',
-                width: 50,
+                width: 45,
                 render: (_, record) =>
                     moment(record.meetingStartTime).format('YYYY-MM-DD') === moment(record.meetingEndTime).format('YYYY-MM-DD')
                         ?
@@ -93,7 +93,7 @@ const H5DataTable: React.FC = () => {
                 render: (_, record) => {
                     return (
                         <div className={styles.action}>
-                            {<Button disabled={record.caseResult} type="primary" onClick={() => setUpdataH5Data(record)}>编辑</Button>}
+                            <Button disabled={record.caseResult} type="primary" onClick={() => setUpdataH5Data(record)}>编辑</Button>
                             <Popconfirm title="确定删除？" okText="是" cancelText="否" onConfirm={() => fetchDelectH5(record.id)}>
                                 <Button loading={buttonLoading}>删除</Button>
                             </Popconfirm>
@@ -123,6 +123,20 @@ const H5DataTable: React.FC = () => {
     const fetchDelectH5 = (id: number) => {
         setButtongLoading(true)
         deleteH5(id)
+            .then(res => {
+                message.info(res.message)
+                setLoading(true)
+            }).catch(err => {
+                message.error(err.message)
+            }).finally(() => setButtongLoading(false))
+    }
+
+    /**
+     * 批量执行h5
+     */
+    const bathExecuteH5 = () => {
+        setButtongLoading(true)
+        executeH5()
             .then(res => {
                 message.info(res.message)
                 setLoading(true)
@@ -191,6 +205,10 @@ const H5DataTable: React.FC = () => {
                     <Space className={styles.space} direction="vertical" size={12}>  <RangePicker onChange={onChange} /> </Space>
 
                     <Search className={styles.search} placeholder="H5名称" onSearch={setH5Name} enterButton />
+
+                    <Popconfirm className={styles.executeButton} placement="top" title="确定执行？" okText="是" cancelText="否" onConfirm={bathExecuteH5}>
+                        <Button type="primary" loading={buttonLoading} danger>批量执行</Button>
+                    </Popconfirm>
 
                     <Button className={styles.button} type="primary" onClick={() => setVisible(true)} >新增H5</Button>
 
