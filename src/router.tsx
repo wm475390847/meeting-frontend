@@ -23,7 +23,7 @@ const Index: React.FC = () => {
         <Router>
           <Routes>
             <Route path="/" element={<Navigate to="/app" replace />} />
-            <Route path="/app" element={<Navigate to="/app/material" replace />} />
+            <Route path="/app" element={<Navigate to="/app/h5data" replace />} />
             {routes.map((route) => {
               const { path } = route
               return (

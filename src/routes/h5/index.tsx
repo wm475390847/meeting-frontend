@@ -1,4 +1,4 @@
-import { MView, PageHeader } from "@/components"
+import { FooterPage, MView, PageHeader } from "@/components"
 import ToolTipModal from "@/components/ToolTip"
 import { deleteH5, executeH5, getH5DataList } from "@/services/h5"
 import { ColumnsType } from "antd/lib/table"
@@ -8,6 +8,8 @@ import styles from './index.module.less'
 import moment from "moment"
 import CreateH5Modal from "@/components/H5Create"
 import UpdateH5Modal from "@/components/H5Update"
+
+console.log("大丈夫生于天地之间，岂能郁郁久居人下！")
 
 interface SearchH5Data {
     meetingName?: string
@@ -94,7 +96,7 @@ const H5DataTable: React.FC = () => {
                     return (
                         <div className={styles.action}>
                             <Button disabled={record.caseResult} type="primary" onClick={() => setUpdataH5Data(record)}>编辑</Button>
-                            <Popconfirm title="确定删除？" okText="是" cancelText="否" onConfirm={() => fetchDelectH5(record.id)}>
+                            <Popconfirm title="确定执行？" placement="top" okText="是" cancelText="否" onConfirm={() => fetchDelectH5(record.id)}>
                                 <Button loading={buttonLoading}>删除</Button>
                             </Popconfirm>
                         </div >
@@ -227,6 +229,7 @@ const H5DataTable: React.FC = () => {
                 {/* 修改h5组件 */}
                 <UpdateH5Modal updateH5Data={updateH5Data} setLoading={setLoading} onCancel={() => setUpdataH5Data(undefined)} />
 
+                <FooterPage text={'会议质量保障平台 ©2022 Created by 芽菜 '} link={'https://codeup.aliyun.com/xhzy/xhzy-qa/meeting-frontend'} />
             </div>
 
         </MView >
