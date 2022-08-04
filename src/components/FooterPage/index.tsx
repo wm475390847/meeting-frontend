@@ -16,8 +16,12 @@ const FooterPage: React.FC<FooterPageProps> = props => {
                 style={{ padding: '0' }}
                 key={link}
                 type='link'
-                onClick={() => window.open(link)}
-            >Codeup地址</Button>
+                onClick={() => link && window.open(link)}
+            >
+                {
+                    link && <span>Codeup地址</span>
+                }
+            </Button>
         </Footer>
     )
 }

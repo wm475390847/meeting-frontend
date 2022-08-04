@@ -5,7 +5,7 @@ import styles from './index.module.less'
 const ExecuteResult: React.FC = () => {
 
     const visitHtml = () => {
-        window.location.href = "http://www.baidu.com"
+        window.location.href = "http://test.ttp.xinhuazhiyun.com/app/cases"
     }
 
     return (
