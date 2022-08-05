@@ -234,7 +234,7 @@ const H5DataTable: React.FC = () => {
                 {/* 修改h5组件 */}
                 <UpdateH5Modal updateH5Data={updateH5Data} setLoading={setLoading} onCancel={() => setUpdataH5Data(undefined)} />
 
-                <FooterPage text={'会议质量保障平台 ©2022 Created by 芽菜 '} link={'https://codeup.aliyun.com/xhzy/xhzy-qa/meeting-frontend'} />
+                <FooterPage text={'会议线质量保障平台 ©2022 Created by 芽菜 '} link={'https://codeup.aliyun.com/xhzy/xhzy-qa/meeting-frontend'} />
             </div>
 
         </MView >
