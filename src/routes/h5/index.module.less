@@ -15,35 +15,18 @@
     display: flex;
     align-items: center;
     margin-bottom: 1.5%;
-
-    .search {
-        width: 150px;
-
-        :global .ant-input {
-            width: 150px;
-        }
-    }
+    justify-content: space-between;
 
     .space {
-
-        :global .ant-space-item {
-            width: 300px;
-        }
+        width: 300px;
+        gap: 0px;
     }
 
-    .executeButton {
-        margin-left: 40%;
-
-        &:last-child {
-            margin-right: 0;
-        }
+    .search {
+        width: 200px;
     }
 
-    .button {
-        margin-left: 2%;
-
-        &:last-child {
-            margin-right: 0;
-        }
+    .popconfirm {
+        margin-right: 18px;
     }
 }

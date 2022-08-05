@@ -204,15 +204,20 @@ const H5DataTable: React.FC = () => {
                 <PageHeader title={"H5保障"} />
                 <Input.Group className={styles.inputgroup}>
 
-                    <Space className={styles.space} direction="vertical" size={12}>  <RangePicker onChange={onChange} /> </Space>
+                    <div>
+                        <Space className={styles.space} direction="vertical">
+                            <RangePicker onChange={onChange} />
+                        </Space>
+                        <Search className={styles.search} placeholder="H5名称" onSearch={setH5Name} enterButton />
+                    </div>
 
-                    <Search className={styles.search} placeholder="H5名称" onSearch={setH5Name} enterButton />
+                    <div>
+                        <Popconfirm className={styles.popconfirm} placement="top" title="确定执行？" okText="是" cancelText="否" onConfirm={bathExecuteH5}>
+                            <Button type="primary" loading={buttonLoading} danger>批量执行</Button>
+                        </Popconfirm>
 
-                    <Popconfirm className={styles.executeButton} placement="top" title="确定执行？" okText="是" cancelText="否" onConfirm={bathExecuteH5}>
-                        <Button type="primary" loading={buttonLoading} danger>批量执行</Button>
-                    </Popconfirm>
-
-                    <Button className={styles.button} type="primary" onClick={() => setVisible(true)} >新增H5</Button>
+                        <Button className={styles.button} type="primary" onClick={() => setVisible(true)} >新增H5</Button>
+                    </div>
 
                 </Input.Group>
 
