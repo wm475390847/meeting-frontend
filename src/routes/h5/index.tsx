@@ -96,7 +96,7 @@ const H5DataTable: React.FC = () => {
                     return (
                         <div className={styles.action}>
                             <Button disabled={record.caseResult} type="primary" onClick={() => setUpdataH5Data(record)}>编辑</Button>
-                            <Popconfirm title="确定执行？" placement="top" okText="是" cancelText="否" onConfirm={() => fetchDelectH5(record.id)}>
+                            <Popconfirm title="确定删除？" placement="top" okText="是" cancelText="否" onConfirm={() => fetchDelectH5(record.id)}>
                                 <Button loading={buttonLoading}>删除</Button>
                             </Popconfirm>
                         </div >
