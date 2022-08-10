@@ -23,7 +23,8 @@ const ToolTipModal: React.FC<ToolTipProps> = (props) => {
                         key={text}
                         type='link'
                         onClick={() => window.open(text)}
-                    >{text}
+                    >
+                        {text}
                     </Button>
                     :
                     <span> {text}</span>

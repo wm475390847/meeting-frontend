@@ -82,9 +82,6 @@ const UpdateH5Modal: React.FC<UpdateH5Props> = (props) => {
                 <Form.Item name='meetingName' label="会议名称" initialValue={updateH5Data?.meetingName}>
                     <Input className={styles.input} />
                 </Form.Item>
-                <Form.Item name='meetingId' label="会议id" initialValue={updateH5Data?.meetingId}>
-                    <Input className={styles.input} />
-                </Form.Item>
 
                 <Form.Item name='meetingStartTime' label="会议时间">
                     <Space
@@ -96,7 +93,7 @@ const UpdateH5Modal: React.FC<UpdateH5Props> = (props) => {
                     </Space>
                 </Form.Item>
 
-                <Form.Item name='h5Name' label="H5名称" initialValue={updateH5Data?.h5Name}>
+                <Form.Item name='h5Name' label="H5名称" initialValue={updateH5Data?.h5Name} required>
                     <Input className={styles.input} />
                 </Form.Item>
 
@@ -104,13 +101,6 @@ const UpdateH5Modal: React.FC<UpdateH5Props> = (props) => {
                     <Input className={styles.input} />
                 </Form.Item>
 
-                <Form.Item name='username' label="账户">
-                    <Input className={styles.input} placeholder='请输入账户' />
-                </Form.Item>
-
-                <Form.Item name='password' label="密码">
-                    <Input className={styles.input} placeholder='请输入密码' />
-                </Form.Item>
             </Form>
         </Modal >
     );

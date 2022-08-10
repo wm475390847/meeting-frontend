@@ -36,7 +36,7 @@ const H5DataTable: React.FC = () => {
         return [
             {
                 title: '序号',
-                width: 20,
+                width: 13,
                 render: (_text, _record, index) => (pageNo as number - 1) * (pageSize as number) + index + 1
             },
             {
@@ -44,22 +44,13 @@ const H5DataTable: React.FC = () => {
                 dataIndex: 'meetingName',
                 key: 'meetingName',
                 width: 45,
-                ellipsis: true,
-                render: (text) => <ToolTipModal text={text} />
-            },
-            {
-                title: '会议id',
-                dataIndex: 'meetingId',
-                key: 'meetingId',
-                width: 45,
-                ellipsis: true,
                 render: (text) => <ToolTipModal text={text} />
             },
             {
                 title: 'url',
                 dataIndex: 'h5Url',
                 key: 'h5Url',
-                width: 60,
+                width: 70,
                 ellipsis: true,
                 render: (text) => <ToolTipModal text={text} isWindowOpen={true} />
             },
@@ -68,14 +59,13 @@ const H5DataTable: React.FC = () => {
                 dataIndex: 'h5Name',
                 key: 'h5Name',
                 width: 45,
-                ellipsis: true,
                 render: (text) => <ToolTipModal text={text} />
             },
             {
                 title: '会议时间',
                 dataIndex: 'meetingStartTime',
                 key: 'meetingStartTime',
-                width: 45,
+                width: 25,
                 render: (_, record) =>
                     moment(record.meetingStartTime).format('YYYY-MM-DD') === moment(record.meetingEndTime).format('YYYY-MM-DD')
                         ?
@@ -234,7 +224,7 @@ const H5DataTable: React.FC = () => {
                 {/* 修改h5组件 */}
                 <UpdateH5Modal updateH5Data={updateH5Data} setLoading={setLoading} onCancel={() => setUpdataH5Data(undefined)} />
 
-                <FooterPage text={'会议线质量保障平台 ©2022 Created by 芽菜 '} link={'https://codeup.aliyun.com/xhzy/xhzy-qa/meeting-frontend'} />
+                <FooterPage text={'会议线质量保障平台 ©2022 Created by 质量中台 '} link={'https://codeup.aliyun.com/xhzy/xhzy-qa/meeting-frontend'} />
             </div>
 
         </MView >
