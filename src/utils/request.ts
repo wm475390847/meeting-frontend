@@ -87,12 +87,11 @@ export default function request(_url: string, options?: any): Promise<RequestOpt
     }).catch((err: any) => {
       if (err) {
         const response = err.response
-        console.log("response:", response);
-
+        
         if (response.status === 502) {
           return err.response.json()
             .then((data: any) => {
-              message.error("系统错误请联系技术支持")
+              message.error(data.msg)
             })
         }
 
@@ -107,7 +106,6 @@ export default function request(_url: string, options?: any): Promise<RequestOpt
           // 自定义报错
           return err.response.json()
             .then((data: any) => {
-              console.log(data)
               if (data && data.code === 'SW-GW-1003') {
                 window.location.href = 'https://sso.xinhuazhiyun.com/login.html?redirectUri=' + encodeURIComponent(window.location.href);
               }

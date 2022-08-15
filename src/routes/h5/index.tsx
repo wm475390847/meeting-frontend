@@ -8,6 +8,7 @@ import styles from './index.module.less'
 import moment from "moment"
 import CreateH5Modal from "@/components/H5Create"
 import UpdateH5Modal from "@/components/H5Update"
+import ReportModal from "@/components/ReportTable"
 
 console.log("大丈夫生于天地之间，岂能郁郁久居人下！")
 
@@ -29,8 +30,10 @@ const H5DataTable: React.FC = () => {
     const [buttonLoading, setButtongLoading] = useState(false)
     const [searchH5Data, setSearchH5Data] = useState<SearchH5Data>()
     const [updateH5Data, setUpdataH5Data] = useState<H5Data>()
-    // 控制子组件开启
-    const [visible, setVisible] = useState(false)
+    // 控制创建h5组件开启
+    const [createVisible, setCreateVisible] = useState(false)
+    // 控制报告组件
+    const [reportVisible, setReportVisible] = useState(false)
 
     const columns = useMemo<ColumnsType<any>>(() => {
         return [
@@ -192,7 +195,7 @@ const H5DataTable: React.FC = () => {
         <MView resize>
             <div>
                 <PageHeader title={"H5保障"} />
-                <Input.Group className={styles.inputgroup}>
+                <Input.Group className={styles.inputGroup}>
 
                     <div>
                         <Space className={styles.space} direction="vertical">
@@ -202,11 +205,11 @@ const H5DataTable: React.FC = () => {
                     </div>
 
                     <div>
-                        <Popconfirm className={styles.popconfirm} placement="top" title="确定执行？" okText="是" cancelText="否" onConfirm={bathExecuteH5}>
-                            <Button type="primary" loading={buttonLoading} danger>批量执行</Button>
+                        <Popconfirm className={styles.button} placement="top" title="确定执行？" okText="是" cancelText="否" onConfirm={bathExecuteH5}>
+                            <Button type='primary' loading={buttonLoading} danger>批量执行</Button>
                         </Popconfirm>
-
-                        <Button className={styles.button} type="primary" onClick={() => setVisible(true)} >新增H5</Button>
+                        <Button className={styles.button} type='primary' onClick={() => setReportVisible(true)}>执行结果</Button>
+                        <Button className={styles.button} type='primary' onClick={() => setCreateVisible(true)} >新增H5</Button>
                     </div>
 
                 </Input.Group>
@@ -220,10 +223,11 @@ const H5DataTable: React.FC = () => {
                     onChange={onChangeTable}
                 />
                 {/* 创建h5组件 */}
-                <CreateH5Modal visible={visible} setLoading={setLoading} onCancel={() => setVisible(false)} />
+                <CreateH5Modal visible={createVisible} setLoading={setLoading} onCancel={() => setCreateVisible(false)} />
                 {/* 修改h5组件 */}
                 <UpdateH5Modal updateH5Data={updateH5Data} setLoading={setLoading} onCancel={() => setUpdataH5Data(undefined)} />
-
+                {/* 执行报告组件 */}
+                <ReportModal visible={reportVisible} onCancel={() => setReportVisible(false)} />
                 <FooterPage text={'会议线质量保障平台 ©2022 Created by 质量中台 '} link={'https://codeup.aliyun.com/xhzy/xhzy-qa/meeting-frontend'} />
             </div>
 
