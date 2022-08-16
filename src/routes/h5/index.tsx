@@ -8,7 +8,7 @@ import styles from './index.module.less'
 import moment from "moment"
 import CreateH5Modal from "@/components/H5Create"
 import UpdateH5Modal from "@/components/H5Update"
-import ReportModal from "@/components/ReportTable"
+import ReportModal from "@/components/Report"
 
 console.log("大丈夫生于天地之间，岂能郁郁久居人下！")
 

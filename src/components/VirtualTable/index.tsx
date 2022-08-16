@@ -1,9 +1,9 @@
 import { Table } from 'antd';
 import classNames from 'classnames';
+import { Console } from 'console';
 import ResizeObserver from 'rc-resize-observer';
 import React, { useEffect, useRef, useState } from 'react';
 import { VariableSizeGrid as Grid } from 'react-window';
-import styles from './index.module.less'
 
 const VirtualTableModal = (props: Parameters<typeof Table>[0]) => {
     const { columns, scroll } = props;
@@ -41,61 +41,61 @@ const VirtualTableModal = (props: Parameters<typeof Table>[0]) => {
         return obj;
     });
 
-    const resetVirtualGrid = () => {
-        gridRef.current.resetAfterIndices({
-            columnIndex: 0,
-            shouldForceUpdate: true,
-        });
-    };
+    // const resetVirtualGrid = () => {
+    //     gridRef.current.resetAfterIndices({
+    //         columnIndex: 0,
+    //         shouldForceUpdate: true,
+    //     });
+    // };
 
-    useEffect(() => resetVirtualGrid, [tableWidth]);
+    // useEffect(() => resetVirtualGrid, [tableWidth]);
 
-    const renderVirtualList = (rawData: object[], { scrollbarSize, ref, onScroll }: any) => {
-        ref.current = connectObject;
-        const totalHeight = rawData.length * 55;
+    // const renderVirtualList = (rawData: object[], { scrollbarSize, ref, onScroll }: any) => {
+    //     ref.current = connectObject;
+    //     const totalHeight = rawData.length * 55;
 
-        return (
-            <Grid
-                ref={gridRef}
-                style={{
-                    marginLeft: 10,
-                }}
-                columnCount={mergedColumns.length}
-                columnWidth={(index: number) => {
-                    const { width } = mergedColumns[index];
-                    return totalHeight > scroll!.y! && index === mergedColumns.length - 1
-                        ? (width as number) - scrollbarSize - 1
-                        : (width as number);
-                }}
-                height={scroll!.y as number}
-                rowCount={rawData.length}
-                rowHeight={() => 55}
-                width={tableWidth}
-                onScroll={({ scrollLeft }: { scrollLeft: number }) => {
-                    onScroll({ scrollLeft });
-                }}
-            >
-                {({
-                    columnIndex,
-                    rowIndex,
-                    style,
-                }: {
-                    columnIndex: number;
-                    rowIndex: number;
-                    style: React.CSSProperties;
-                }) => (
-                    <div
-                        className={classNames('virtual-table-cell', {
-                            'virtual-table-cell-last': columnIndex === mergedColumns.length - 1,
-                        })}
-                        style={style}
-                    >
-                        {(rawData[rowIndex] as any)[(mergedColumns as any)[columnIndex].dataIndex]}
-                    </div>
-                )}
-            </Grid>
-        );
-    };
+    //     return (
+    //         <Grid
+    //             ref={gridRef}
+    //             style={{
+    //                 marginLeft: 10,
+    //             }}
+    //             columnCount={mergedColumns.length}
+    //             columnWidth={(index: number) => {
+    //                 const { width } = mergedColumns[index];
+    //                 return totalHeight > scroll!.y! && index === mergedColumns.length - 1
+    //                     ? (width as number) - scrollbarSize - 1
+    //                     : (width as number);
+    //             }}
+    //             height={scroll!.y as number}
+    //             rowCount={rawData.length}
+    //             rowHeight={() => 55}
+    //             width={tableWidth}
+    //             onScroll={({ scrollLeft }: { scrollLeft: number }) => {
+    //                 onScroll({ scrollLeft });
+    //             }}
+    //         >
+    //             {({
+    //                 columnIndex,
+    //                 rowIndex,
+    //                 style,
+    //             }: {
+    //                 columnIndex: number;
+    //                 rowIndex: number;
+    //                 style: React.CSSProperties;
+    //             }) => (
+    //                 <div
+    //                     className={classNames('virtual-table-cell', {
+    //                         'virtual-table-cell-last': columnIndex === mergedColumns.length - 1,
+    //                     })}
+    //                     style={style}
+    //                 >
+    //                     {(rawData[rowIndex] as any)[(mergedColumns as any)[columnIndex].dataIndex]}
+    //                 </div>
+    //             )}
+    //         </Grid>
+    //     );
+    // };
 
     return (
         <ResizeObserver
@@ -108,9 +108,10 @@ const VirtualTableModal = (props: Parameters<typeof Table>[0]) => {
                 className="virtual-table"
                 columns={mergedColumns}
                 pagination={false}
-                components={{
-                    body: renderVirtualList as any,
-                }}
+                key={"id"}
+            // components={{
+            //     body: renderVirtualList as any,
+            // }}
             />
         </ResizeObserver>
     );

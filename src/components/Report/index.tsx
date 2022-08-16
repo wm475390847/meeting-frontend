@@ -1,77 +1,43 @@
-import { getH5Report } from "@/services/h5";
-import { useEffect, useMemo, useState } from "react";
-import VirtualTable from "../VirtualTable";
-import { ColumnsType } from "antd/lib/table";
-import moment from "moment";
-import { text } from "stream/consumers";
-import { Button } from "antd";
+import { Button, Collapse, Modal } from "antd";
+import ReportTableModal from "../ReportTable";
+import styles from './index.module.less'
 
-type ReportTableModalProps = {
-    result?: boolean
+type ReportModalProps = {
+    visible: boolean
+    onCancel?: () => void
 }
 
-const ReportTableModal: React.FC<ReportTableModalProps> = (prop) => {
-    const { result } = prop
-    const [reportList, setReportList] = useState<ReportData[]>()
+const ReportModal: React.FC<ReportModalProps> = (prop) => {
+    const { onCancel, visible } = prop
+    const { Panel } = Collapse
 
-    const columns = useMemo<ColumnsType<any>>(() => {
-        return [
-            {
-                title: 'h5Name',
-                dataIndex: 'h5Name',
-                key: 'h5Name',
-                width: 250
-            },
-            {
-                title: '错误原因',
-                dataIndex: 'reason',
-                key: 'reason',
-                width: 200
-            },
-            {
-                title: '基础图片路径',
-                dataIndex: 'baseOssPath',
-                key: 'baseOssPath',
-            },
-            {
-                title: '结果图片路径',
-                dataIndex: 'resultOssPath',
-                key: 'resultOssPath',
-                render: (text) =>
-                    <div>{text}</div>
-            },
-            {
-                title: '执行时间',
-                dataIndex: 'executeTime',
-                key: 'executeTime',
-                width: 200,
-                render: () => <Button>{"sss"}</Button>
-            }
-        ]
-    }, [result])
+    const onChange = (key: string | string[]) => {
 
-    /**
-     * 获取报告
-     */
-    const fetchReportList = (result: boolean) => {
-        getH5Report({
-            result: result
-        }
-        ).then(rep => {
-            setReportList(rep.data)
-        })
+    };
+
+    const handleCancel = () => {
+        onCancel && onCancel()
     }
 
-    /**
-     * 监听header是否有变化，有变化则进行请求
-     */
-    useEffect(() => {
-        result != null && fetchReportList(result)
-    }, [result])
-
     return (
-        <VirtualTable columns={columns} dataSource={reportList} scroll={{ y: 300, x: '100vw' }} />
+        <Modal
+            visible={visible}
+            className={styles.modal}
+            title="执行结果"
+            onCancel={handleCancel}
+            footer={<Button type='primary' onClick={() => handleCancel()}>确定</Button>}
+            destroyOnClose
+        >
+            < Collapse className={styles.collapse} ghost destroyInactivePanel={true} defaultActiveKey={['1']} onChange={onChange} bordered={true} >
+                <Panel header='成功' key='1'>
+                    <ReportTableModal result={true} />
+                </Panel>
+                <Panel header='失败' key='2' >
+                    <ReportTableModal result={false} />
+                </Panel>
+            </Collapse >
+        </Modal>
     )
 };
 
-export default ReportTableModal;
+export default ReportModal;
