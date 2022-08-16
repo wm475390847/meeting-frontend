@@ -28,14 +28,14 @@ const ReportTableModal: React.FC<ReportTableModalProps> = (prop) => {
                 width: 250
             },
             {
-                title: '基础图片路径',
+                title: '基础图片',
                 dataIndex: 'baseOssPath',
                 key: 'baseOssPath',
                 width: 200,
                 render: (text) => <Button style={{ padding: '0' }} type="link" key={"link"} onClick={() => window.open(text)}> {"点我查看图片"}</ Button>
             },
             {
-                title: '结果图片路径',
+                title: '结果图片(中间为基础图，右侧为对比图)',
                 dataIndex: 'resultOssPath',
                 key: 'resultOssPath',
                 width: 200,
