@@ -209,7 +209,7 @@ const H5DataTable: React.FC = () => {
                             <Button type='primary' loading={buttonLoading} danger>批量执行</Button>
                         </Popconfirm>
                         <Button className={styles.button} type='primary' onClick={() => setReportVisible(true)}>执行结果</Button>
-                        <Button className={styles.button} type='primary' onClick={() => setCreateVisible(true)} >新增H5</Button>
+                        <Button type='primary' onClick={() => setCreateVisible(true)} >新增H5</Button>
                     </div>
 
                 </Input.Group>
