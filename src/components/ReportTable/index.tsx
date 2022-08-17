@@ -35,7 +35,7 @@ const ReportTableModal: React.FC<ReportTableModalProps> = (prop) => {
                 render: (text) => <Button style={{ padding: '0' }} type="link" key={"link"} onClick={() => window.open(text)}> {"点我查看图片"}</ Button>
             },
             {
-                title: '结果图片(中间为基础图，右侧为对比图)',
+                title: '结果图片(右侧为对比图)',
                 dataIndex: 'resultOssPath',
                 key: 'resultOssPath',
                 width: 200,

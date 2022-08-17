@@ -228,7 +228,7 @@ const H5DataTable: React.FC = () => {
                 <UpdateH5Modal updateH5Data={updateH5Data} setLoading={setLoading} onCancel={() => setUpdataH5Data(undefined)} />
                 {/* 执行报告组件 */}
                 <ReportModal visible={reportVisible} onCancel={() => setReportVisible(false)} />
-                <FooterPage text={'会议线质量保障平台 ©2022 Created by 质量中台 '} link={'https://codeup.aliyun.com/xhzy/xhzy-qa/meeting-frontend'} />
+                <FooterPage text={'会议线质量保障平台 ©2022 Created by 质量中台 '} link={'https://codeup.aliyun.com/xhzy/xhzy-qa/meeting-frontend/tree/dev'} />
             </div>
 
         </MView >
