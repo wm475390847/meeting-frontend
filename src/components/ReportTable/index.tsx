@@ -70,8 +70,6 @@ const ReportTableModal: React.FC<ReportTableModalProps> = (prop) => {
         result != null && fetchReportList(result)
     }, [result])
 
-    console.log(columns)
-
     return (
         <VirtualTable columns={columns} dataSource={reportList} scroll={{ y: 300, x: '100vw' }} />
     )
