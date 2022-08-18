@@ -25,3 +25,23 @@
     }
   }
 }
+
+.formItem {
+  display: flex;
+  align-items: center;
+  margin-left: 15px;
+
+  .inlineFormItem {
+    margin-bottom: 0;
+    flex: 1;
+    height: 30px;
+  }
+
+  :global {
+    .ant-form-item-with-help .ant-form-item-explain {
+      position: absolute;
+      bottom: 0;
+      transform: translateY(100%);
+    }
+  }
+}

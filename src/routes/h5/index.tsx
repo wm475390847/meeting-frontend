@@ -158,10 +158,6 @@ const H5DataTable: React.FC = () => {
         })
     }
 
-    const setMeetingName = (value: string) => {
-        setSearchH5Data({ ...searchH5Data, meetingName: value })
-    }
-
     const setH5Name = (value: string) => {
         setSearchH5Data({ ...searchH5Data, h5Name: value })
     }

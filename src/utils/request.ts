@@ -91,7 +91,7 @@ export default function request(_url: string, options?: any): Promise<RequestOpt
         if (response.status === 502) {
           return err.response.json()
             .then((data: any) => {
-              message.error(data.msg)
+              message.error("服务正在发布")
             })
         }
 

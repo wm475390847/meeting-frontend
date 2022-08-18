@@ -67,3 +67,14 @@ export const getH5Report: (data: { result?: boolean }) => Promise<RequestOpt> = 
         }
     })
 }
+
+export const getH5ResultPercent: () => Promise<RequestOpt> = () => {
+    return new Promise(async (resolve, reject) => {
+        const res = await request.get(`/material/h5/percent`)
+        if (res.success) {
+            resolve(res)
+        } else {
+            reject(res)
+        }
+    })
+}
