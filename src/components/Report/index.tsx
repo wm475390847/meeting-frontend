@@ -1,5 +1,5 @@
 import { getH5ResultPercent } from "@/services/h5";
-import { Button, Collapse, Form, Modal } from "antd";
+import { Button, Collapse, Form, message, Modal } from "antd";
 import { useEffect, useState } from "react";
 import ReportTableModal from "../ReportTable";
 import styles from './index.module.less'
@@ -26,6 +26,8 @@ const ReportModal: React.FC<ReportModalProps> = (prop) => {
         getH5ResultPercent()
             .then(rep => {
                 setResultPercent(rep.data)
+            }).catch(err => {
+                message.error(err.message)
             })
     }
 
@@ -43,16 +45,16 @@ const ReportModal: React.FC<ReportModalProps> = (prop) => {
             destroyOnClose
         >
             <div className={styles.formItem}>
-                <Form.Item name='total' className={styles.inlineFormItem} label="总数">
+                <Form.Item className={styles.inlineFormItem} label="总数">
                     {resultPercent?.total}
                 </Form.Item>
-                <Form.Item name='success' className={styles.inlineFormItem} label="成功">
+                <Form.Item className={styles.inlineFormItem} label="成功">
                     {resultPercent?.success}
                 </Form.Item>
-                <Form.Item name='fail' className={styles.inlineFormItem} label="失败">
+                <Form.Item className={styles.inlineFormItem} label="失败">
                     {resultPercent ? resultPercent.total - resultPercent.success : 0}
                 </Form.Item>
-                <Form.Item name='percent' className={styles.inlineFormItem} label="成功率">
+                <Form.Item className={styles.inlineFormItem} label="成功率">
                     {resultPercent?.percent as number * 100}%
                 </Form.Item>
             </div>

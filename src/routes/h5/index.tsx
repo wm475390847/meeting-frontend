@@ -69,6 +69,7 @@ const H5DataTable: React.FC = () => {
                 dataIndex: 'meetingStartTime',
                 key: 'meetingStartTime',
                 width: 25,
+                sorter: (a, b) => moment(a.meetingStartTime).unix() - moment(b.meetingStartTime).unix(),
                 render: (_, record) =>
                     moment(record.meetingStartTime).format('YYYY-MM-DD') === moment(record.meetingEndTime).format('YYYY-MM-DD')
                         ?

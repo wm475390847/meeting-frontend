@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import VirtualTable from "../VirtualTable";
 import { ColumnsType } from "antd/lib/table";
 import moment from "moment";
-import { Button } from "antd";
+import { Button, message } from "antd";
 
 type ReportTableModalProps = {
     result?: boolean
@@ -57,9 +57,10 @@ const ReportTableModal: React.FC<ReportTableModalProps> = (prop) => {
     const fetchReportList = (result: boolean) => {
         getH5Report({
             result: result
-        }
-        ).then(rep => {
+        }).then(rep => {
             setReportList(rep.data)
+        }).catch(err => {
+            message.error(err.message)
         })
     }
 
@@ -71,7 +72,12 @@ const ReportTableModal: React.FC<ReportTableModalProps> = (prop) => {
     }, [result])
 
     return (
-        <VirtualTable columns={columns} dataSource={reportList} scroll={{ y: 300, x: '100vw' }} />
+        <VirtualTable
+            rowKey={"id"}
+            columns={columns}
+            dataSource={reportList}
+            scroll={{ y: 300, x: '100vw' }}
+        />
     )
 };
 
