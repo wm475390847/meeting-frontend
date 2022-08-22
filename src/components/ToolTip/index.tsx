@@ -3,12 +3,13 @@ import React from 'react';
 import styles from './index.module.less'
 
 type ToolTipProps = {
-    text: string
+    buttonText?: string
+    linkText: string
     isWindowOpen?: boolean
 }
 
 const ToolTipModal: React.FC<ToolTipProps> = (props) => {
-    const { text, isWindowOpen } = props
+    const { linkText: text, isWindowOpen, buttonText: buttonContent } = props
 
     return (
         <Tooltip overlayClassName={styles.tooltip}
@@ -27,7 +28,7 @@ const ToolTipModal: React.FC<ToolTipProps> = (props) => {
                         {text}
                     </Button>
                     :
-                    <span> {text}</span>
+                    <span> {buttonContent}</span>
             }
         </Tooltip >
     );

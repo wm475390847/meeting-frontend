@@ -4,6 +4,7 @@ import VirtualTable from "../VirtualTable";
 import { ColumnsType } from "antd/lib/table";
 import moment from "moment";
 import { Button, message } from "antd";
+import ToolTipModal from "../ToolTip";
 
 type ReportTableModalProps = {
     result?: boolean
@@ -25,7 +26,15 @@ const ReportTableModal: React.FC<ReportTableModalProps> = (prop) => {
                 title: '错误原因',
                 dataIndex: 'reason',
                 key: 'reason',
-                width: 250
+                width: 150
+            },
+            {
+                title: 'url',
+                dataIndex: 'h5Url',
+                key: 'h5Url',
+                width: 200,
+                ellipsis: true,
+                render: (text) => <Button style={{ padding: '0' }} type="link" key={"link"} onClick={() => window.open(text)}> {"点我查看h5"}</ Button>
             },
             {
                 title: '基础图片',

@@ -47,7 +47,7 @@ const H5DataTable: React.FC = () => {
                 dataIndex: 'meetingName',
                 key: 'meetingName',
                 width: 45,
-                render: (text) => <ToolTipModal text={text} />
+                render: (text) => <ToolTipModal linkText={text} buttonText={text} />
             },
             {
                 title: 'url',
@@ -55,14 +55,14 @@ const H5DataTable: React.FC = () => {
                 key: 'h5Url',
                 width: 70,
                 ellipsis: true,
-                render: (text) => <ToolTipModal text={text} isWindowOpen={true} />
+                render: (text) => <ToolTipModal linkText={text} isWindowOpen={true} buttonText={text} />
             },
             {
                 title: 'H5名称',
                 dataIndex: 'h5Name',
                 key: 'h5Name',
                 width: 45,
-                render: (text) => <ToolTipModal text={text} />
+                render: (text) => <ToolTipModal linkText={text} buttonText={text} />
             },
             {
                 title: '会议时间',
