@@ -4,7 +4,6 @@ import VirtualTable from "../VirtualTable";
 import { ColumnsType } from "antd/lib/table";
 import moment from "moment";
 import { Button, message } from "antd";
-import ToolTipModal from "../ToolTip";
 
 type ReportTableModalProps = {
     result?: boolean
