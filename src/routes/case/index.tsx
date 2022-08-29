@@ -1,0 +1,224 @@
+import { Button, Input, Popconfirm, Progress, Select, Table } from 'antd';
+import React, { useEffect, useMemo, useState } from 'react';
+import { ColumnsType } from 'antd/lib/table';
+import { getCaseList, getProdects } from '@/services/case';
+import { FooterPage, MView, PageHeader } from '@/components';
+import styles from './index.module.less'
+import CasseReasonModal from '@/components/CaseReason';
+import moment from 'moment';
+import ToolTipModal from '@/components/ToolTip';
+
+interface SearchCase {
+  productId?: number
+  caseResult?: boolean
+  env?: string
+  caseOwner?: string
+}
+
+const CaseTable: React.FC = (props) => {
+  const { Option, OptGroup } = Select;
+  const { Search } = Input
+  const [pageNo, setPageNo] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
+  const [loading, setLoading] = useState(true)
+  const [total, setTotal] = useState(0)
+  const [caseList, setCaseList] = useState<CaseInfo[]>()
+  const [reason, setReason] = useState()
+  const [searchCase, setSearchCase] = useState<SearchCase>()
+  const [serviceList, setServiceList] = useState<ServiceInfo[]>([])
+
+  const columns = useMemo<ColumnsType<any>>(() => {
+    return [
+      {
+        title: "序号",
+        key: "id",
+        width: 10,
+        render: (_text, _record, index) => (pageNo as number - 1) * (pageSize as number) + index + 1
+      },
+      {
+        title: "Name",
+        key: "caseName",
+        dataIndex: "caseName",
+        width: '14%',
+        ellipsis: true,
+        render: (text) => <ToolTipModal linkText={text} buttonText={text} />
+      },
+      {
+        title: "Desc",
+        key: "caseDesc",
+        dataIndex: "caseDesc",
+        width: '15%',
+        ellipsis: true,
+        render: (text) => <ToolTipModal linkText={text} buttonText={text} />
+      },
+      {
+        title: "Result",
+        key: "caseResult",
+        dataIndex: "caseResult",
+        width: 10,
+        render: (text) => {
+          return (
+            text ? < Progress type="circle" percent={100} width={30} /> : < Progress status="exception" type="circle" percent={100} width={30} />
+          )
+        }
+      },
+      {
+        title: "Product",
+        key: "productName",
+        dataIndex: "productName",
+        width: 15
+      },
+      {
+        title: "Env",
+        key: "env",
+        dataIndex: "env",
+        width: 10
+      },
+      {
+        title: "Owner",
+        key: "caseOwner",
+        dataIndex: "caseOwner",
+        width: 15
+      },
+      {
+        title: "ExecuteTime",
+        key: "gmtModified",
+        dataIndex: "gmtModified",
+        width: 25,
+        render: (text) => <div>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</div>
+      },
+      {
+        title: '操作',
+        dataIndex: 'action',
+        key: 'action',
+        width: '15%',
+        render: (_, record) => {
+          return (
+            <div className={styles.action}>
+              {<Button disabled={record.caseResult} type="primary" onClick={() => setReason(record.caseReason)}>查看</Button>}
+              <Popconfirm title="亲~功能未完成哦！" okText="是" cancelText="否">
+                <Button >删除</Button>
+              </Popconfirm>
+            </div >
+          )
+        }
+      }
+    ]
+  }, [pageNo, pageSize])
+
+  const onChangeTable = (value: any) => {
+    const { current, pageSize } = value
+    setPageNo(current)
+    setPageSize(pageSize)
+    setLoading(true)
+  }
+
+  /**
+   * 获取报告
+   */
+  const fetchCommonCaseList = () => {
+    getCaseList({
+      pageNo: pageNo,
+      pageSize: pageSize,
+      caseResult: searchCase?.caseResult,
+      productId: searchCase?.productId,
+      env: searchCase?.env,
+      caseOwner: searchCase?.caseOwner
+    }).then(data => {
+      setCaseList(data.records)
+      setTotal(data.total)
+      setLoading(false)
+    })
+  }
+
+  const fetchProductList = () => {
+    getProdects()
+      .then(data => {
+        setServiceList(data)
+        setLoading(false)
+      })
+  }
+
+  const setProductId = (value: String) => {
+    setSearchCase({ ...searchCase, productId: value as unknown as number })
+    setLoading(true)
+  };
+
+  const setResult = (value: string) => {
+    setSearchCase({ ...searchCase, caseResult: value as unknown as boolean })
+    setLoading(true)
+  }
+
+  const setEnv = (value: string) => {
+    setSearchCase({ ...searchCase, env: value })
+    setLoading(true)
+  }
+
+  const setCaseOwner = (value: string) => {
+    setSearchCase({ ...searchCase, caseOwner: value })
+    setLoading(true)
+  }
+
+  useEffect(() => {
+    serviceList.length === 0 && fetchProductList()
+  }, [serviceList])
+
+  /**
+   *  监听pageNo变化时刷新列表
+   */
+  useEffect(() => {
+    loading && fetchCommonCaseList()
+  }, [pageNo, loading])
+
+
+  return (
+    <MView resize>
+      <PageHeader title="用例列表" />
+
+      <span>执行结果：</span>
+      <Select className={styles.select} defaultValue="全部" onChange={setResult}>
+        <Option value="">全部</Option>
+        <Option value="true">成功</Option>
+        <Option value="false">失败</Option>
+      </Select>
+
+      <span className={styles.span}>所属产品：</span>
+      <Select className={styles.select} defaultValue={"全部"} onChange={setProductId} >
+        <OptGroup label="全部">
+          <Option value="">全部</Option>
+        </OptGroup>
+        {serviceList?.map((service: ServiceInfo) => (
+          <OptGroup label={service.name}>
+            {service.products.map((product: ProductInfo) => (
+              <Option value={product.id}>{product.name}</Option>))}
+          </OptGroup>
+        ))}
+      </Select>
+
+      <span className={styles.span}>环境：</span>
+      <Select className={styles.select} defaultValue="全部" onChange={setEnv}>
+        <Option value="">全部</Option>
+        <Option value="test">测试环境</Option>
+        <Option value="prod">生产环境</Option>
+      </Select>
+
+      <span className={styles.span}>用例作者：</span>
+      <Search placeholder="owner" onSearch={setCaseOwner} enterButton />
+
+
+      <Table
+        columns={columns}
+        dataSource={caseList}
+        onChange={onChangeTable}
+        pagination={{ total, current: pageNo, showSizeChanger: true }}
+        loading={loading}
+        rowKey="id"
+      >
+      </Table>
+      <CasseReasonModal reason={reason} onCancel={() => setReason(undefined)} />
+      <FooterPage text={'会议线质量保障平台 ©2022 Created by 质量中台 '} link={'https://codeup.aliyun.com/xhzy/xhzy-qa/meeting-frontend/tree/dev'} />
+    </MView >
+  );
+};
+
+export default CaseTable;

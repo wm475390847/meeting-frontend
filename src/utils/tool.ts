@@ -24,6 +24,12 @@ const addGetParams = (url: string, data = {}) => {
 
 // url 接口, data 入参, options 配置
 export const request = {
+  getTtp: (url: string, data = {}) => {
+    return _request(`${'http://test.ttp.xinhuazhiyun.com'}${'/ttp-backend'}${addGetParams(url, data)}`, {
+      method: 'GET',
+    });
+  },
+
   get: (url: string, data = {}) => {
     return _request(`${API_PREFIX}${addGetParams(url, data)}`, {
       method: 'GET',
