@@ -6,7 +6,7 @@ const Synthesize: React.FC = () => {
     return (
         <MView resize>
             <div>
-                <PageHeader title={"综合保障"} />
+                <PageHeader title={"其他"} />
                 <Button
                     key={'weLook'}
                     type='primary'
