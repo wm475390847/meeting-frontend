@@ -174,7 +174,7 @@ const H5DataTable: React.FC = () => {
     return (
         <MView resize>
             <div>
-                <PageHeader title={"H5保障"} />
+                <PageHeader title={"页面保障"} />
                 <Input.Group className={styles.inputGroup}>
 
                     <div>
@@ -185,7 +185,7 @@ const H5DataTable: React.FC = () => {
                     </div>
 
                     <div>
-                        <Button type='primary' onClick={() => setCreateVisible(true)} >新增H5</Button>
+                        <Button type='primary' onClick={() => setCreateVisible(true)} >新增页面</Button>
                     </div>
 
                 </Input.Group>
