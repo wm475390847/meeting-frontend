@@ -1,17 +1,18 @@
-import { getH5ResultPercent } from "@/services/h5";
+import { getTaskResultPercent } from "@/services/task";
 import { Button, Collapse, Form, message, Modal } from "antd";
 import { useEffect, useState } from "react";
 import ReportTableModal from "../ReportTable";
 import styles from './index.module.less'
 
 type ReportModalProps = {
-    visible: boolean
+    taskInfo?: TaskInfo
     onCancel?: () => void
 }
 
 const ReportModal: React.FC<ReportModalProps> = (prop) => {
-    const { onCancel, visible } = prop
+    const { onCancel, taskInfo } = prop
     const { Panel } = Collapse
+    const [visible, setVisible] = useState(false)
     const [resultPercent, setResultPercent] = useState<ResultPercent>()
 
     const onChange = (key: string | string[]) => {
@@ -19,17 +20,25 @@ const ReportModal: React.FC<ReportModalProps> = (prop) => {
     };
 
     const handleCancel = () => {
+        setVisible(false)
         onCancel && onCancel()
     }
 
     const getPercent = () => {
-        getH5ResultPercent()
+        getTaskResultPercent(taskInfo?.id as number)
             .then(rep => {
                 setResultPercent(rep.data)
             }).catch(err => {
                 message.error(err.message)
             })
     }
+
+    useEffect(() => {
+        if (!taskInfo) {
+            return
+        }
+        setVisible(true)
+    }, [taskInfo])
 
     useEffect(() => {
         visible && getPercent()
@@ -63,10 +72,10 @@ const ReportModal: React.FC<ReportModalProps> = (prop) => {
             < Collapse className={styles.collapse} ghost destroyInactivePanel={true} defaultActiveKey={['2']} onChange={onChange} bordered={true} >
 
                 <Panel header='失败' key='2' >
-                    <ReportTableModal result={false} />
+                    <ReportTableModal result={false} taskId={taskInfo?.id as number} />
                 </Panel>
                 <Panel header='成功' key='1'>
-                    <ReportTableModal result={true} />
+                    <ReportTableModal result={true} taskId={taskInfo?.id as number} />
                 </Panel>
             </Collapse >
         </Modal>

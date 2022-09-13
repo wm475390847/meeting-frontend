@@ -2,7 +2,7 @@ import { RequestOpt } from "@/utils/request"
 import { request } from "@/utils/tool"
 import { ICreateH5Req, IH5DataListReq, IUpdateH5Req } from "./interface"
 
-export const getH5DataList: (data: IH5DataListReq) => Promise<IPageRequest<H5Data>> = (data) => {
+export const getH5DataList: (data: IH5DataListReq) => Promise<IPageRequest<H5DataInfo>> = (data) => {
     return new Promise(async (resolve, reject) => {
         const res = await request.get(`/material/h5s`, data)
         if (res.success) {
@@ -24,17 +24,6 @@ export const createH5: (data: ICreateH5Req) => Promise<RequestOpt> = (data) => {
     })
 }
 
-export const deleteH5: (id: number) => Promise<RequestOpt> = (id) => {
-    return new Promise(async (resolve, reject) => {
-        const res = await request.delete(`/material/h5/${id}`, id)
-        if (res.success) {
-            resolve(res)
-        } else {
-            reject(res)
-        }
-    })
-}
-
 export const updateH5: (data: IUpdateH5Req) => Promise<RequestOpt> = (data) => {
     return new Promise(async (resolve, reject) => {
         const res = await request.put(`/material/h5`, data)
@@ -46,31 +35,9 @@ export const updateH5: (data: IUpdateH5Req) => Promise<RequestOpt> = (data) => {
     })
 }
 
-export const executeH5: () => Promise<RequestOpt> = () => {
+export const deleteH5: (id: number) => Promise<RequestOpt> = (id) => {
     return new Promise(async (resolve, reject) => {
-        const res = await request.post(`/material/h5/execute`)
-        if (res.success) {
-            resolve(res)
-        } else {
-            reject(res)
-        }
-    })
-}
-
-export const getH5Report: (data: { result?: boolean }) => Promise<RequestOpt> = (data) => {
-    return new Promise(async (resolve, reject) => {
-        const res = await request.get(`/material/h5/report`, data)
-        if (res.success) {
-            resolve(res)
-        } else {
-            reject(res)
-        }
-    })
-}
-
-export const getH5ResultPercent: () => Promise<RequestOpt> = () => {
-    return new Promise(async (resolve, reject) => {
-        const res = await request.get(`/material/h5/percent`)
+        const res = await request.delete(`/material/h5/${id}`, id)
         if (res.success) {
             resolve(res)
         } else {

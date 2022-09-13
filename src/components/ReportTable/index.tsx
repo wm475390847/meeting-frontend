@@ -1,16 +1,17 @@
-import { getH5Report } from "@/services/h5";
 import { useEffect, useMemo, useState } from "react";
 import VirtualTable from "../VirtualTable";
 import { ColumnsType } from "antd/lib/table";
 import moment from "moment";
 import { Button, message } from "antd";
+import { getTaskReport } from "@/services/task";
 
 type ReportTableModalProps = {
     result?: boolean
+    taskId: number
 }
 
 const ReportTableModal: React.FC<ReportTableModalProps> = (prop) => {
-    const { result } = prop
+    const { result, taskId } = prop
     const [reportList, setReportList] = useState<ReportData[]>()
 
     const columns = useMemo<ColumnsType<any>>(() => {
@@ -62,9 +63,10 @@ const ReportTableModal: React.FC<ReportTableModalProps> = (prop) => {
     /**
      * 获取报告
      */
-    const fetchReportList = (result: boolean) => {
-        getH5Report({
-            result: result
+    const fetchReportList = (result: boolean, taskId: number) => {
+        getTaskReport({
+            result: result,
+            taskId: taskId
         }).then(rep => {
             setReportList(rep.data)
         }).catch(err => {
@@ -76,7 +78,7 @@ const ReportTableModal: React.FC<ReportTableModalProps> = (prop) => {
      * 监听是否有变化，有变化则进行请求
      */
     useEffect(() => {
-        result != null && fetchReportList(result)
+        result != null && fetchReportList(result, taskId)
     }, [result])
 
     return (

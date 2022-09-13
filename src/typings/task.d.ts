@@ -1,11 +1,11 @@
-interface H5DataInfo {
-    h5Name: string
-    h5Url: string
+interface TaskInfo {
+    taskName: string
     id: number
-    meetingId: string
-    meetingName: string
-    meetingStartTime: string
-    meetingEndTime: string
+    caseIds: number[]
+    cron?: string
+    executeTime?: string
+    elapsedTime?: string
+    status: number
 }
 
 interface ExecuteResultData {

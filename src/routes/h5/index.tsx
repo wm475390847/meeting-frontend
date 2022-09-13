@@ -1,6 +1,6 @@
 import { FooterPage, MView, PageHeader } from "@/components"
 import ToolTipModal from "@/components/ToolTip"
-import { deleteH5, executeH5, getH5DataList } from "@/services/h5"
+import { deleteH5, getH5DataList } from "@/services/h5"
 import { ColumnsType } from "antd/lib/table"
 import { useEffect, useMemo, useState } from "react"
 import { Button, DatePicker, Input, message, Popconfirm, Space, Table } from 'antd'
@@ -8,7 +8,6 @@ import styles from './index.module.less'
 import moment from "moment"
 import CreateH5Modal from "@/components/H5Create"
 import UpdateH5Modal from "@/components/H5Update"
-import ReportModal from "@/components/Report"
 
 console.log("大丈夫生于天地之间，岂能郁郁久居人下！")
 
@@ -26,14 +25,12 @@ const H5DataTable: React.FC = () => {
     const [pageNo, setPageNo] = useState(1)
     const [pageSize, setPageSize] = useState(10)
     const [total, setTotal] = useState(0)
-    const [h5DataList, setH5DataList] = useState<H5Data[]>()
+    const [h5DataList, setH5DataList] = useState<H5DataInfo[]>()
     const [buttonLoading, setButtongLoading] = useState(false)
     const [searchH5Data, setSearchH5Data] = useState<SearchH5Data>()
-    const [updateH5Data, setUpdataH5Data] = useState<H5Data>()
+    const [updateH5Data, setUpdataH5Data] = useState<H5DataInfo>()
     // 控制创建h5组件开启
     const [createVisible, setCreateVisible] = useState(false)
-    // 控制报告组件
-    const [reportVisible, setReportVisible] = useState(false)
 
     const columns = useMemo<ColumnsType<any>>(() => {
         return [
@@ -128,20 +125,6 @@ const H5DataTable: React.FC = () => {
     }
 
     /**
-     * 批量执行h5
-     */
-    const bathExecuteH5 = () => {
-        setButtongLoading(true)
-        executeH5()
-            .then(res => {
-                message.info(res.message)
-                setLoading(true)
-            }).catch(err => {
-                message.error(err.message)
-            }).finally(() => setButtongLoading(false))
-    }
-
-    /**
      * 获取h5数据列表
      */
     const fetchH5DataList = () => {
@@ -202,10 +185,6 @@ const H5DataTable: React.FC = () => {
                     </div>
 
                     <div>
-                        <Popconfirm className={styles.button} placement="top" title="确定执行？" okText="是" cancelText="否" onConfirm={bathExecuteH5}>
-                            <Button type='primary' loading={buttonLoading} danger>批量执行</Button>
-                        </Popconfirm>
-                        <Button className={styles.button} type='primary' onClick={() => setReportVisible(true)}>执行结果</Button>
                         <Button type='primary' onClick={() => setCreateVisible(true)} >新增H5</Button>
                     </div>
 
@@ -223,8 +202,6 @@ const H5DataTable: React.FC = () => {
                 <CreateH5Modal visible={createVisible} setLoading={setLoading} onCancel={() => setCreateVisible(false)} />
                 {/* 修改h5组件 */}
                 <UpdateH5Modal updateH5Data={updateH5Data} setLoading={setLoading} onCancel={() => setUpdataH5Data(undefined)} />
-                {/* 执行报告组件 */}
-                <ReportModal visible={reportVisible} onCancel={() => setReportVisible(false)} />
                 <FooterPage text={'会议线质量保障平台 ©2022 Created by 质量中台 '} link={'https://codeup.aliyun.com/xhzy/xhzy-qa/meeting-frontend/tree/dev'} />
             </div>
 
