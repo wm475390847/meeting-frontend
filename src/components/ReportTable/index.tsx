@@ -51,6 +51,13 @@ const ReportTableModal: React.FC<ReportTableModalProps> = (prop) => {
                 render: (text) => <Button style={{ padding: '0' }} type="link" key={"link"} onClick={() => window.open(text)}> {"点我查看图片"}</ Button>
             },
             {
+                title: '执行耗时(s)',
+                dataIndex: 'elapsedTime',
+                key: 'elapsedTime',
+                width: '10%',
+                render: (_, record) => record.elapsedTime && record.elapsedTime / 1000 + 's'
+            },
+            {
                 title: '执行时间',
                 dataIndex: 'executeTime',
                 key: 'executeTime',
