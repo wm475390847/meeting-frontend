@@ -5,6 +5,7 @@ export interface ICaseReq {
   productId?: number
   env?: string
   caseOwner?: string
+  caseName?: string
 }
 
 

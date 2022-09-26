@@ -16,7 +16,7 @@ export const getCaseList: (data: ICaseReq) => Promise<IPageRequest<CaseInfo>> = 
 // 获取产品列表
 export const getProdects: () => Promise<ServiceInfo[]> = () => {
   return new Promise(async (resolve, reject) => {
-    const res = await request.getTtp(`/cases/product`)
+    const res = await request.getTtp(`/products/group`)
     if (res.success) {
       resolve(res.data)
     } else {

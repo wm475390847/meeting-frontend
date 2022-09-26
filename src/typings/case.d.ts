@@ -13,11 +13,11 @@ interface CaseInfo {
 
 interface ServiceInfo {
     id: number
-    name: string
+    serviceName: string
     products: ProductInfo[]
 }
 
 interface ProductInfo {
     id: number
-    name: string
+    productName: string
 }

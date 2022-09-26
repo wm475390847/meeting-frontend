@@ -13,6 +13,7 @@ interface SearchCase {
   caseResult?: boolean
   env?: string
   caseOwner?: string
+  caseName?: string
 }
 
 const CaseTable: React.FC = (props) => {
@@ -123,7 +124,8 @@ const CaseTable: React.FC = (props) => {
       caseResult: searchCase?.caseResult,
       productId: searchCase?.productId,
       env: searchCase?.env,
-      caseOwner: searchCase?.caseOwner
+      caseOwner: searchCase?.caseOwner,
+      caseName: searchCase?.caseName
     }).then(data => {
       setCaseList(data.records)
       setTotal(data.total)
@@ -159,6 +161,11 @@ const CaseTable: React.FC = (props) => {
     setLoading(true)
   }
 
+  const setCaseName = (value: string) => {
+    setSearchCase({ ...searchCase, caseName: value })
+    setLoading(true)
+  }
+
   useEffect(() => {
     serviceList.length === 0 && fetchProductList()
   }, [serviceList])
@@ -175,22 +182,22 @@ const CaseTable: React.FC = (props) => {
     <MView resize>
       <PageHeader title="用例列表" />
 
-      <span>执行结果：</span>
+      <span>结果：</span>
       <Select className={styles.select} defaultValue="全部" onChange={setResult}>
         <Option value="">全部</Option>
         <Option value="true">成功</Option>
         <Option value="false">失败</Option>
       </Select>
 
-      <span className={styles.span}>所属产品：</span>
+      <span className={styles.span}>产品：</span>
       <Select className={styles.select} defaultValue={"全部"} onChange={setProductId} >
         <OptGroup label="全部">
           <Option value="">全部</Option>
         </OptGroup>
         {serviceList?.map((service: ServiceInfo) => (
-          <OptGroup label={service.name}>
+          <OptGroup label={service.serviceName}>
             {service.products.map((product: ProductInfo) => (
-              <Option value={product.id}>{product.name}</Option>))}
+              <Option value={product.id}>{product.productName}</Option>))}
           </OptGroup>
         ))}
       </Select>
@@ -202,8 +209,12 @@ const CaseTable: React.FC = (props) => {
         <Option value="prod">生产环境</Option>
       </Select>
 
-      <span className={styles.span}>用例作者：</span>
+      <span className={styles.span}>name：</span>
+      <Search placeholder="caseName" onSearch={setCaseName} enterButton />
+
+      <span className={styles.span}>owner：</span>
       <Search placeholder="owner" onSearch={setCaseOwner} enterButton />
+
 
 
       <Table
