@@ -83,8 +83,8 @@ const CaseTable: React.FC = (props) => {
       },
       {
         title: "ExecuteTime",
-        key: "gmtModified",
-        dataIndex: "gmtModified",
+        key: "excuteTime",
+        dataIndex: "excuteTime",
         width: 25,
         render: (text) => <div>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</div>
       },
@@ -210,7 +210,7 @@ const CaseTable: React.FC = (props) => {
       </Select>
 
       <span className={styles.span}>name：</span>
-      <Search placeholder="caseName" onSearch={setCaseName} enterButton />
+      <Search placeholder="name" onSearch={setCaseName} enterButton />
 
       <span className={styles.span}>owner：</span>
       <Search placeholder="owner" onSearch={setCaseOwner} enterButton />

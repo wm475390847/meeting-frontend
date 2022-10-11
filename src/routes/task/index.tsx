@@ -4,7 +4,7 @@ import { ColumnsType } from "antd/lib/table"
 import { useEffect, useMemo, useState } from "react"
 import { Button, message, Popconfirm, Spin, Table } from 'antd'
 import styles from './index.module.less'
-import { executeTask, getTaskInfoList } from "@/services/task"
+import { deleteTask, executeTask, getTaskInfoList } from "@/services/task"
 import ReportModal from "@/components/Report"
 import { TaskStatusEnum } from "@/constants"
 import { LoadingOutlined } from "@ant-design/icons"
@@ -123,7 +123,13 @@ const TaskTable: React.FC = () => {
     }
 
     const fetchDelectTask = (taskId: number) => {
-        message.info("暂不支持删除哦")
+        deleteTask(taskId)
+            .then(res => {
+                message.info(res.message)
+                setLoading(true)
+            }).catch(err => {
+                message.error(err.message)
+            }).finally(() => setButtongLoading(false))
     }
 
     useEffect(() => {

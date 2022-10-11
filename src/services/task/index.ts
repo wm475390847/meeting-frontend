@@ -1,10 +1,22 @@
 import { RequestOpt } from "@/utils/request"
 import { request } from "@/utils/tool"
+import { table } from "console"
 import { ITaskInfoListReq } from "./interface"
 
 export const executeTask: (taskId: number) => Promise<RequestOpt> = (taskId) => {
     return new Promise(async (resolve, reject) => {
         const res = await request.post(`/material/task/execute/${taskId}`)
+        if (res.success) {
+            resolve(res)
+        } else {
+            reject(res)
+        }
+    })
+}
+
+export const deleteTask: (taskId: number) => Promise<RequestOpt> = (taskId) => {
+    return new Promise(async (resolve, reject) => {
+        const res = await request.delete(`/material/task/${taskId}`)
         if (res.success) {
             resolve(res)
         } else {
