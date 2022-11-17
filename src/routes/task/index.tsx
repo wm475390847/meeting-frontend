@@ -2,7 +2,7 @@ import { FooterPage, MView, PageHeader } from "@/components"
 import ToolTipModal from "@/components/ToolTip"
 import { ColumnsType } from "antd/lib/table"
 import { useEffect, useMemo, useState } from "react"
-import { Button, message, Popconfirm, Spin, Table } from 'antd'
+import { Button, Input, message, Popconfirm, Spin, Table } from 'antd'
 import styles from './index.module.less'
 import { deleteTask, executeTask, getTaskList } from "@/services/task"
 import TaskReportModal from "@/components/TaskReport"
@@ -25,10 +25,9 @@ const TaskTable: React.FC = () => {
     const columns = useMemo<ColumnsType<any>>(() => {
         return [
             {
-                title: '任务id',
-                dataIndex: 'id',
-                key: 'id',
-                width: '10%'
+                title: '序号',
+                width: '7%',
+                render: (_text, _record, index) => (pageNo as number - 1) * (pageSize as number) + index + 1
             },
             {
                 title: '定时表达式',
@@ -140,6 +139,9 @@ const TaskTable: React.FC = () => {
         <MView resize>
             <div>
                 <PageHeader title={"任务列表"} />
+                <Input.Group className={styles.inputGroup}>
+                    <Button type='primary'>新增任务</Button>
+                </Input.Group>
                 <Table
                     columns={columns}
                     dataSource={taskInfoList}

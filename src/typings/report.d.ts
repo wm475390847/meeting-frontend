@@ -131,9 +131,9 @@ interface FaceResult {
     /**
      * 包含哪些视频
      */
-    videoIdList: string[]
+    videoIdList?: string[]
     /**
      * 包含哪些图片
      */
-    imageList: string[]
+    imageList?: string[]
 }

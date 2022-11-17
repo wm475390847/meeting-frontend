@@ -1,5 +1,5 @@
 import { createFace } from "@/services/face";
-import { Button, Modal, Form, DatePicker, Input, message } from "antd";
+import { Button, Modal, Form, Input, message } from "antd";
 import { useState } from "react";
 import styles from './index.module.less'
 
@@ -13,7 +13,6 @@ const FaceCreateModal: React.FC<FaceCreateProps> = (props) => {
     const [form] = Form.useForm()
     const { visible, onCancel, setLoading } = (props)
     const [buttonLoading, setButtonLoading] = useState(false)
-    const RangePicker: any = DatePicker.RangePicker;
 
     /**
      * 关闭弹窗&清空组件所都数据
@@ -22,13 +21,6 @@ const FaceCreateModal: React.FC<FaceCreateProps> = (props) => {
         onCancel && onCancel()
     }
 
-    /**
-     * 时间框组件变化的值获取
-     * @param value 值
-     */
-    const onChange = (value: string) => {
-
-    }
 
     /**
      * 提交
@@ -71,6 +63,11 @@ const FaceCreateModal: React.FC<FaceCreateProps> = (props) => {
                 <Form.Item name='miceId' label="专题id" required>
                     <Input className={styles.input} placeholder='请输入专题id' />
                 </Form.Item>
+
+                <Form.Item name='faceDesc' label='备注信息'>
+                    <Input className={styles.input} placeholder='请输入备注信息' />
+                </Form.Item>
+
             </Form>
         </Modal >
     );

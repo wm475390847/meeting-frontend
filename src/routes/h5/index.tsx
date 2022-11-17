@@ -36,7 +36,7 @@ const H5DataTable: React.FC = () => {
         return [
             {
                 title: '序号',
-                width: 13,
+                width: '7%',
                 render: (_text, _record, index) => (pageNo as number - 1) * (pageSize as number) + index + 1
             },
             {

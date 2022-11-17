@@ -1,11 +1,11 @@
 import { RequestOpt } from "@/utils/request"
 import { request } from "@/utils/tool"
-import { ICreateFaceReq, ISearchFaceListReq } from "./interface"
+import { ICreateFaceReq, ISearchFaceListReq, IUpdateFaceReq } from "./interface"
 
 /**
  * 获取人脸识别任务列表
  * @param data 
- * @returns 
+ * @return
  */
 export const getFaceList: (data: ISearchFaceListReq) => Promise<IPageRequest<FaceData>> = (data) => {
     return new Promise(async (resolve, reject) => {
@@ -26,6 +26,22 @@ export const getFaceList: (data: ISearchFaceListReq) => Promise<IPageRequest<Fac
 export const createFace: (data: ICreateFaceReq) => Promise<RequestOpt> = (data) => {
     return new Promise(async (resolve, reject) => {
         const res = await request.post(`/face/create`, data)
+        if (res.success) {
+            resolve(res)
+        } else {
+            reject(res)
+        }
+    })
+}
+
+/**
+ * 修改人脸识别任务
+ * @param data 
+ * @returns 
+ */
+export const updateFace: (data: IUpdateFaceReq) => Promise<RequestOpt> = (data) => {
+    return new Promise(async (resolve, reject) => {
+        const res = await request.put(`/face/update`, data)
         if (res.success) {
             resolve(res)
         } else {

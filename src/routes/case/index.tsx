@@ -33,7 +33,7 @@ const CaseTable: React.FC = (props) => {
       {
         title: "序号",
         key: "id",
-        width: 10,
+        width: '7%',
         render: (_text, _record, index) => (pageNo as number - 1) * (pageSize as number) + index + 1
       },
       {
@@ -56,7 +56,7 @@ const CaseTable: React.FC = (props) => {
         title: "Result",
         key: "caseResult",
         dataIndex: "caseResult",
-        width: 10,
+        width: 12,
         render: (text) => {
           return (
             text ? < Progress type="circle" percent={100} width={30} /> : < Progress status="exception" type="circle" percent={100} width={30} />

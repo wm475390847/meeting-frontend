@@ -5,12 +5,12 @@ import FaceReportTableModal from "../FaceReportTable";
 import styles from './index.module.less'
 
 type FaceReportProps = {
-    faceData?: FaceData
+    faceDataSwitch?: FaceDataSwitch
     onCancel?: () => void
 }
 
 const FaceReportModal: React.FC<FaceReportProps> = (props) => {
-    const { onCancel, faceData } = props
+    const { onCancel, faceDataSwitch } = props
     const [visible, setVisible] = useState(false)
     const [faceResult, setFaceResult] = useState<FaceReport>()
     const { Panel } = Collapse
@@ -25,7 +25,7 @@ const FaceReportModal: React.FC<FaceReportProps> = (props) => {
     }
 
     const fetchGetResult = () => {
-        getFaceResult(faceData?.id as number)
+        getFaceResult(faceDataSwitch?.faceData?.id as number)
             .then(rep => {
                 setFaceResult(rep.data)
             }).catch(err => {
@@ -34,12 +34,6 @@ const FaceReportModal: React.FC<FaceReportProps> = (props) => {
     }
 
     const stringList2ObjectList: (v: string[]) => DiffData[] = (data: string[]) => {
-        // const diffData: DiffData[] = [];
-        // data.forEach(id => {
-        //     const temp: DiffData = { businessId: '' };
-        //     temp.businessId = id;
-        //     diffData.push(temp)
-        // })
         const res: DiffData[] = data?.map(id => {
             return {
                 businessId: id
@@ -49,11 +43,14 @@ const FaceReportModal: React.FC<FaceReportProps> = (props) => {
     }
 
     useEffect(() => {
-        if (!faceData) {
+        if (!faceDataSwitch?.faceData) {
+            return
+        }
+        if (faceDataSwitch.edit) {
             return
         }
         setVisible(true)
-    }, [faceData])
+    }, [faceDataSwitch])
 
     useEffect(() => {
         visible && fetchGetResult()
@@ -70,24 +67,24 @@ const FaceReportModal: React.FC<FaceReportProps> = (props) => {
         >
             <div className={styles.formItem}>
                 <Form.Item className={styles.inlineFormItem} label="原始总数">
-                    {faceResult?.oldResult.total}
+                    {faceResult?.oldResult?.total}
                 </Form.Item>
                 <Form.Item className={styles.inlineFormItem} label="原始视频数量">
-                    {faceResult?.oldResult.videoNum}
+                    {faceResult?.oldResult?.videoNum}
                 </Form.Item>
                 <Form.Item className={styles.inlineFormItem} label="原始图片数量">
-                    {faceResult?.oldResult.imageNum}
+                    {faceResult?.oldResult?.imageNum}
                 </Form.Item>
             </div>
             <div className={styles.formItem}>
                 <Form.Item className={styles.inlineFormItem} label="最新总数">
-                    {faceResult?.newResult.total}
+                    {faceResult?.newResult?.total}
                 </Form.Item>
                 <Form.Item className={styles.inlineFormItem} label="最新视频数量">
-                    {faceResult?.newResult.videoNum}
+                    {faceResult?.newResult?.videoNum}
                 </Form.Item>
                 <Form.Item className={styles.inlineFormItem} label="最新图片数量">
-                    {faceResult?.newResult.imageNum}
+                    {faceResult?.newResult?.imageNum}
                 </Form.Item>
             </div>
             < Collapse className={styles.collapse} ghost destroyInactivePanel={true} defaultActiveKey={['2']} onChange={onChange} bordered={true} >

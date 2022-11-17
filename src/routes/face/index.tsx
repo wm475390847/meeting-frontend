@@ -7,14 +7,15 @@ import styles from './index.module.less'
 import { executeFace, getFaceList } from "@/services/face"
 import FaceCreateModal from "@/components/FaceCreate"
 import FaceReportModal from "@/components/FaceReport"
+import UpdateFaceModal from "@/components/FaceUpdate"
 
-const FaceData: React.FC = () => {
+const FaceDataTable: React.FC = () => {
     const [loading, setLoading] = useState(true)
     const [pageNo, setPageNo] = useState(1)
     const [pageSize, setPageSize] = useState(10)
     const [total, setTotal] = useState(0)
     const [faceDateList, setFaceDataList] = useState<FaceData[]>()
-    const [faceData, setFaceData] = useState<FaceData>()
+    const [faceDataSwitch, setFaceDataSwitch] = useState<FaceDataSwitch>()
     const [buttonLoading, setButtongLoading] = useState(false)
 
     // 控制创建face组件开启
@@ -24,22 +25,22 @@ const FaceData: React.FC = () => {
         return [
             {
                 title: '序号',
-                width: 10,
+                width: '7%',
                 render: (_text, _record, index) => (pageNo as number - 1) * (pageSize as number) + index + 1
             },
             {
                 title: 'faceUrl',
                 dataIndex: 'faceUrl',
                 key: 'faceUrl',
-                width: 50,
+                width: 45,
                 ellipsis: true,
                 render: (text) => <ToolTipModal linkText={text} isWindowOpen={true} buttonText={text} />
             },
             {
-                title: '人脸备注',
+                title: '备注',
                 dataIndex: 'faceDesc',
                 key: 'faceDesc',
-                width: 15,
+                width: 10,
             },
             {
                 title: 'miceId',
@@ -56,13 +57,11 @@ const FaceData: React.FC = () => {
                 render: (_, record) => {
                     return (
                         <div className={styles.action}>
-                            <Popconfirm title="未完成" placement="top" okText="是" cancelText="否">
-                                <Button type="primary" loading={buttonLoading}>编辑</Button>
-                            </Popconfirm>
+                            <Button type="primary" onClick={() => setFaceDataSwitch({ faceData: record, edit: true })} loading={buttonLoading}>编辑</Button>
                             <Popconfirm title="确定执行？" placement="top" okText="是" cancelText="否" onConfirm={() => fetchExecuteFace(record.id)}>
-                                <Button loading={buttonLoading}>执行识别</Button>
+                                <Button loading={buttonLoading}>执行</Button>
                             </Popconfirm>
-                            <Button onClick={() => setFaceData(record)}> 识别结果</Button>
+                            <Button onClick={() => setFaceDataSwitch({ faceData: record, edit: false })}> 结果</Button>
                         </div >
                     )
                 }
@@ -133,7 +132,9 @@ const FaceData: React.FC = () => {
                 {/* 创建face组件 */}
                 <FaceCreateModal visible={createVisible} setLoading={setLoading} onCancel={() => setCreateVisible(false)} />
                 {/* 识别报告组件 */}
-                <FaceReportModal faceData={faceData} onCancel={() => setFaceData(undefined)}></FaceReportModal>
+                <FaceReportModal faceDataSwitch={faceDataSwitch} onCancel={() => setFaceDataSwitch(undefined)}></FaceReportModal>
+                {/* 修改face组件 */}
+                <UpdateFaceModal faceDataSwitch={faceDataSwitch} setLoading={setLoading} onCancel={() => setFaceDataSwitch(undefined)} />
                 <FooterPage text={'会议线质量保障平台 ©2022 Created by 质量中台 '} link={'https://codeup.aliyun.com/xhzy/xhzy-qa/meeting-frontend/tree/dev'} />
             </div>
 
@@ -141,4 +142,4 @@ const FaceData: React.FC = () => {
     )
 }
 
-export default FaceData
+export default FaceDataTable
