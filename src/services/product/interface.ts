@@ -1,4 +1,4 @@
-export interface IProductListReq {
+export interface ISearchProductListReq {
   pageNo: number
   pageSize: number
 }

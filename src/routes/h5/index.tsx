@@ -1,6 +1,6 @@
 import { FooterPage, MView, PageHeader } from "@/components"
 import ToolTipModal from "@/components/ToolTip"
-import { deleteH5, getH5DataList } from "@/services/h5"
+import { deleteH5, getH5List } from "@/services/h5"
 import { ColumnsType } from "antd/lib/table"
 import { useEffect, useMemo, useState } from "react"
 import { Button, DatePicker, Input, message, Popconfirm, Space, Table } from 'antd'
@@ -25,10 +25,10 @@ const H5DataTable: React.FC = () => {
     const [pageNo, setPageNo] = useState(1)
     const [pageSize, setPageSize] = useState(10)
     const [total, setTotal] = useState(0)
-    const [h5DataList, setH5DataList] = useState<H5DataInfo[]>()
+    const [h5DataList, setH5DataList] = useState<H5Data[]>()
     const [buttonLoading, setButtongLoading] = useState(false)
     const [searchH5Data, setSearchH5Data] = useState<SearchH5Data>()
-    const [updateH5Data, setUpdataH5Data] = useState<H5DataInfo>()
+    const [updateH5Data, setUpdataH5Data] = useState<H5Data>()
     // 控制创建h5组件开启
     const [createVisible, setCreateVisible] = useState(false)
 
@@ -128,7 +128,7 @@ const H5DataTable: React.FC = () => {
      * 获取h5数据列表
      */
     const fetchH5DataList = () => {
-        getH5DataList({
+        getH5List({
             pageNo: pageNo,
             pageSize: pageSize,
             h5Name: searchH5Data?.h5Name,

@@ -1,7 +1,6 @@
 import { RequestOpt } from "@/utils/request"
 import { request } from "@/utils/tool"
-import { table } from "console"
-import { ITaskInfoListReq } from "./interface"
+import { ISearchTaskListReq } from "./interface"
 
 export const executeTask: (taskId: number) => Promise<RequestOpt> = (taskId) => {
     return new Promise(async (resolve, reject) => {
@@ -25,7 +24,7 @@ export const deleteTask: (taskId: number) => Promise<RequestOpt> = (taskId) => {
     })
 }
 
-export const getTaskInfoList: (data: ITaskInfoListReq) => Promise<IPageRequest<TaskInfo>> = (data) => {
+export const getTaskList: (data: ISearchTaskListReq) => Promise<IPageRequest<TaskInfo>> = (data) => {
     return new Promise(async (resolve, reject) => {
         const res = await request.get(`/material/tasks`, data)
         if (res.success) {

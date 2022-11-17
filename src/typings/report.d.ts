@@ -1,4 +1,7 @@
-interface ReportData {
+/**
+ * 任务报告
+ */
+interface TaskReport {
 
     /**
      * 主键
@@ -85,4 +88,52 @@ interface ReportData {
      */
     result: boolean
 
+}
+
+/**
+ * 人脸识别报告
+ */
+interface FaceReport {
+    /**
+     * 旧的结果
+     */
+    oldResult: FaceResult
+    /**
+     * 新的结果
+     */
+    newResult: FaceResult
+    /**
+     * diff图片
+     */
+    imageDiffList: string[]
+    /**
+     * diff视频
+     */
+    videoDiffList: string[]
+}
+
+/**
+ * 人脸识别结果
+ */
+interface FaceResult {
+    /**
+     * 视频数量
+     */
+    videoNum: number
+    /**
+     * 图片数量
+     */
+    imageNum: number
+    /**
+     * 总量
+     */
+    total: number
+    /**
+     * 包含哪些视频
+     */
+    videoIdList: string[]
+    /**
+     * 包含哪些图片
+     */
+    imageList: string[]
 }

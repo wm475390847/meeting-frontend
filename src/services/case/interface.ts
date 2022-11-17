@@ -1,4 +1,4 @@
-export interface ICaseReq {
+export interface ISearchCaseListReq {
   pageSize: number
   pageNo: number
   caseResult?: boolean

@@ -7,7 +7,7 @@ import styles from './index.module.less'
 type UpdateH5Props = {
     onCancel?: () => void
     setLoading: React.Dispatch<React.SetStateAction<boolean>>
-    updateH5Data?: H5DataInfo
+    updateH5Data?: H5Data
 }
 
 const UpdateH5Modal: React.FC<UpdateH5Props> = (props) => {

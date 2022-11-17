@@ -4,8 +4,8 @@ import { ColumnsType } from "antd/lib/table"
 import { useEffect, useMemo, useState } from "react"
 import { Button, message, Popconfirm, Spin, Table } from 'antd'
 import styles from './index.module.less'
-import { deleteTask, executeTask, getTaskInfoList } from "@/services/task"
-import ReportModal from "@/components/Report"
+import { deleteTask, executeTask, getTaskList } from "@/services/task"
+import TaskReportModal from "@/components/TaskReport"
 import { TaskStatusEnum } from "@/constants"
 import { LoadingOutlined } from "@ant-design/icons"
 import moment from "moment"
@@ -101,7 +101,7 @@ const TaskTable: React.FC = () => {
      * 获取任务数据列表
      */
     const fetchTaskInfoList = () => {
-        getTaskInfoList({
+        getTaskList({
             pageNo: pageNo,
             pageSize: pageSize,
             taskName: taskName
@@ -150,7 +150,7 @@ const TaskTable: React.FC = () => {
                 />
 
                 {/* 执行报告组件 */}
-                <ReportModal taskInfo={taskInfo} onCancel={() => setTaskInfo(undefined)} />
+                <TaskReportModal taskInfo={taskInfo} onCancel={() => setTaskInfo(undefined)} />
                 <FooterPage text={'会议线质量保障平台 ©2022 Created by 质量中台 '} link={'https://codeup.aliyun.com/xhzy/xhzy-qa/meeting-frontend/tree/dev'} />
             </div>
 

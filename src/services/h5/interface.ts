@@ -1,7 +1,7 @@
 /**
  * 获取h5列表请求
  */
-export interface IH5DataListReq {
+export interface ISearchH5ListReq {
   pageNo: number
   pageSize: number
   h5Name?: string

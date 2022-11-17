@@ -5,14 +5,14 @@ import moment from "moment";
 import { Button, message } from "antd";
 import { getTaskReport } from "@/services/task";
 
-type ReportTableModalProps = {
+type TaskReportTableModalProps = {
     result?: boolean
     taskId: number
 }
 
-const ReportTableModal: React.FC<ReportTableModalProps> = (prop) => {
+const TaskReportTableModal: React.FC<TaskReportTableModalProps> = (prop) => {
     const { result, taskId } = prop
-    const [reportList, setReportList] = useState<ReportData[]>()
+    const [reportList, setReportList] = useState<TaskReport[]>()
 
     const columns = useMemo<ColumnsType<any>>(() => {
         return [
@@ -98,4 +98,4 @@ const ReportTableModal: React.FC<ReportTableModalProps> = (prop) => {
     )
 };
 
-export default ReportTableModal;
+export default TaskReportTableModal;

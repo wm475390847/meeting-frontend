@@ -1,7 +1,7 @@
 /**
  * 获取任务列表请求
  */
-export interface ITaskInfoListReq {
+export interface ISearchTaskListReq {
   pageNo: number
   pageSize: number
   taskName?: string

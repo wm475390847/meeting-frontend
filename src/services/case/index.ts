@@ -1,8 +1,12 @@
 import { request } from "@/utils/tool"
-import { ICaseReq as ICaseReq } from "./interface"
+import { ISearchCaseListReq as ISearchCaseListReq } from "./interface"
 
-// 获取用例列表
-export const getCaseList: (data: ICaseReq) => Promise<IPageRequest<CaseInfo>> = (data) => {
+/**
+ * 获取用例列表
+ * @param data 
+ * @returns 
+ */
+export const getCaseList: (data: ISearchCaseListReq) => Promise<IPageRequest<CaseInfo>> = (data) => {
   return new Promise(async (resolve, reject) => {
     const res = await request.getTtp(`/cases`, data)
     if (res.success) {
@@ -13,8 +17,11 @@ export const getCaseList: (data: ICaseReq) => Promise<IPageRequest<CaseInfo>> = 
   })
 }
 
-// 获取产品列表
-export const getProdects: () => Promise<ServiceInfo[]> = () => {
+/**
+ * 获取产品列表
+ * @returns 
+ */
+export const getProdectList: () => Promise<ServiceInfo[]> = () => {
   return new Promise(async (resolve, reject) => {
     const res = await request.getTtp(`/products/group`)
     if (res.success) {

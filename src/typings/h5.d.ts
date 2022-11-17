@@ -1,4 +1,4 @@
-interface H5DataInfo {
+interface H5Data {
     h5Name: string
     h5Url: string
     id: number
@@ -8,7 +8,7 @@ interface H5DataInfo {
     meetingEndTime: string
 }
 
-interface ExecuteResultData {
+interface ExecuteResult {
     id: number
     meetingName: string
     meetingId: string

@@ -1,7 +1,7 @@
 import { request } from "@/utils/tool"
-import { IProductListReq } from "./interface"
+import { ISearchProductListReq } from "./interface"
 
-export const getProductList: (data: IProductListReq) => Promise<IPageRequest<ProductInfo>> = (data) => {
+export const getProductList: (data: ISearchProductListReq) => Promise<IPageRequest<ProductInfo>> = (data) => {
     return new Promise(async (resolve, reject) => {
         const res = await request.getTtp(`/products`, data)
         if (res.success) {

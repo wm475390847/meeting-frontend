@@ -1,7 +1,7 @@
 import { Button, Input, Popconfirm, Progress, Select, Table } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import { ColumnsType } from 'antd/lib/table';
-import { getCaseList, getProdects } from '@/services/case';
+import { getCaseList, getProdectList } from '@/services/case';
 import { FooterPage, MView, PageHeader } from '@/components';
 import styles from './index.module.less'
 import CasseReasonModal from '@/components/CaseReason';
@@ -117,7 +117,7 @@ const CaseTable: React.FC = (props) => {
   /**
    * 获取报告
    */
-  const fetchCommonCaseList = () => {
+  const fetchCaseList = () => {
     getCaseList({
       pageNo: pageNo,
       pageSize: pageSize,
@@ -134,7 +134,7 @@ const CaseTable: React.FC = (props) => {
   }
 
   const fetchProductList = () => {
-    getProdects()
+    getProdectList()
       .then(data => {
         setServiceList(data)
         setLoading(false)
@@ -174,7 +174,7 @@ const CaseTable: React.FC = (props) => {
    *  监听pageNo变化时刷新列表
    */
   useEffect(() => {
-    loading && fetchCommonCaseList()
+    loading && fetchCaseList()
   }, [pageNo, loading])
 
 

@@ -8,7 +8,7 @@ interface TaskInfo {
     status: number
 }
 
-interface ExecuteResultData {
+interface ExecuteResult {
     id: number
     meetingName: string
     meetingId: string

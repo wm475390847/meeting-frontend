@@ -1,16 +1,16 @@
 import { getTaskResultPercent } from "@/services/task";
 import { Button, Collapse, Form, message, Modal } from "antd";
 import { useEffect, useState } from "react";
-import ReportTableModal from "../ReportTable";
+import TaskReportTableModal from "../TaskReportTable";
 import styles from './index.module.less'
 
-type ReportModalProps = {
+type TaskReportModalProps = {
     taskInfo?: TaskInfo
     onCancel?: () => void
 }
 
-const ReportModal: React.FC<ReportModalProps> = (prop) => {
-    const { onCancel, taskInfo } = prop
+const TaskReportModal: React.FC<TaskReportModalProps> = (props) => {
+    const { onCancel, taskInfo } = props
     const { Panel } = Collapse
     const [visible, setVisible] = useState(false)
     const [resultPercent, setResultPercent] = useState<ResultPercent>()
@@ -68,18 +68,16 @@ const ReportModal: React.FC<ReportModalProps> = (prop) => {
                 </Form.Item>
             </div>
 
-
             < Collapse className={styles.collapse} ghost destroyInactivePanel={true} defaultActiveKey={['2']} onChange={onChange} bordered={true} >
-
                 <Panel header='失败' key='2' >
-                    <ReportTableModal result={false} taskId={taskInfo?.id as number} />
+                    <TaskReportTableModal result={false} taskId={taskInfo?.id as number} />
                 </Panel>
                 <Panel header='成功' key='1'>
-                    <ReportTableModal result={true} taskId={taskInfo?.id as number} />
+                    <TaskReportTableModal result={true} taskId={taskInfo?.id as number} />
                 </Panel>
             </Collapse >
         </Modal>
     )
 };
 
-export default ReportModal;
+export default TaskReportModal;
