@@ -95,22 +95,22 @@ const UpdateFaceModal: React.FC<UpdateFaceProps> = (props) => {
                 wrapperCol={{ span: 15, offset: 1 }}
                 form={form}
             >
-                <Form.Item name='miceId' label="专题Id" initialValue={faceDataSwitch?.faceData.miceId} required={true}>
+                <Form.Item name='miceId' label="专题Id" initialValue={faceDataSwitch?.faceData.miceId} rules={[{ required: true, message: '专题id不能为空' }]}>
                     <Input className={styles.input} />
                 </Form.Item>
-                <Form.Item name='faceUrl' label="faceUrl" initialValue={faceDataSwitch?.faceData.faceUrl} required>
+                <Form.Item name='faceUrl' label="人脸地址" initialValue={faceDataSwitch?.faceData.faceUrl} rules={[{ required: true, message: '人脸地址不能为空' }]}>
                     <Input className={styles.input} />
                 </Form.Item>
-                <Form.Item name='faceDesc' label="faceDesc" initialValue={faceDataSwitch?.faceData.faceDesc} >
+                <Form.Item name='faceDesc' label="描述" initialValue={faceDataSwitch?.faceData.faceDesc} >
                     <Input className={styles.input} />
                 </Form.Item>
-                <Form.Item name='total' label="原始素材数" initialValue={faceResult?.total} required>
+                <Form.Item name='total' label="原始素材数" initialValue={faceResult?.total} rules={[{ required: true, message: '原始素材数不能为空' }]}>
                     <InputNumber min={0} className={styles.input} />
                 </Form.Item>
-                <Form.Item name='videoNum' label="原始视频数" initialValue={faceResult?.videoNum} required>
+                <Form.Item name='videoNum' label="原始视频数" initialValue={faceResult?.videoNum} rules={[{ required: true, message: '原始视频数不能为空' }]}>
                     <InputNumber min={0} className={styles.input} />
                 </Form.Item>
-                <Form.Item name='imageNum' label="原始图片数" initialValue={faceResult?.imageNum} required>
+                <Form.Item name='imageNum' label="原始图片数" initialValue={faceResult?.imageNum} rules={[{ required: true, message: '原始图片数不能为空' }]}>
                     <InputNumber min={0} className={styles.input} />
                 </Form.Item>
             </Form>

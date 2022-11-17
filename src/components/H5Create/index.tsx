@@ -72,7 +72,7 @@ const CreateH5Modal: React.FC<CreateH5Props> = (props) => {
                 wrapperCol={{ span: 15, offset: 1 }}
                 form={form}
             >
-                <Form.Item name='meetingName' label="会议名称">
+                <Form.Item name='meetingName' label="会议名称" >
                     <Input className={styles.input} placeholder='请输入会议名称' />
                 </Form.Item>
 
@@ -86,11 +86,11 @@ const CreateH5Modal: React.FC<CreateH5Props> = (props) => {
                     </Space>
                 </Form.Item>
 
-                <Form.Item name='h5Name' label="H5名称" required>
+                <Form.Item name='h5Name' label="H5名称" rules={[{ required: true, message: 'H5名称不能为空' }]}>
                     <Input className={styles.input} placeholder='请输入H5名称' />
                 </Form.Item>
 
-                <Form.Item name='h5Url' label="H5Url" required>
+                <Form.Item name='h5Url' label="H5Url" rules={[{ required: true, message: 'H5Url不能为空' }]}>
                     <Input className={styles.input} placeholder='请输入H5Url' />
                 </Form.Item>
             </Form>

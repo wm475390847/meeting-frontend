@@ -56,11 +56,11 @@ const FaceCreateModal: React.FC<FaceCreateProps> = (props) => {
                 wrapperCol={{ span: 15, offset: 1 }}
                 form={form}
             >
-                <Form.Item name='faceUrl' label="人脸地址" required>
+                <Form.Item name='faceUrl' label="人脸地址" rules={[{ required: true, message: 'oss地址不能为空' }]}>
                     <Input className={styles.input} placeholder='请输入人脸「OSS」地址' />
                 </Form.Item>
 
-                <Form.Item name='miceId' label="专题id" required>
+                <Form.Item name='miceId' label="专题id" rules={[{ required: true, message: '专题id不能为空' }]}>
                     <Input className={styles.input} placeholder='请输入专题id' />
                 </Form.Item>
 
