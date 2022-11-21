@@ -7,18 +7,15 @@ import "ace-builds/src-noconflict/theme-cloud9_night";
 import "ace-builds/src-noconflict/ext-language_tools";
 import styles from './index.module.less'
 
-type CaseReasonProps = {
+type CaseReasonModuleProps = {
   reason?: string
   onCancel?: () => void
 }
 
-const CasseReasonModal: React.FC<CaseReasonProps> = (props) => {
+const CasseReasonModule: React.FC<CaseReasonModuleProps> = (props) => {
   const { reason, onCancel } = props
   const [visible, setVisible] = useState(false)
 
-  /**
-   * 关闭弹窗，父组件传入onCancel(setVisible=false)
-   */
   const handleCancel = () => {
     setVisible(false)
     onCancel && onCancel()
@@ -71,4 +68,4 @@ const CasseReasonModal: React.FC<CaseReasonProps> = (props) => {
   );
 };
 
-export default CasseReasonModal;
+export default CasseReasonModule;

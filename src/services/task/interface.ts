@@ -19,8 +19,7 @@ export interface ICreateTaskReq {
  * 修改任务请求
  */
 export interface IUpdateTaskReq {
-  caseIds: number[]
-  taskName: string
+  caseIds?: number[]
+  taskName?: string
+  id: number
 }
-
-

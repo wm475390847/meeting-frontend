@@ -2,11 +2,11 @@ import { useMemo } from "react";
 import VirtualTable from "../VirtualTable";
 import { ColumnsType } from "antd/lib/table";
 
-type FaceReportTableModalProps = {
+type FaceReportTableModuleProps = {
     diffList?: DiffData[]
 }
 
-const FaceReportTableModal: React.FC<FaceReportTableModalProps> = (props) => {
+const FaceReportTableModule: React.FC<FaceReportTableModuleProps> = (props) => {
     const { diffList } = props
 
     const columns = useMemo<ColumnsType<any>>(() => {
@@ -30,4 +30,4 @@ const FaceReportTableModal: React.FC<FaceReportTableModalProps> = (props) => {
     )
 };
 
-export default FaceReportTableModal;
+export default FaceReportTableModule;

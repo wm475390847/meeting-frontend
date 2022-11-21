@@ -2,7 +2,7 @@ import { RequestOpt } from "@/utils/request"
 import { request } from "@/utils/tool"
 import { ICreateH5Req, ISearchH5ListReq, IUpdateH5Req } from "./interface"
 
-export const getH5List: (data: ISearchH5ListReq) => Promise<IPageRequest<H5Data>> = (data) => {
+export const getH5List: (data: ISearchH5ListReq) => Promise<IPageRequest<H5Info>> = (data) => {
     return new Promise(async (resolve, reject) => {
         const res = await request.get(`/material/h5s`, data)
         if (res.success) {

@@ -1,17 +1,17 @@
 import { getFaceResult } from "@/services/face";
 import { Button, Modal, Form, message, Collapse } from "antd";
 import { useEffect, useState } from "react";
-import FaceReportTableModal from "../FaceReportTable";
+import FaceReportTableModule from "../FaceReportTable";
 import styles from './index.module.less'
 
-type FaceReportProps = {
-    faceDataSwitch?: FaceDataSwitch
+type FaceReportModuleProps = {
+    faceInfo?: FaceInfo
     onCancel?: () => void
 }
 
-const FaceReportModal: React.FC<FaceReportProps> = (props) => {
-    const { onCancel, faceDataSwitch } = props
-    const [visible, setVisible] = useState(false)
+const FaceReportModule: React.FC<FaceReportModuleProps> = (props) => {
+    const { onCancel, faceInfo } = props
+    const [visible, setVisible] = useState(true)
     const [faceResult, setFaceResult] = useState<FaceReport>()
     const { Panel } = Collapse
 
@@ -25,7 +25,7 @@ const FaceReportModal: React.FC<FaceReportProps> = (props) => {
     }
 
     const fetchGetResult = () => {
-        getFaceResult(faceDataSwitch?.faceData?.id as number)
+        getFaceResult(faceInfo?.id as number)
             .then(rep => {
                 setFaceResult(rep.data)
             }).catch(err => {
@@ -33,7 +33,7 @@ const FaceReportModal: React.FC<FaceReportProps> = (props) => {
             })
     }
 
-    const stringList2ObjectList: (v: string[]) => DiffData[] = (data: string[]) => {
+    const strings2Objects: (v: string[]) => DiffData[] = (data: string[]) => {
         const res: DiffData[] = data?.map(id => {
             return {
                 businessId: id
@@ -43,14 +43,8 @@ const FaceReportModal: React.FC<FaceReportProps> = (props) => {
     }
 
     useEffect(() => {
-        if (!faceDataSwitch?.faceData) {
-            return
-        }
-        if (faceDataSwitch.edit) {
-            return
-        }
-        setVisible(true)
-    }, [faceDataSwitch])
+        faceInfo && setVisible(true)
+    }, [faceInfo])
 
     useEffect(() => {
         visible && fetchGetResult()
@@ -89,14 +83,14 @@ const FaceReportModal: React.FC<FaceReportProps> = (props) => {
             </div>
             < Collapse className={styles.collapse} ghost destroyInactivePanel={true} defaultActiveKey={['2']} onChange={onChange} bordered={true} >
                 <Panel header='差异图片' key='2' >
-                    <FaceReportTableModal diffList={stringList2ObjectList(faceResult?.imageDiffList as string[])} />
+                    <FaceReportTableModule diffList={strings2Objects(faceResult?.imageDiffList as string[])} />
                 </Panel>
                 <Panel header='差异视频' key='1'>
-                    <FaceReportTableModal diffList={stringList2ObjectList(faceResult?.videoDiffList as string[])} />
+                    <FaceReportTableModule diffList={strings2Objects(faceResult?.videoDiffList as string[])} />
                 </Panel>
             </Collapse >
         </Modal >
     )
 }
 
-export default FaceReportModal
+export default FaceReportModule

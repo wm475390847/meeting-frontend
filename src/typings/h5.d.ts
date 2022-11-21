@@ -1,4 +1,4 @@
-interface H5Data {
+interface H5Info {
     h5Name: string
     h5Url: string
     id: number

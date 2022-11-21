@@ -4,7 +4,7 @@ import { ColumnsType } from 'antd/lib/table';
 import { getCaseList, getProdectList } from '@/services/case';
 import { FooterPage, MView, PageHeader } from '@/components';
 import styles from './index.module.less'
-import CasseReasonModal from '@/components/CaseReason';
+import CasseReasonModule from '@/components/CaseReason';
 import moment from 'moment';
 import ToolTipModal from '@/components/ToolTip';
 
@@ -16,7 +16,7 @@ interface SearchCase {
   caseName?: string
 }
 
-const CaseTable: React.FC = (props) => {
+const CasePage: React.FC = (props) => {
   const { Option, OptGroup } = Select;
   const { Search } = Input
   const [pageNo, setPageNo] = useState(1)
@@ -33,14 +33,14 @@ const CaseTable: React.FC = (props) => {
       {
         title: "序号",
         key: "id",
-        width: '7%',
+        width: '5%',
         render: (_text, _record, index) => (pageNo as number - 1) * (pageSize as number) + index + 1
       },
       {
         title: "Name",
         key: "caseName",
         dataIndex: "caseName",
-        width: '14%',
+        width: '15%',
         ellipsis: true,
         render: (text) => <ToolTipModal linkText={text} buttonText={text} />
       },
@@ -56,7 +56,7 @@ const CaseTable: React.FC = (props) => {
         title: "Result",
         key: "caseResult",
         dataIndex: "caseResult",
-        width: 12,
+        width: '6%',
         render: (text) => {
           return (
             text ? < Progress type="circle" percent={100} width={30} /> : < Progress status="exception" type="circle" percent={100} width={30} />
@@ -67,25 +67,25 @@ const CaseTable: React.FC = (props) => {
         title: "Product",
         key: "productName",
         dataIndex: "productName",
-        width: 15
+        width: '6.5%'
       },
       {
         title: "Env",
         key: "env",
         dataIndex: "env",
-        width: 10
+        width: '6%'
       },
       {
         title: "Owner",
         key: "caseOwner",
         dataIndex: "caseOwner",
-        width: 15
+        width: '6%'
       },
       {
         title: "ExecuteTime",
         key: "excuteTime",
         dataIndex: "excuteTime",
-        width: 25,
+        width: '10%',
         render: (text) => <div>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</div>
       },
       {
@@ -226,10 +226,10 @@ const CaseTable: React.FC = (props) => {
         rowKey="id"
       >
       </Table>
-      <CasseReasonModal reason={reason} onCancel={() => setReason(undefined)} />
+      <CasseReasonModule reason={reason} onCancel={() => setReason(undefined)} />
       <FooterPage text={'会议线质量保障平台 ©2022 Created by 质量中台 '} link={'https://codeup.aliyun.com/xhzy/xhzy-qa/meeting-frontend/tree/dev'} />
     </MView >
   );
 };
 
-export default CaseTable;
+export default CasePage;

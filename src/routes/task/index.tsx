@@ -5,20 +5,20 @@ import { useEffect, useMemo, useState } from "react"
 import { Button, Input, message, Popconfirm, Spin, Table } from 'antd'
 import styles from './index.module.less'
 import { deleteTask, executeTask, getTaskList } from "@/services/task"
-import TaskReportModal from "@/components/TaskReport"
+import TaskReportModule from "@/components/TaskReport"
 import { TaskStatusEnum } from "@/constants"
 import { LoadingOutlined } from "@ant-design/icons"
 import moment from "moment"
+import UpdateTaskModule from "@/components/TaskUpdate"
 
-const TaskTable: React.FC = () => {
+const TaskPage: React.FC = () => {
     const [loading, setLoading] = useState(true)
     const [pageNo, setPageNo] = useState(1)
     const [pageSize, setPageSize] = useState(10)
     const [total, setTotal] = useState(0)
-    const [taskInfoList, setTaskInfoList] = useState<TaskInfo[]>()
+    const [taskList, setTaskList] = useState<TaskInfo[]>()
     const [buttonLoading, setButtongLoading] = useState(false)
-    const [taskName, setTaskName] = useState()
-    // 控制报告组件
+    const [status, setStatus] = useState<number>(0)
     const [taskInfo, setTaskInfo] = useState<TaskInfo>()
     const antIcon = <LoadingOutlined style={{ fontSize: 15 }} spin />;
 
@@ -26,7 +26,7 @@ const TaskTable: React.FC = () => {
         return [
             {
                 title: '序号',
-                width: '7%',
+                width: '5%',
                 render: (_text, _record, index) => (pageNo as number - 1) * (pageSize as number) + index + 1
             },
             {
@@ -39,7 +39,7 @@ const TaskTable: React.FC = () => {
                 title: '任务名称',
                 dataIndex: 'taskName',
                 key: 'taskName',
-                width: '20%',
+                width: '15%',
                 render: (text) => <ToolTipModal linkText={text} buttonText={text} />
             },
             {
@@ -74,7 +74,8 @@ const TaskTable: React.FC = () => {
                             <Popconfirm title='确定执行？' placement="top" okText="是" cancelText="否" onConfirm={() => fetchExecuteTask(record.id)}>
                                 <Button type="primary" loading={buttonLoading}>执行</Button>
                             </Popconfirm>
-                            <Button onClick={() => setTaskInfo(record)}>报告</Button>
+                            <Button onClick={() => { setTaskInfo(record), setStatus(2) }}>编辑</Button>
+                            <Button onClick={() => { setTaskInfo(record), setStatus(3) }}>报告</Button>
                             <Popconfirm title='确定删除？' placement="top" okText="是" cancelText="否" onConfirm={() => fetchDelectTask(record.id)}>
                                 <Button loading={buttonLoading}>删除</Button>
                             </Popconfirm>
@@ -85,10 +86,6 @@ const TaskTable: React.FC = () => {
         ]
     }, [pageNo, pageSize])
 
-    /**
-     * 获取当前页码
-     * @param value
-     */
     const onChangeTable = (value: any) => {
         const { current, pageSize } = value
         setPageNo(current)
@@ -96,16 +93,12 @@ const TaskTable: React.FC = () => {
         setLoading(true)
     }
 
-    /**
-     * 获取任务数据列表
-     */
-    const fetchTaskInfoList = () => {
+    const fetchTaskList = () => {
         getTaskList({
             pageNo: pageNo,
             pageSize: pageSize,
-            taskName: taskName
         }).then(data => {
-            setTaskInfoList(data.records)
+            setTaskList(data.records)
             setTotal(data.total)
             setLoading(false)
         })
@@ -132,32 +125,30 @@ const TaskTable: React.FC = () => {
     }
 
     useEffect(() => {
-        loading && fetchTaskInfoList()
+        loading && fetchTaskList()
     }, [pageNo, loading])
 
     return (
         <MView resize>
-            <div>
-                <PageHeader title={"任务列表"} />
-                <Input.Group className={styles.inputGroup}>
-                    <Button type='primary'>新增任务</Button>
-                </Input.Group>
-                <Table
-                    columns={columns}
-                    dataSource={taskInfoList}
-                    rowKey='id'
-                    pagination={{ total, current: pageNo, showSizeChanger: true }}
-                    loading={loading}
-                    onChange={onChangeTable}
-                />
-
-                {/* 执行报告组件 */}
-                <TaskReportModal taskInfo={taskInfo} onCancel={() => setTaskInfo(undefined)} />
-                <FooterPage text={'会议线质量保障平台 ©2022 Created by 质量中台 '} link={'https://codeup.aliyun.com/xhzy/xhzy-qa/meeting-frontend/tree/dev'} />
-            </div>
-
+            <PageHeader title={"任务列表"} />
+            <Input.Group className={styles.inputGroup}>
+                <Button type='primary'>新增任务</Button>
+            </Input.Group>
+            <Table
+                columns={columns}
+                dataSource={taskList}
+                rowKey='id'
+                pagination={{ total, current: pageNo, showSizeChanger: true }}
+                loading={loading}
+                onChange={onChangeTable}
+            />
+            {/* 报告组件 */}
+            {status == 3 && <TaskReportModule taskInfo={taskInfo} onCancel={() => setTaskInfo(undefined)} />}
+            {/* 编辑组件 */}
+            {status == 2 && <UpdateTaskModule taskInfo={taskInfo} setLoading={setLoading} onCancel={() => setTaskInfo(undefined)} />}
+            <FooterPage text={'会议线质量保障平台 ©2022 Created by 质量中台 '} link={'https://codeup.aliyun.com/xhzy/xhzy-qa/meeting-frontend/tree/dev'} />
         </MView >
     )
 }
 
-export default TaskTable
+export default TaskPage

@@ -3,33 +3,26 @@ import { Button, Modal, Form, Input, message, InputNumber } from "antd";
 import { useEffect, useState } from "react";
 import styles from './index.module.less'
 
-type UpdateFaceProps = {
+type UpdateFaceModuleProps = {
+    faceInfo?: FaceInfo
     onCancel?: () => void
     setLoading: React.Dispatch<React.SetStateAction<boolean>>
-    faceDataSwitch?: FaceDataSwitch
 }
 
-const UpdateFaceModal: React.FC<UpdateFaceProps> = (props) => {
-    const { onCancel, setLoading, faceDataSwitch } = (props)
+const UpdateFaceModule: React.FC<UpdateFaceModuleProps> = (props) => {
+    const { onCancel, setLoading, faceInfo } = (props)
     const [form] = Form.useForm()
     const [buttonLoading, setButtonLoading] = useState(false)
-    const [visible, setVisible] = useState(false)
+    const [visible, setVisible] = useState(true)
     const [faceResult, setFaceResult] = useState<FaceResult>()
 
-    /**
-     * 关闭弹窗&清空组件所都数据
-     */
     const handleCancel = () => {
         setVisible(false)
         onCancel && onCancel()
     }
 
-    /**
-     * 解析string的返回值为json
-     * @returns 
-     */
     const getValue = () => {
-        const metaData = faceDataSwitch?.faceData?.metaData
+        const metaData = faceInfo?.metaData
         setFaceResult(metaData && JSON.parse(metaData) || {})
     }
 
@@ -47,7 +40,7 @@ const UpdateFaceModal: React.FC<UpdateFaceProps> = (props) => {
                 videoNum: values.videoNum as number
             }
             setFaceResult(temp)
-            const faceData = faceDataSwitch?.faceData
+            const faceData = faceInfo
 
             // 判断id为空就报错
             if (!faceData?.id) {
@@ -76,9 +69,9 @@ const UpdateFaceModal: React.FC<UpdateFaceProps> = (props) => {
     }
 
     useEffect(() => {
-        faceDataSwitch && faceDataSwitch.edit && setVisible(true)
+        faceInfo && setVisible(true)
         getValue()
-    }, [faceDataSwitch])
+    }, [faceInfo])
 
     return (
         <Modal
@@ -95,13 +88,13 @@ const UpdateFaceModal: React.FC<UpdateFaceProps> = (props) => {
                 wrapperCol={{ span: 15, offset: 1 }}
                 form={form}
             >
-                <Form.Item name='miceId' label="专题Id" initialValue={faceDataSwitch?.faceData.miceId} rules={[{ required: true, message: '专题id不能为空' }]}>
+                <Form.Item name='miceId' label="专题Id" initialValue={faceInfo?.miceId} rules={[{ required: true, message: '专题id不能为空' }]}>
                     <Input className={styles.input} />
                 </Form.Item>
-                <Form.Item name='faceUrl' label="人脸地址" initialValue={faceDataSwitch?.faceData.faceUrl} rules={[{ required: true, message: '人脸地址不能为空' }]}>
+                <Form.Item name='faceUrl' label="人脸地址" initialValue={faceInfo?.faceUrl} rules={[{ required: true, message: '人脸地址不能为空' }]}>
                     <Input className={styles.input} />
                 </Form.Item>
-                <Form.Item name='faceDesc' label="描述" initialValue={faceDataSwitch?.faceData.faceDesc} >
+                <Form.Item name='faceDesc' label="描述" initialValue={faceInfo?.faceDesc} >
                     <Input className={styles.input} />
                 </Form.Item>
                 <Form.Item name='total' label="原始素材数" initialValue={faceResult?.total} rules={[{ required: true, message: '原始素材数不能为空' }]}>
@@ -118,4 +111,4 @@ const UpdateFaceModal: React.FC<UpdateFaceProps> = (props) => {
     );
 }
 
-export default UpdateFaceModal
+export default UpdateFaceModule

@@ -1,4 +1,4 @@
-interface FaceData {
+interface FaceInfo {
     faceUrl: string
     faceDesc: string
     miceId: string
@@ -9,11 +9,6 @@ interface FaceData {
 
 interface DiffData {
     businessId: string
-}
-
-interface FaceDataSwitch {
-    edit: boolean
-    faceData: FaceData
 }
 
 /**

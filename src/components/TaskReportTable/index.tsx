@@ -3,14 +3,14 @@ import VirtualTable from "../VirtualTable";
 import { ColumnsType } from "antd/lib/table";
 import moment from "moment";
 import { Button, message } from "antd";
-import { getTaskReport } from "@/services/task";
+import { getTaskReport as getTaskReportList } from "@/services/task";
 
-type TaskReportTableModalProps = {
+type TaskReportTableModuleProps = {
     result?: boolean
     taskId: number
 }
 
-const TaskReportTableModal: React.FC<TaskReportTableModalProps> = (prop) => {
+const TaskReportTableModule: React.FC<TaskReportTableModuleProps> = (prop) => {
     const { result, taskId } = prop
     const [reportList, setReportList] = useState<TaskReport[]>()
 
@@ -67,11 +67,8 @@ const TaskReportTableModal: React.FC<TaskReportTableModalProps> = (prop) => {
         ]
     }, [result])
 
-    /**
-     * 获取报告
-     */
     const fetchReportList = (result: boolean, taskId: number) => {
-        getTaskReport({
+        getTaskReportList({
             result: result,
             taskId: taskId
         }).then(rep => {
@@ -81,9 +78,6 @@ const TaskReportTableModal: React.FC<TaskReportTableModalProps> = (prop) => {
         })
     }
 
-    /**
-     * 监听是否有变化，有变化则进行请求
-     */
     useEffect(() => {
         result != null && fetchReportList(result, taskId)
     }, [result])
@@ -98,4 +92,4 @@ const TaskReportTableModal: React.FC<TaskReportTableModalProps> = (prop) => {
     )
 };
 
-export default TaskReportTableModal;
+export default TaskReportTableModule;

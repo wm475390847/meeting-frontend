@@ -7,7 +7,7 @@ import { ICreateFaceReq, ISearchFaceListReq, IUpdateFaceReq } from "./interface"
  * @param data 
  * @return
  */
-export const getFaceList: (data: ISearchFaceListReq) => Promise<IPageRequest<FaceData>> = (data) => {
+export const getFaceList: (data: ISearchFaceListReq) => Promise<IPageRequest<FaceInfo>> = (data) => {
     return new Promise(async (resolve, reject) => {
         const res = await request.get(`/face/lists`, data)
         if (res.success) {

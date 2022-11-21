@@ -4,13 +4,13 @@ import moment from "moment";
 import { useState } from "react";
 import styles from './index.module.less'
 
-type CreateH5Props = {
+type CreateH5ModuleProps = {
     visible: boolean
     onCancel?: () => void
     setLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const CreateH5Modal: React.FC<CreateH5Props> = (props) => {
+const CreateH5Module: React.FC<CreateH5ModuleProps> = (props) => {
     const [form] = Form.useForm()
     const { visible, onCancel, setLoading } = (props)
     const [buttonLoading, setButtonLoading] = useState(false)
@@ -18,17 +18,10 @@ const CreateH5Modal: React.FC<CreateH5Props> = (props) => {
     const [startTime, setStartTime] = useState<number>()
     const [endTime, setEndTime] = useState<number>()
 
-    /**
-     * 关闭弹窗&清空组件所都数据
-     */
     const handleCancel = () => {
         onCancel && onCancel()
     }
 
-    /**
-     * 时间框组件变化的值获取
-     * @param value 值
-     */
     const onChange = (value: string) => {
         if (!Array.isArray(value)) {
             setStartTime(undefined)
@@ -39,9 +32,6 @@ const CreateH5Modal: React.FC<CreateH5Props> = (props) => {
         setEndTime(moment(value[1]).valueOf())
     }
 
-    /**
-     * 提交
-     */
     const onSubmit = () => {
         form.validateFields().then(values => {
             setButtonLoading(true)
@@ -98,4 +88,4 @@ const CreateH5Modal: React.FC<CreateH5Props> = (props) => {
     );
 }
 
-export default CreateH5Modal
+export default CreateH5Module
