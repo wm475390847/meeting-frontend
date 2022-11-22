@@ -1,7 +1,6 @@
 import { getFaceResult } from "@/services/face";
 import { Button, Modal, Form, message, Collapse } from "antd";
 import { useEffect, useState } from "react";
-import FaceReportTableModule from "../FaceReportTable";
 import styles from './index.module.less'
 
 type FaceReportModuleProps = {
@@ -33,13 +32,10 @@ const FaceReportModule: React.FC<FaceReportModuleProps> = (props) => {
             })
     }
 
-    const strings2Objects: (v: string[]) => DiffData[] = (data: string[]) => {
-        const res: DiffData[] = data?.map(id => {
-            return {
-                businessId: id
-            }
-        })
-        return res;
+    const arrayParse = (array1: string[], array2: string[]) => {
+        let a = array1?.join(', ')
+        let b = array2?.join(', ')
+        return a && b ? a + ", " + b : a ? a : b ? b : null
     }
 
     useEffect(() => {
@@ -60,33 +56,43 @@ const FaceReportModule: React.FC<FaceReportModuleProps> = (props) => {
             destroyOnClose
         >
             <div className={styles.formItem}>
-                <Form.Item className={styles.inlineFormItem} label="原始总数">
+                <Form.Item className={styles.inlineFormItem} label="基准总数">
                     {faceResult?.oldResult?.total}
                 </Form.Item>
-                <Form.Item className={styles.inlineFormItem} label="原始视频数量">
+                <Form.Item className={styles.inlineFormItem} label="基准视频数量">
                     {faceResult?.oldResult?.videoNum}
                 </Form.Item>
-                <Form.Item className={styles.inlineFormItem} label="原始图片数量">
+                <Form.Item className={styles.inlineFormItem} label="基准图片数量">
                     {faceResult?.oldResult?.imageNum}
                 </Form.Item>
             </div>
             <div className={styles.formItem}>
-                <Form.Item className={styles.inlineFormItem} label="最新总数">
+                <Form.Item className={styles.inlineFormItem} label="实际总数">
                     {faceResult?.newResult?.total}
                 </Form.Item>
-                <Form.Item className={styles.inlineFormItem} label="最新视频数量">
+                <Form.Item className={styles.inlineFormItem} label="实际视频数量">
                     {faceResult?.newResult?.videoNum}
                 </Form.Item>
-                <Form.Item className={styles.inlineFormItem} label="最新图片数量">
+                <Form.Item className={styles.inlineFormItem} label="实际图片数量">
                     {faceResult?.newResult?.imageNum}
                 </Form.Item>
             </div>
-            < Collapse className={styles.collapse} ghost destroyInactivePanel={true} defaultActiveKey={['2']} onChange={onChange} bordered={true} >
-                <Panel header='差异图片' key='2' >
-                    <FaceReportTableModule diffList={strings2Objects(faceResult?.imageDiffList as string[])} />
+            < Collapse className={styles.collapse} ghost destroyInactivePanel={true} defaultActiveKey={['1']} onChange={onChange} bordered={true} >
+
+                <Panel header='素材' key='1' >
+                    <Form.Item label={'基础媒资id'}>
+                        {arrayParse(faceResult?.oldResult?.imageIdList as string[], faceResult?.oldResult?.videoIdList as string[])}
+                    </Form.Item>
+
+                    <Form.Item label={'实际媒资id'}>
+                        {arrayParse(faceResult?.newResult?.imageIdList as string[], faceResult?.newResult?.videoIdList as string[])}
+                    </Form.Item>
+                    <Form.Item label={'diff媒资id'}>
+                        {arrayParse(faceResult?.imageDiffList as string[], faceResult?.videoDiffList as string[])}
+                    </Form.Item>
                 </Panel>
-                <Panel header='差异视频' key='1'>
-                    <FaceReportTableModule diffList={strings2Objects(faceResult?.videoDiffList as string[])} />
+                <Panel header='合成时长' key='2'>
+                    {'请等二期'}
                 </Panel>
             </Collapse >
         </Modal >

@@ -4,7 +4,7 @@ import { ICreateH5Req, ISearchH5ListReq, IUpdateH5Req } from "./interface"
 
 export const getH5List: (data: ISearchH5ListReq) => Promise<IPageRequest<H5Info>> = (data) => {
     return new Promise(async (resolve, reject) => {
-        const res = await request.get(`/material/h5s`, data)
+        const res = await request.get(`/api/pages`, data)
         if (res.success) {
             resolve(res.data)
         } else {
@@ -15,7 +15,7 @@ export const getH5List: (data: ISearchH5ListReq) => Promise<IPageRequest<H5Info>
 
 export const createH5: (data: ICreateH5Req) => Promise<RequestOpt> = (data) => {
     return new Promise(async (resolve, reject) => {
-        const res = await request.post(`/material/h5`, data)
+        const res = await request.post(`/api/page`, data)
         if (res.success) {
             resolve(res)
         } else {
@@ -26,7 +26,7 @@ export const createH5: (data: ICreateH5Req) => Promise<RequestOpt> = (data) => {
 
 export const updateH5: (data: IUpdateH5Req) => Promise<RequestOpt> = (data) => {
     return new Promise(async (resolve, reject) => {
-        const res = await request.put(`/material/h5`, data)
+        const res = await request.put(`/api/page`, data)
         if (res.success) {
             resolve(res)
         } else {
@@ -37,7 +37,7 @@ export const updateH5: (data: IUpdateH5Req) => Promise<RequestOpt> = (data) => {
 
 export const deleteH5: (id: number) => Promise<RequestOpt> = (id) => {
     return new Promise(async (resolve, reject) => {
-        const res = await request.delete(`/material/h5/${id}`, id)
+        const res = await request.delete(`/api/page/${id}`, id)
         if (res.success) {
             resolve(res)
         } else {

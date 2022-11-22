@@ -104,7 +104,7 @@ const FaceDataTable: React.FC = () => {
     return (
         <MView resize>
             <div>
-                <PageHeader title={"人脸检测"} />
+                <PageHeader title={"WELOOK人脸检测"} />
                 <Input.Group className={styles.inputGroup} >
                     <Button type='primary' onClick={() => setCreateVisible(true)} >新增识别</Button>
                 </Input.Group>

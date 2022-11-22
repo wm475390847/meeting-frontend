@@ -34,5 +34,16 @@ interface FaceResult {
     /**
      * 包含哪些图片
      */
-    imageList?: string[]
+    imageIdList?: string[]
+}
+
+interface OssConfig {
+    endpoint: string
+    ak: string
+    sk: string
+    bucketName: string
+    /**
+     * 文件要上传的路径（不包含bucketName）
+     */
+    objectPath: string
 }

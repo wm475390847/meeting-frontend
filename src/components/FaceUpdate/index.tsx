@@ -23,7 +23,8 @@ const UpdateFaceModule: React.FC<UpdateFaceModuleProps> = (props) => {
 
     const getValue = () => {
         const metaData = faceInfo?.metaData
-        setFaceResult(metaData && JSON.parse(metaData) || {})
+        console.log(metaData);
+        setFaceResult(metaData && JSON.parse(metaData))
     }
 
     /**
@@ -40,18 +41,17 @@ const UpdateFaceModule: React.FC<UpdateFaceModuleProps> = (props) => {
                 videoNum: values.videoNum as number
             }
             setFaceResult(temp)
-            const faceData = faceInfo
 
             // 判断id为空就报错
-            if (!faceData?.id) {
+            if (!faceInfo?.id) {
                 message.error("id为空")
                 setButtonLoading(false)
                 return
             }
 
             updateFace({
-                id: faceData.id,
-                resultData: faceData.resultData,
+                id: faceInfo.id,
+                resultData: faceInfo.resultData,
                 metaData: JSON.stringify(temp),
                 faceUrl: values.faceUrl,
                 faceDesc: values.faceDesc,

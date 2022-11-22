@@ -9,7 +9,7 @@ import { ICreateFaceReq, ISearchFaceListReq, IUpdateFaceReq } from "./interface"
  */
 export const getFaceList: (data: ISearchFaceListReq) => Promise<IPageRequest<FaceInfo>> = (data) => {
     return new Promise(async (resolve, reject) => {
-        const res = await request.get(`/face/lists`, data)
+        const res = await request.get(`/api/faces`, data)
         if (res.success) {
             resolve(res.data)
         } else {
@@ -25,7 +25,7 @@ export const getFaceList: (data: ISearchFaceListReq) => Promise<IPageRequest<Fac
  */
 export const createFace: (data: ICreateFaceReq) => Promise<RequestOpt> = (data) => {
     return new Promise(async (resolve, reject) => {
-        const res = await request.post(`/face/create`, data)
+        const res = await request.post(`/api/face`, data)
         if (res.success) {
             resolve(res)
         } else {
@@ -41,7 +41,7 @@ export const createFace: (data: ICreateFaceReq) => Promise<RequestOpt> = (data) 
  */
 export const updateFace: (data: IUpdateFaceReq) => Promise<RequestOpt> = (data) => {
     return new Promise(async (resolve, reject) => {
-        const res = await request.put(`/face/update`, data)
+        const res = await request.put(`/api/face`, data)
         if (res.success) {
             resolve(res)
         } else {
@@ -57,7 +57,7 @@ export const updateFace: (data: IUpdateFaceReq) => Promise<RequestOpt> = (data) 
  */
 export const executeFace: (id: number) => Promise<RequestOpt> = (id) => {
     return new Promise(async (resolve, reject) => {
-        const res = await request.post(`/face/execute/${id}`)
+        const res = await request.post(`/api/face/execute/${id}`)
         if (res.success) {
             resolve(res)
         } else {
@@ -73,7 +73,18 @@ export const executeFace: (id: number) => Promise<RequestOpt> = (id) => {
  */
 export const getFaceResult: (id: number) => Promise<RequestOpt> = (id) => {
     return new Promise(async (resolve, reject) => {
-        const res = await request.get(`/face/compare/${id}`)
+        const res = await request.get(`/api/face/result/${id}`)
+        if (res.success) {
+            resolve(res)
+        } else {
+            reject(res)
+        }
+    })
+}
+
+export const getOssCongfig: (business: string) => Promise<RequestOpt> = (business) => {
+    return new Promise(async (resolve, reject) => {
+        const res = await request.get(`/api/ossConfig/${business}`)
         if (res.success) {
             resolve(res)
         } else {
