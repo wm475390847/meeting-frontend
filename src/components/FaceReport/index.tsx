@@ -1,4 +1,4 @@
-import { getFaceResult } from "@/services/face";
+import { getFaceResult } from "@/services";
 import { Button, Modal, Form, message, Collapse } from "antd";
 import { useEffect, useState } from "react";
 import styles from './index.module.less'

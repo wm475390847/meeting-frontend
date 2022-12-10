@@ -109,7 +109,7 @@ export default function request(_url: string, options?: any): Promise<RequestOpt
               if (data && data.code === 'SW-GW-1003') {
                 window.location.href = 'https://sso.xinhuazhiyun.com/login.html?redirectUri=' + encodeURIComponent(window.location.href);
               }
-            })
+            }) 
             .catch((e: Error) => {
               console.log(e);
             });

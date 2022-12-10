@@ -4,7 +4,7 @@ import { ColumnsType } from "antd/lib/table"
 import { useEffect, useMemo, useState } from "react"
 import { Button, Input, message, Popconfirm, Table } from 'antd'
 import styles from './index.module.less'
-import { executeFace, getFaceList } from "@/services/face"
+import { executeFace, getFaceList } from "@/services"
 import CreateFaceModule from "@/components/FaceCreate"
 import FaceReportModule from "@/components/FaceReport"
 import UpdateFaceModule from "@/components/FaceUpdate"

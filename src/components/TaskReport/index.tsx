@@ -1,4 +1,4 @@
-import { getTaskResultPercent } from "@/services/task";
+import { getTaskResultPercent } from "@/services";
 import { Button, Collapse, Form, message, Modal } from "antd";
 import { useEffect, useState } from "react";
 import TaskReportTableModule from "../TaskReportTable";

@@ -1,5 +1,4 @@
-import { Button, Modal, Form, Input, Collapse } from "antd";
-import Search from "antd/lib/input/Search";
+import { Button, Modal, Form, Input } from "antd";
 import { useEffect, useState } from "react";
 import UpdateTaskTableModule from "../TaskUpdateTable";
 import styles from './index.module.less'
@@ -12,27 +11,20 @@ type UpdateTaskModuleProps = {
 
 const UpdateTaskModule: React.FC<UpdateTaskModuleProps> = (props) => {
     const { onCancel, taskInfo } = (props)
-    const [buttonLoading, setButtonLoading] = useState(false)
     const [visible, setVisible] = useState(true)
     const [searchInfo, setSearchInfo] = useState<string>()
-    const { Panel } = Collapse
+    const [buttonLoading, setButtongLoading] = useState(false)
 
     const onChange = (value: any) => {
         console.log(value);
     };
 
-    /**
-     * 关闭弹窗&清空组件所都数据
-     */
     const handleCancel = () => {
         setVisible(false)
         setSearchInfo(undefined)
         onCancel && onCancel()
     }
 
-    // /**
-    //  * 提交
-    //  */
     // const onSubmit = () => {
     //     form.validateFields().then(values => {
     //         setButtonLoading(true)
@@ -48,10 +40,6 @@ const UpdateTaskModule: React.FC<UpdateTaskModuleProps> = (props) => {
     //             }).finally(() => setButtonLoading(false))
     //     })
     // }
-
-    const onSearch = (value: string) => {
-        setSearchInfo(value)
-    }
 
     useEffect(() => {
         taskInfo && setVisible(true)
@@ -73,9 +61,9 @@ const UpdateTaskModule: React.FC<UpdateTaskModuleProps> = (props) => {
             <Form.Item name='cron' label="定时时间" initialValue={taskInfo?.cron} rules={[{ required: true, message: '定时不能为空' }]}>
                 <Input className={styles.input} />
             </Form.Item>
-            <Form.Item name='h5Ids' label='包含页面' rules={[{ required: true, message: '任务名称不能为空' }]}>
-                <UpdateTaskTableModule />
-            </Form.Item>
+            {/* <Form.Item name='h5Ids' label='包含页面' rules={[{ required: true, message: '任务不能为空' }]}>
+                {taskInfo?.id && <UpdateTaskTableModule taskId={taskInfo.id} />}
+            </Form.Item> */}
         </Modal>
     );
 }

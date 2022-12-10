@@ -48,6 +48,23 @@ export const PROJECT_HOST = [
     : `test.${DOMAIN}`}`
   : location.protocol + `//${IS_PRE ? `pre.${DOMAIN}` : `${DOMAIN}`}`;
 
+export const File = ['ai', 'psd', 'rar', 'zip', 'war'];
+export const Video = ['mp4', 'MP4'];
+export const Image = ['png', 'PNG', 'jpeg', 'JPEG', 'jpg', 'JPG', 'gif', 'GIF'];
+export const ImageNoGif = ['png', 'PNG', 'jpeg', 'JPEG', 'jpg', 'JPG'];
+
+export const Doc = [
+  'doc',
+  'docs',
+  'docx',
+  'pdf',
+  'ppt',
+  'pptx',
+  'txt',
+  'xls',
+  'xlsx',
+];
+
 export enum TaskStatusEnum {
   "删除",
   "等待中",

@@ -3,7 +3,7 @@ import VirtualTable from "../VirtualTable";
 import { ColumnsType } from "antd/lib/table";
 import moment from "moment";
 import { Button, message } from "antd";
-import { getTaskReport as getTaskReportList } from "@/services/task";
+import { getTaskReport as getTaskReportList } from "@/services";
 
 type TaskReportTableModuleProps = {
     result?: boolean

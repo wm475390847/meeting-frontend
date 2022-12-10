@@ -1,6 +1,6 @@
 import { FooterPage, MView, PageHeader } from "@/components"
 import ToolTipModal from "@/components/ToolTip"
-import { deleteH5, getH5List } from "@/services/h5"
+import { deleteH5, getH5List } from "@/services"
 import { ColumnsType } from "antd/lib/table"
 import { useEffect, useMemo, useState } from "react"
 import { Button, DatePicker, Input, message, Popconfirm, Space, Table } from 'antd'
@@ -11,7 +11,7 @@ import UpdateH5Module from "@/components/H5Update"
 
 console.log("大丈夫生于天地之间，岂能郁郁久居人下！")
 
-interface SearchH5Data {
+interface SearchH5 {
     meetingName?: string
     h5Name?: string
     meetingStartTime?: number
@@ -27,9 +27,9 @@ const H5DataTable: React.FC = () => {
     const [total, setTotal] = useState(0)
     const [h5DataList, setH5DataList] = useState<H5Info[]>()
     const [buttonLoading, setButtongLoading] = useState(false)
-    const [searchH5Data, setSearchH5Data] = useState<SearchH5Data>()
-    const [updateH5Data, setUpdataH5Data] = useState<H5Info>()
-    const [createVisible, setCreateVisible] = useState(false)
+    const [searchH5, setSearchH5] = useState<SearchH5>()
+    const [updateH5, setUpdataH5] = useState<H5Info>()
+    const [visible, setVisible] = useState(false)
 
     const columns = useMemo<ColumnsType<any>>(() => {
         return [
@@ -85,7 +85,7 @@ const H5DataTable: React.FC = () => {
                 render: (_, record) => {
                     return (
                         <div className={styles.action}>
-                            <Button disabled={record.caseResult} type="primary" onClick={() => setUpdataH5Data(record)}>编辑</Button>
+                            <Button disabled={record.caseResult} type="primary" onClick={() => setUpdataH5(record)}>编辑</Button>
                             <Popconfirm title="确定删除？" placement="top" okText="是" cancelText="否" onConfirm={() => fetchDelectH5(record.id)}>
                                 <Button loading={buttonLoading}>删除</Button>
                             </Popconfirm>
@@ -118,10 +118,10 @@ const H5DataTable: React.FC = () => {
         getH5List({
             pageNo: pageNo,
             pageSize: pageSize,
-            h5Name: searchH5Data?.h5Name,
-            meetingName: searchH5Data?.meetingName,
-            meetingStartTime: searchH5Data?.meetingStartTime,
-            meetingEndTime: searchH5Data?.meetingEndTime
+            h5Name: searchH5?.h5Name,
+            meetingName: searchH5?.meetingName,
+            meetingStartTime: searchH5?.meetingStartTime,
+            meetingEndTime: searchH5?.meetingEndTime
         }).then(data => {
             setH5DataList(data.records)
             setTotal(data.total)
@@ -130,18 +130,18 @@ const H5DataTable: React.FC = () => {
     }
 
     const setH5Name = (value: string) => {
-        setSearchH5Data({ ...searchH5Data, h5Name: value })
+        setSearchH5({ ...searchH5, h5Name: value })
     }
 
     const onChange = (value: string) => {
         if (!Array.isArray(value)) {
-            setSearchH5Data({
+            setSearchH5({
                 meetingStartTime: undefined,
                 meetingEndTime: undefined
             })
             return
         }
-        setSearchH5Data({
+        setSearchH5({
             meetingStartTime: moment(value[0]).valueOf(),
             meetingEndTime: moment(value[1]).valueOf()
         })
@@ -153,7 +153,7 @@ const H5DataTable: React.FC = () => {
 
     useEffect(() => {
         setLoading(true)
-    }, [searchH5Data])
+    }, [searchH5])
 
     return (
         <MView resize>
@@ -169,7 +169,7 @@ const H5DataTable: React.FC = () => {
                     </div>
 
                     <div>
-                        <Button type='primary' onClick={() => setCreateVisible(true)} >新增页面</Button>
+                        <Button type='primary' onClick={() => setVisible(true)} >新增页面</Button>
                     </div>
 
                 </Input.Group>
@@ -183,9 +183,9 @@ const H5DataTable: React.FC = () => {
                     onChange={onChangeTable}
                 />
                 {/* 创建h5组件 */}
-                <CreateH5Module visible={createVisible} setLoading={setLoading} onCancel={() => setCreateVisible(false)} />
+                <CreateH5Module visible={visible} setLoading={setLoading} onCancel={() => setVisible(false)} />
                 {/* 修改h5组件 */}
-                <UpdateH5Module h5Info={updateH5Data} setLoading={setLoading} onCancel={() => setUpdataH5Data(undefined)} />
+                <UpdateH5Module h5Info={updateH5} setLoading={setLoading} onCancel={() => setUpdataH5(undefined)} />
                 <FooterPage text={'会议线质量保障平台 ©2022 Created by 质量中台 '} link={'https://codeup.aliyun.com/xhzy/xhzy-qa/meeting-frontend/tree/dev'} />
             </div>
 

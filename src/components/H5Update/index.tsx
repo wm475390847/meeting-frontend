@@ -1,4 +1,4 @@
-import { updateH5 } from "@/services/h5";
+import { updateH5 } from "@/services";
 import { Button, Modal, Form, Space, DatePicker, Input, message } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";

@@ -1,7 +1,7 @@
 import { Button, Input, Popconfirm, Progress, Select, Table } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import { ColumnsType } from 'antd/lib/table';
-import { getCaseList, getProdectList } from '@/services/case';
+import { getCaseList, getProdectList } from '@/services';
 import { FooterPage, MView, PageHeader } from '@/components';
 import styles from './index.module.less'
 import CasseReasonModule from '@/components/CaseReason';

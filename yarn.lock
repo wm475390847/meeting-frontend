@@ -343,6 +343,11 @@
   "resolved" "https://registry.npmjs.org/@types/isomorphic-fetch/-/isomorphic-fetch-0.0.36.tgz"
   "version" "0.0.36"
 
+"@types/lodash@^4.14.189":
+  "integrity" "sha512-kb9/98N6X8gyME9Cf7YaqIMvYGnBSWqEci6tiettE6iJWH1XdJz/PO8LB0GtLCG7x8dU3KWhZT+lA1a35127tA=="
+  "resolved" "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.189.tgz"
+  "version" "4.14.189"
+
 "@types/node@^17.0.26":
   "integrity" "sha512-UXdBxNGqTMtm7hCwh9HtncFVLrXoqA3oJW30j6XWp5BH/wu3mVeaxo7cq5benFdBw34HB3XDT2TRPI7rXZ+mDg=="
   "resolved" "https://registry.npmjs.org/@types/node/-/node-17.0.40.tgz"

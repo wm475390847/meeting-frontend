@@ -1,7 +1,7 @@
-import { createFace, getOssCongfig } from "@/services/face";
+import { createFace, getOssConfig } from "@/services";
 import { Button, Modal, Form, Input, message } from "antd";
 import { useEffect, useState } from "react";
-import UploadImageModule from "../UploadImage";
+import UploadImgModule from "../ImageUpload";
 import styles from './index.module.less'
 
 type CreateFaceModuleProps = {
@@ -37,7 +37,7 @@ const CreateFaceModule: React.FC<CreateFaceModuleProps> = (props) => {
     }
 
     const fetchOssConfig = () => {
-        getOssCongfig('face')
+        getOssConfig({ business: 'face' })
             .then(rep => {
                 setOssConfig(rep.data)
             }).catch(err => {
@@ -64,15 +64,14 @@ const CreateFaceModule: React.FC<CreateFaceModuleProps> = (props) => {
                 wrapperCol={{ span: 15, offset: 1 }}
                 form={form}
             >
-                <Form.Item name='miceId' label="专题id" rules={[{ required: true, message: '专题id不能为空' }]}>
+                <Form.Item label="专题id" rules={[{ required: true, message: '专题id不能为空' }]}>
                     <Input className={styles.input} placeholder='请输入专题id' />
                 </Form.Item>
-                <Form.Item name='faceDesc' label='备注信息'>
-                    <Input className={styles.input} placeholder='请输入备注信息' />
+                <Form.Item label="人脸" rules={[{ required: true, message: '人脸不能为空' }]}>
+                    {ossConfig && <UploadImgModule ossConfig={ossConfig} />}
                 </Form.Item>
-                <Form.Item name='faceUrl' label="人脸地址" rules={[{ required: true, message: 'oss地址不能为空' }]}>
-                    <Input className={styles.input} placeholder='请输入人脸「OSS」地址' />
-                    {/* <UploadImageModule ossConfig={ossConfig} /> */}
+                <Form.Item label='备注信息'>
+                    <Input className={styles.input} placeholder='请输入备注信息' />
                 </Form.Item>
             </Form>
         </Modal >

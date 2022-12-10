@@ -4,7 +4,7 @@ import { ColumnsType } from "antd/lib/table"
 import { useEffect, useMemo, useState } from "react"
 import { Button, Input, message, Popconfirm, Spin, Table } from 'antd'
 import styles from './index.module.less'
-import { deleteTask, executeTask, getTaskList } from "@/services/task"
+import { deleteTask, executeTask, getTaskList } from "@/services"
 import TaskReportModule from "@/components/TaskReport"
 import { TaskStatusEnum } from "@/constants"
 import { LoadingOutlined } from "@ant-design/icons"
@@ -74,7 +74,7 @@ const TaskPage: React.FC = () => {
                             <Popconfirm title='确定执行？' placement="top" okText="是" cancelText="否" onConfirm={() => fetchExecuteTask(record.id)}>
                                 <Button type="primary" loading={buttonLoading}>执行</Button>
                             </Popconfirm>
-                            <Button onClick={() => { setTaskInfo(record), setStatus(2) }}>编辑</Button>
+                            {/* <Button onClick={() => { setTaskInfo(record), setStatus(2) }}>编辑</Button> */}
                             <Button onClick={() => { setTaskInfo(record), setStatus(3) }}>报告</Button>
                             <Popconfirm title='确定删除？' placement="top" okText="是" cancelText="否" onConfirm={() => fetchDelectTask(record.id)}>
                                 <Button loading={buttonLoading}>删除</Button>

@@ -1,4 +1,4 @@
-import { updateFace } from "@/services/face";
+import { updateFace } from "@/services";
 import { Button, Modal, Form, Input, message, InputNumber } from "antd";
 import { useEffect, useState } from "react";
 import styles from './index.module.less'

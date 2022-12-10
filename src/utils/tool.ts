@@ -1,5 +1,5 @@
 import _request from '@/utils/request';
-import { API_PREFIX } from '@/constants'
+import { API_PREFIX, Image, Video, Doc, File } from '@/constants'
 import qs from 'qs';
 
 interface IObjectAny {
@@ -124,3 +124,17 @@ export const dateFormat = (date: (string | number | Date), format = 'yyyy-MM-dd 
   });
   return format;
 };
+
+export const getMediaType = (subMediaType: string) => {
+  let mediaType = 'file';
+  if (Image.includes(subMediaType)) {
+    mediaType = 'image';
+  } else if (Video.includes(subMediaType)) {
+    mediaType = 'video';
+  } else if (Doc.includes(subMediaType)) {
+    mediaType = 'doc';
+  } else if (File.includes(subMediaType)) {
+    mediaType = 'file';
+  }
+  return mediaType;
+}
