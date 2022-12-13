@@ -121,7 +121,7 @@ const UpdateTaskTableModule: React.FC<UpdateTaskTableModuleProps> = (props) => {
                         pagination={{ total, current: pageNo, showSizeChanger: true }}
                         rowSelection={rowSelection}
                         onChange={onChangeTable}
-                        columns={columns}
+                        columns={columns as RecordType[]}
                         dataSource={filteredItems}
                         size="small"
                         style={{ pointerEvents: listDisabled ? 'none' : undefined }}
