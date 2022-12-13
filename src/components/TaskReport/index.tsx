@@ -65,13 +65,19 @@ const TaskReportModule: React.FC<TaskReportModuleProps> = (props) => {
                 </Form.Item>
             </div>
 
-            < Collapse className={styles.collapse} ghost destroyInactivePanel={true} defaultActiveKey={['2']} onChange={onChange} bordered={true} >
-                <Panel header='失败' key='2' >
-                    <TaskReportTableModule result={false} taskId={taskInfo?.id as number} />
-                </Panel>
-                <Panel header='成功' key='1'>
-                    <TaskReportTableModule result={true} taskId={taskInfo?.id as number} />
-                </Panel>
+            < Collapse className={styles.collapse} ghost destroyInactivePanel={true} onChange={onChange} bordered={true} >
+                {
+                    resultPercent && resultPercent.total - resultPercent.success != 0 &&
+                    <Panel header='失败' key='2' >
+                        <TaskReportTableModule result={false} taskId={taskInfo?.id as number} />
+                    </Panel>
+                }
+                {
+                    resultPercent && resultPercent.success != 0 &&
+                    <Panel header='成功' key='1'>
+                        <TaskReportTableModule result={true} taskId={taskInfo?.id as number} />
+                    </Panel>
+                }
             </Collapse >
         </Modal>
     )

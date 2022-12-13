@@ -15,6 +15,7 @@ const CreateFaceModule: React.FC<CreateFaceModuleProps> = (props) => {
     const { visible, onCancel, setLoading } = (props)
     const [buttonLoading, setButtonLoading] = useState(false)
     const [ossConfig, setOssConfig] = useState<OssConfig>();
+    const [url, setUrl] = useState<string>()
 
     const handleCancel = () => {
         onCancel && onCancel()
@@ -23,7 +24,11 @@ const CreateFaceModule: React.FC<CreateFaceModuleProps> = (props) => {
     const onSubmit = () => {
         form.validateFields().then(values => {
             setButtonLoading(true)
-            createFace({ ...values })
+            createFace({
+                faceDesc: values.faceDesc,
+                miceId: values.miceId,
+                faceUrl: url as string,
+            })
                 .then(res => {
                     if (res.success) {
                         message.success(res.message)
@@ -64,13 +69,13 @@ const CreateFaceModule: React.FC<CreateFaceModuleProps> = (props) => {
                 wrapperCol={{ span: 15, offset: 1 }}
                 form={form}
             >
-                <Form.Item label="专题id" rules={[{ required: true, message: '专题id不能为空' }]}>
+                <Form.Item key={'miceId'} label="专题id" rules={[{ required: true, message: '专题id不能为空' }]}>
                     <Input className={styles.input} placeholder='请输入专题id' />
                 </Form.Item>
-                <Form.Item label="人脸" rules={[{ required: true, message: '人脸不能为空' }]}>
-                    {ossConfig && <UploadImgModule ossConfig={ossConfig} />}
+                <Form.Item key={'faceUrl'} label="人脸">
+                    {ossConfig && <UploadImgModule ossConfig={ossConfig} onUploadSuccess={url => setUrl(url)} />}
                 </Form.Item>
-                <Form.Item label='备注信息'>
+                <Form.Item key={'faceDesc'} label='备注信息'>
                     <Input className={styles.input} placeholder='请输入备注信息' />
                 </Form.Item>
             </Form>

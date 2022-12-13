@@ -22,6 +22,7 @@ export interface ISearchFaceListReq {
 export interface ICreateFaceReq {
   miceId: string
   faceUrl: string
+  faceDesc?: string
 }
 
 /**

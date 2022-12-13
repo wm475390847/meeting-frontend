@@ -274,3 +274,8 @@ interface ResultPercent {
   success: number
   percent: number
 }
+
+declare module "*.module.less";
+declare module "*.svg";
+declare module "*.png";
+declare module "*.MOV";

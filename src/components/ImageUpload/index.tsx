@@ -1,18 +1,26 @@
-import React, { useState } from 'react';
-import { message, Upload } from 'antd';
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import OSS from 'ali-oss';
 import { v4 as uuidv4 } from 'uuid';
-import ImgCrop from 'antd-img-crop';
+import React, { useState } from 'react';
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { message, Upload, Image } from 'antd';
+import styles from './index.module.less';
+import type { RcFile, UploadFile } from 'antd/es/upload/interface';
+import viewIcon from '@/assets/svg/view.svg';
 
 type UploadImgModuleProps = {
-  ossConfig: OssConfig
+  ossConfig: OssConfig;
+  // fileUrl?: string;
+  // viewType: string;
+  // imgVisible: boolean;
+  onUploadSuccess: (url: string) => void;
 }
 
 const UploadImgModule: React.FC<UploadImgModuleProps> = (props) => {
-  const { ossConfig } = props
-  const [file, setFile] = useState<UploadFile>();
-
+  const { ossConfig, onUploadSuccess } = props
+  const [loading, setLoading] = useState(false);
+  const [imageUrl, setImageUrl] = useState<string>();
+  // const [imgVisible, setImgVisible] = useState(false);
+  const [viewImgUrl, setViewImgUrl] = useState('');
   /**
    * 初始化oss
    * @returns 
@@ -28,47 +36,47 @@ const UploadImgModule: React.FC<UploadImgModuleProps> = (props) => {
     return { client };
   };
 
+  // const handleView = () => {
+  //   if (viewType === 'image') {
+  //     setViewImgUrl(fileUrl as string);
+  //   } else {
+  //     // setViewVideoUrl(fileUrl);
+  //     // setVideoVisible(true);
+  //   }
+  // }
+
   /**
    * 获取完整的上传路径
    * @returns 
    */
-  const getFullPath = () => {
+  const getFullPath = (file: UploadFile) => {
     if (file != null) {
       const temSubMediaTypeArr = file.name.split('.');
       const temSubMediaType = temSubMediaTypeArr[temSubMediaTypeArr.length - 1];
       const fileName = uuidv4() + '.' + temSubMediaType;
-      return ossConfig.uploadPath + `/${fileName}`;
+      const fullPath = ossConfig.uploadPath + `/${fileName}`;
+      return fullPath;
     } else {
       message.error('文件为空')
     }
   }
 
-  /**
-   * 检测到文件变化
-   * @param param0 
-   */
-  const onChange: UploadProps['onChange'] = ({ file: newFile }) => {
-    setFile(newFile);
+  const getBase64 = (img: RcFile, callback: (url: string) => void) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result as string));
+    reader.readAsDataURL(img);
   };
 
   /**
-   * 展示
-   * @param file 文件
+   * 获取图片oss地址
+   * @param ossConfig  oss配置
+   * @param fullPath  全路径
+   * @returns 
    */
-  const onPreview = async (file: UploadFile) => {
-    let src = file.url as string;
-    if (!src) {
-      src = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.originFileObj as RcFile);
-        reader.onload = () => resolve(reader.result as string);
-      });
-    }
-    const image = new Image();
-    image.src = src;
-    const imgWindow = window.open(src);
-    imgWindow?.document.write(image.outerHTML);
-  };
+  const transformCdnUrl = (ossConfig: OssConfig, fullPath: string) => {
+    const prefix = /^https:/.test(ossConfig.endPoint) ? 'https://' : 'http://';
+    return prefix + ossConfig.bucketName + '.newscdn.cn' + "/" + fullPath;
+  }
 
   /**
    * 上传之前的逻辑
@@ -80,36 +88,73 @@ const UploadImgModule: React.FC<UploadImgModuleProps> = (props) => {
     if (!isJpgOrPng) {
       message.error('只能上传 JPG/PNG 文件!');
     }
-    const isLt2M = file.size as number / 1024 / 1024 < 2;
+    const isLt2M = file.size as number / 1024 / 1024 < 5;
     if (!isLt2M) {
       message.error('图像必须小于2MB!');
     }
     return isJpgOrPng && isLt2M;
   };
 
+  /**
+   * 上传按钮
+   */
+  const uploadButton = (
+    <div>
+      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+      <div style={{ marginTop: 8 }}>Upload</div>
+    </div>
+  );
+
   return (
-    <ImgCrop rotate>
-      <Upload
-        listType="picture-card"
-        onChange={onChange}
-        onPreview={onPreview}
-        beforeUpload={beforeUpload}
-        maxCount={1}
-        customRequest={({ file }) => {
-          const fullPath = getFullPath()
-          fullPath && assemOSSClient().client
-            .multipartUpload(fullPath, file, {})
-            .then(() => {
-              message.info('上传成功')
-            })
-            .catch(() => {
-              message.info('上传失败')
+    <><Upload
+      name="avatar"
+      listType="picture-card"
+      className="avatar-uploader"
+      beforeUpload={beforeUpload}
+      showUploadList={false}
+      customRequest={({ file }) => {
+        setLoading(true);
+        const fullPath = getFullPath(file as UploadFile);
+        fullPath && assemOSSClient().client
+          .put(fullPath, file)
+          .then(() => {
+            message.success('上传成功');
+            const ossPath = transformCdnUrl(ossConfig, fullPath);
+            onUploadSuccess(ossPath);
+            setLoading(false);
+            getBase64(file as RcFile, (url) => {
+              setLoading(false);
+              setImageUrl(url);
             });
-        }}
-      >
-        {!file && '+ Upload'}
-      </Upload>
-    </ImgCrop>
+          })
+          .catch(() => {
+            message.error('上传失败');
+          });
+      }}
+    >
+      {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+    </Upload>
+      {/* <div>
+        {
+          viewType === "image" && (
+            <div className={styles.maskIcon} onClick={handleView}>
+              <img src={viewIcon} alt="" className="img100" />
+            </div>
+          )
+        }
+      </div> */}
+
+      {/* <Image
+        style={{ display: 'none' }}
+        preview={{
+          visible: imgVisible,
+          src: viewImgUrl,
+          onVisibleChange: value => {
+            // imgVisible(value)
+            // setImgVisible(value);
+          },
+        }} /> */}
+    </>
   );
 };
 

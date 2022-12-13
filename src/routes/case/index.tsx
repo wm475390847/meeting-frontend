@@ -31,15 +31,14 @@ const CasePage: React.FC = (props) => {
   const columns = useMemo<ColumnsType<any>>(() => {
     return [
       {
-        title: "序号",
-        key: "id",
+        title: '序号',
         width: '5%',
         render: (_text, _record, index) => (pageNo as number - 1) * (pageSize as number) + index + 1
       },
       {
-        title: "Name",
-        key: "caseName",
-        dataIndex: "caseName",
+        title: 'Name',
+        key: 'caseName',
+        dataIndex: 'caseName',
         width: '15%',
         ellipsis: true,
         render: (text) => <ToolTipModal linkText={text} buttonText={text} />
@@ -183,21 +182,21 @@ const CasePage: React.FC = (props) => {
       <PageHeader title="用例列表" />
 
       <span>结果：</span>
-      <Select className={styles.select} defaultValue="全部" onChange={setResult}>
+      <Select className={styles.select} defaultValue="全部" onChange={setResult} >
         <Option value="">全部</Option>
         <Option value="true">成功</Option>
         <Option value="false">失败</Option>
       </Select>
 
       <span className={styles.span}>产品：</span>
-      <Select className={styles.select} defaultValue={"全部"} onChange={setProductId} >
+      <Select className={styles.select} defaultValue={"全部"} onChange={setProductId}>
         <OptGroup label="全部">
           <Option value="">全部</Option>
         </OptGroup>
         {serviceList?.map((service: ServiceInfo) => (
-          <OptGroup label={service.serviceName}>
+          <OptGroup label={service.serviceName} key={service.serviceName}>
             {service.products.map((product: ProductInfo) => (
-              <Option value={product.id}>{product.productName}</Option>))}
+              <Option value={product.id} key={product.id}>{product.productName}</Option>))}
           </OptGroup>
         ))}
       </Select>
@@ -215,15 +214,13 @@ const CasePage: React.FC = (props) => {
       <span className={styles.span}>owner：</span>
       <Search placeholder="owner" onSearch={setCaseOwner} enterButton />
 
-
-
       <Table
         columns={columns}
         dataSource={caseList}
+        rowKey='id'
         onChange={onChangeTable}
         pagination={{ total, current: pageNo, showSizeChanger: true }}
         loading={loading}
-        rowKey="id"
       >
       </Table>
       <CasseReasonModule reason={reason} onCancel={() => setReason(undefined)} />

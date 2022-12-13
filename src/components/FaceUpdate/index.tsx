@@ -1,6 +1,7 @@
-import { updateFace } from "@/services";
+import { getOssConfig, updateFace } from "@/services";
 import { Button, Modal, Form, Input, message, InputNumber } from "antd";
 import { useEffect, useState } from "react";
+import UploadImgModule from "../ImageUpload";
 import styles from './index.module.less'
 
 type UpdateFaceModuleProps = {
@@ -15,6 +16,8 @@ const UpdateFaceModule: React.FC<UpdateFaceModuleProps> = (props) => {
     const [buttonLoading, setButtonLoading] = useState(false)
     const [visible, setVisible] = useState(true)
     const [faceResult, setFaceResult] = useState<FaceResult>()
+    const [ossConfig, setOssConfig] = useState<OssConfig>();
+    const [url, setUrl] = useState<string>()
 
     const handleCancel = () => {
         setVisible(false)
@@ -23,9 +26,22 @@ const UpdateFaceModule: React.FC<UpdateFaceModuleProps> = (props) => {
 
     const getValue = () => {
         const metaData = faceInfo?.metaData
-        console.log(metaData);
         setFaceResult(metaData && JSON.parse(metaData))
     }
+
+    const fetchOssConfig = () => {
+        getOssConfig({ business: 'face' })
+            .then(rep => {
+                setOssConfig(rep.data)
+            }).catch(err => {
+                message.error(err.message)
+            })
+    }
+
+    useEffect(() => {
+        visible && fetchOssConfig()
+    }, [visible])
+
 
     /**
      * 提交
@@ -38,7 +54,7 @@ const UpdateFaceModule: React.FC<UpdateFaceModuleProps> = (props) => {
                 ...faceResult,
                 imageNum: values.imageNum as number,
                 total: values.total as number,
-                videoNum: values.videoNum as number
+                videoNum: values.videoNum as number,
             }
             setFaceResult(temp)
 
@@ -53,7 +69,7 @@ const UpdateFaceModule: React.FC<UpdateFaceModuleProps> = (props) => {
                 id: faceInfo.id,
                 resultData: faceInfo.resultData,
                 metaData: JSON.stringify(temp),
-                faceUrl: values.faceUrl,
+                faceUrl: url,
                 faceDesc: values.faceDesc,
                 miceId: values.miceId
             }).then(res => {
