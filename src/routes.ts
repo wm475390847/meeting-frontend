@@ -48,25 +48,25 @@ export interface RouteBase {
 const routes: RouteBase[] = [
   {
     name: PageTitle.page,
-    path: '/admin/page',
+    path: '/app/page',
     element: H5DataPage,
     children: [],
   },
   {
     name: PageTitle.task,
-    path: '/admin/task',
+    path: '/app/task',
     element: TaskDataPage,
     children: [],
   },
   {
     name: PageTitle.face,
-    path: '/admin/face',
+    path: '/app/face',
     element: FaceDataPage,
     children: [],
   },
   {
     name: PageTitle.case,
-    path: '/admin/case',
+    path: '/app/case',
     element: CaseDataPage,
     children: [],
   },
