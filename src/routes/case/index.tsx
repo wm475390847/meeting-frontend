@@ -2,7 +2,6 @@ import { Button, Input, Popconfirm, Progress, Select, Table } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import { ColumnsType } from 'antd/lib/table';
 import { getCaseList, getProdectList } from '@/services';
-import { FooterPage, MView, PageHeader } from '@/components';
 import styles from './index.module.less'
 import CasseReasonModule from '@/components/CaseReason';
 import moment from 'moment';
@@ -16,7 +15,7 @@ interface SearchCase {
   caseName?: string
 }
 
-const CasePage: React.FC = (props) => {
+const CaseDataPage: React.FC = (props) => {
   const { Option, OptGroup } = Select;
   const { Search } = Input
   const [pageNo, setPageNo] = useState(1)
@@ -94,7 +93,7 @@ const CasePage: React.FC = (props) => {
         width: '15%',
         render: (_, record) => {
           return (
-            <div className={styles.action}>
+            <div className={styles.tableAction}>
               {<Button disabled={record.caseResult} type="primary" onClick={() => setReason(record.caseReason)}>查看</Button>}
               <Popconfirm title="亲~功能未完成哦！" okText="是" cancelText="否">
                 <Button >删除</Button>
@@ -178,42 +177,38 @@ const CasePage: React.FC = (props) => {
 
 
   return (
-    <MView resize>
-      <PageHeader title="用例列表" />
-
-      <span>结果：</span>
-      <Select className={styles.select} defaultValue="全部" onChange={setResult} >
-        <Option value="">全部</Option>
-        <Option value="true">成功</Option>
-        <Option value="false">失败</Option>
-      </Select>
-
-      <span className={styles.span}>产品：</span>
-      <Select className={styles.select} defaultValue={"全部"} onChange={setProductId}>
-        <OptGroup label="全部">
+    <div className={styles.content}>
+      <Input.Group className={styles.action}>
+        <span>结果：</span>
+        <Select className={styles.select} defaultValue="全部" onChange={setResult} >
           <Option value="">全部</Option>
-        </OptGroup>
-        {serviceList?.map((service: ServiceInfo) => (
-          <OptGroup label={service.serviceName} key={service.serviceName}>
-            {service.products.map((product: ProductInfo) => (
-              <Option value={product.id} key={product.id}>{product.productName}</Option>))}
+          <Option value="true">成功</Option>
+          <Option value="false">失败</Option>
+        </Select>
+
+        <span className={styles.span}>产品：</span>
+        <Select className={styles.select} defaultValue={"全部"} onChange={setProductId}>
+          <OptGroup label="全部">
+            <Option value="">全部</Option>
           </OptGroup>
-        ))}
-      </Select>
-
-      <span className={styles.span}>环境：</span>
-      <Select className={styles.select} defaultValue="全部" onChange={setEnv}>
-        <Option value="">全部</Option>
-        <Option value="test">测试环境</Option>
-        <Option value="prod">生产环境</Option>
-      </Select>
-
-      <span className={styles.span}>name：</span>
-      <Search placeholder="name" onSearch={setCaseName} enterButton />
-
-      <span className={styles.span}>owner：</span>
-      <Search placeholder="owner" onSearch={setCaseOwner} enterButton />
-
+          {serviceList?.map((service: ServiceInfo) => (
+            <OptGroup label={service.serviceName} key={service.serviceName}>
+              {service.products.map((product: ProductInfo) => (
+                <Option value={product.id} key={product.id}>{product.productName}</Option>))}
+            </OptGroup>
+          ))}
+        </Select>
+        <span className={styles.span}>环境：</span>
+        <Select className={styles.select} defaultValue="全部" onChange={setEnv}>
+          <Option value="">全部</Option>
+          <Option value="test">测试环境</Option>
+          <Option value="prod">生产环境</Option>
+        </Select>
+        <span className={styles.span}>name：</span>
+        <Search placeholder="name" onSearch={setCaseName} enterButton />
+        <span className={styles.span}>owner：</span>
+        <Search placeholder="owner" onSearch={setCaseOwner} enterButton />
+      </Input.Group>
       <Table
         columns={columns}
         dataSource={caseList}
@@ -221,12 +216,12 @@ const CasePage: React.FC = (props) => {
         onChange={onChangeTable}
         pagination={{ total, current: pageNo, showSizeChanger: true }}
         loading={loading}
+        className={styles.table}
       >
       </Table>
       <CasseReasonModule reason={reason} onCancel={() => setReason(undefined)} />
-      <FooterPage text={'会议线质量保障平台 ©2022 Created by 质量中台 '} link={'https://codeup.aliyun.com/xhzy/xhzy-qa/meeting-frontend/tree/dev'} />
-    </MView >
+    </div>
   );
 };
 
-export default CasePage;
+export default CaseDataPage;

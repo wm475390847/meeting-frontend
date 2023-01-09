@@ -8,24 +8,30 @@ import type { RcFile, UploadFile } from 'antd/es/upload/interface';
 import viewIcon from '@/assets/svg/view.svg';
 
 type UploadImgModuleProps = {
-  ossConfig: OssConfig;
-  // fileUrl?: string;
+  ossConfig?: OssConfig;
+  faceUrl?: string;
   // viewType: string;
   // imgVisible: boolean;
   onUploadSuccess: (url: string) => void;
 }
 
 const UploadImgModule: React.FC<UploadImgModuleProps> = (props) => {
-  const { ossConfig, onUploadSuccess } = props
+  const { ossConfig, faceUrl, onUploadSuccess } = props
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
+  const [fileList, setFileList] = useState<UploadFile[]>();
+
   // const [imgVisible, setImgVisible] = useState(false);
-  const [viewImgUrl, setViewImgUrl] = useState('');
+  // const [viewImgUrl, setViewImgUrl] = useState('');
+
   /**
    * 初始化oss
    * @returns 
    */
   const assemOSSClient = () => {
+    if (ossConfig == null) {
+      return null
+    }
     const client = new OSS({
       accessKeyId: ossConfig.accessKeyId,
       accessKeySecret: ossConfig.accessKeySecret,
@@ -35,6 +41,17 @@ const UploadImgModule: React.FC<UploadImgModuleProps> = (props) => {
     });
     return { client };
   };
+
+  const getFileList = () => {
+    return [
+      {
+        uid: '-1',
+        name: 'image.png',
+        status: 'done',
+        url: faceUrl,
+      }
+    ]
+  }
 
   // const handleView = () => {
   //   if (viewType === 'image') {
@@ -54,7 +71,7 @@ const UploadImgModule: React.FC<UploadImgModuleProps> = (props) => {
       const temSubMediaTypeArr = file.name.split('.');
       const temSubMediaType = temSubMediaTypeArr[temSubMediaTypeArr.length - 1];
       const fileName = uuidv4() + '.' + temSubMediaType;
-      const fullPath = ossConfig.uploadPath + `/${fileName}`;
+      const fullPath = ossConfig && ossConfig.uploadPath + `/${fileName}`;
       return fullPath;
     } else {
       message.error('文件为空')
@@ -112,13 +129,18 @@ const UploadImgModule: React.FC<UploadImgModuleProps> = (props) => {
       className="avatar-uploader"
       beforeUpload={beforeUpload}
       showUploadList={false}
+      fileList={getFileList() as UploadFile[]}
       customRequest={({ file }) => {
         setLoading(true);
         const fullPath = getFullPath(file as UploadFile);
-        fullPath && assemOSSClient().client
+        const client = assemOSSClient()
+        fullPath && client && client.client
           .put(fullPath, file)
           .then(() => {
             message.success('上传成功');
+            if (ossConfig == null) {
+              return
+            }
             const ossPath = transformCdnUrl(ossConfig, fullPath);
             onUploadSuccess(ossPath);
             setLoading(false);

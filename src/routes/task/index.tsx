@@ -1,4 +1,3 @@
-import { FooterPage, MView, PageHeader } from "@/components"
 import ToolTipModal from "@/components/ToolTip"
 import { ColumnsType } from "antd/lib/table"
 import { useEffect, useMemo, useState } from "react"
@@ -11,7 +10,7 @@ import { LoadingOutlined } from "@ant-design/icons"
 import moment from "moment"
 import UpdateTaskModule from "@/components/TaskUpdate"
 
-const TaskPage: React.FC = () => {
+const TaskDataPage: React.FC = () => {
     const [loading, setLoading] = useState(true)
     const [pageNo, setPageNo] = useState(1)
     const [pageSize, setPageSize] = useState(10)
@@ -70,7 +69,7 @@ const TaskPage: React.FC = () => {
                 width: '15%',
                 render: (_, record) => {
                     return (
-                        <div className={styles.action}>
+                        <div className={styles.tableAction}>
                             <Popconfirm title='确定执行？' placement="top" okText="是" cancelText="否" onConfirm={() => fetchExecuteTask(record.id)}>
                                 <Button type="primary" loading={buttonLoading}>执行</Button>
                             </Popconfirm>
@@ -129,11 +128,8 @@ const TaskPage: React.FC = () => {
     }, [pageNo, loading])
 
     return (
-        <MView resize>
-            <PageHeader title={"任务列表"} />
-            <Input.Group className={styles.inputGroup}>
-                <Button type='primary'>新增任务</Button>
-            </Input.Group>
+        <div className={styles.content}>
+            <Button className={styles.button} type='primary'>新增任务</Button>
             <Table
                 columns={columns}
                 dataSource={taskList}
@@ -141,14 +137,14 @@ const TaskPage: React.FC = () => {
                 pagination={{ total, current: pageNo, showSizeChanger: true }}
                 loading={loading}
                 onChange={onChangeTable}
+                className={styles.table}
             />
             {/* 报告组件 */}
             {status == 3 && <TaskReportModule taskInfo={taskInfo} onCancel={() => setTaskInfo(undefined)} />}
             {/* 编辑组件 */}
             {status == 2 && <UpdateTaskModule taskInfo={taskInfo} setLoading={setLoading} onCancel={() => setTaskInfo(undefined)} />}
-            <FooterPage text={'会议线质量保障平台 ©2022 Created by 质量中台 '} link={'https://codeup.aliyun.com/xhzy/xhzy-qa/meeting-frontend/tree/dev'} />
-        </MView >
+        </div>
     )
 }
 
-export default TaskPage
+export default TaskDataPage

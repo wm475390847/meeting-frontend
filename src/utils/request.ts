@@ -87,7 +87,7 @@ export default function request(_url: string, options?: any): Promise<RequestOpt
     }).catch((err: any) => {
       if (err) {
         const response = err.response
-        
+
         if (response.status === 502) {
           return err.response.json()
             .then((data: any) => {
@@ -109,7 +109,7 @@ export default function request(_url: string, options?: any): Promise<RequestOpt
               if (data && data.code === 'SW-GW-1003') {
                 window.location.href = 'https://sso.xinhuazhiyun.com/login.html?redirectUri=' + encodeURIComponent(window.location.href);
               }
-            }) 
+            })
             .catch((e: Error) => {
               console.log(e);
             });

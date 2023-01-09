@@ -205,6 +205,17 @@ export const updateH5: (data: IUpdateH5Req) => Promise<RequestOpt> = (data) => {
     })
 }
 
+export const batchUpdate: () => Promise<RequestOpt> = () => {
+    return new Promise(async (resolve, reject) => {
+        const res = await request.put(`/api/page/batch`)
+        if (res.success) {
+            resolve(res)
+        } else {
+            reject(res)
+        }
+    })
+}
+
 export const deleteH5: (id: number) => Promise<RequestOpt> = (id) => {
     return new Promise(async (resolve, reject) => {
         const res = await request.delete(`/api/page/${id}`, id)
@@ -230,6 +241,21 @@ export const getOssConfig: (data: { business: string }) => Promise<RequestOpt> =
 export const getProductList: (data: ISearchProductListReq) => Promise<IPageRequest<ProductInfo>> = (data) => {
     return new Promise(async (resolve, reject) => {
         const res = await request.getTtp(`/products`, data)
+        if (res.success) {
+            resolve(res.data)
+        } else {
+            reject(res)
+        }
+    })
+}
+
+/**
+ * 获取用户信息
+ * @returns 
+ */
+export const getUserInfo = () => {
+    return new Promise(async (resolve, reject) => {
+        const res = await request.get(`/api/user`)
         if (res.success) {
             resolve(res.data)
         } else {

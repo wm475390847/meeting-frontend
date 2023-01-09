@@ -1,4 +1,8 @@
-.action {
+.content {
+    margin-top: 20px;
+}
+
+.tableAction {
     display: flex;
     align-items: center;
 
@@ -11,17 +15,26 @@
     }
 }
 
-.span {
-    margin-left: 40px;
+.action {
+    margin-left: 20px;
+
+    .span {
+        margin-left: 20px;
+    }
+
+    .select {
+        width: 150px;
+        margin-left: 0px;
+    }
+
+    :global(.ant-input-group-wrapper.ant-input-search.ant-input-search-with-button) {
+        width: 150px;
+        margin-left: 10px;
+    }
 }
 
-.select {
-    margin-bottom: 1.5%;
-    width: 120px;
-    margin-left: 10px;
-}
-
-:global(.ant-input-group-wrapper.ant-input-search.ant-input-search-with-button) {
-    width: 150px;
-    margin-left: 8px;
+.table {
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 20px;
 }

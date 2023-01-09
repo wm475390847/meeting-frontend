@@ -1,4 +1,3 @@
-import { FooterPage, MView, PageHeader } from "@/components"
 import ToolTipModal from "@/components/ToolTip"
 import { ColumnsType } from "antd/lib/table"
 import { useEffect, useMemo, useState } from "react"
@@ -9,7 +8,7 @@ import CreateFaceModule from "@/components/FaceCreate"
 import FaceReportModule from "@/components/FaceReport"
 import UpdateFaceModule from "@/components/FaceUpdate"
 
-const FaceDataTable: React.FC = () => {
+const FaceDataPage: React.FC = () => {
     const [loading, setLoading] = useState(true)
     const [buttonLoading, setButtongLoading] = useState(false)
     const [pageNo, setPageNo] = useState(1)
@@ -56,7 +55,7 @@ const FaceDataTable: React.FC = () => {
                 width: '15%',
                 render: (_, record) => {
                     return (
-                        <div className={styles.action}>
+                        <div className={styles.tableAction}>
                             <Button type="primary" onClick={() => { setFaceInfo(record), setStatus(2) }} loading={buttonLoading}>编辑</Button>
                             <Popconfirm title="确定执行？" placement="top" okText="是" cancelText="否" onConfirm={() => fetchExecuteFace(record.id)}>
                                 <Button loading={buttonLoading}>执行</Button>
@@ -102,31 +101,27 @@ const FaceDataTable: React.FC = () => {
     }, [pageNo, loading])
 
     return (
-        <MView resize>
-            <div>
-                <PageHeader title={"WELOOK人脸检测"} />
-                <Input.Group className={styles.inputGroup} >
-                    <Button type='primary' onClick={() => setCreateVisible(true)} >新增识别</Button>
-                </Input.Group>
-                <Table
-                    columns={columns}
-                    dataSource={faceList}
-                    rowKey='id'
-                    pagination={{ total, current: pageNo, showSizeChanger: true }}
-                    loading={loading}
-                    onChange={onChangeTable}
-                />
-                {/* 创建face组件 */}
-                <CreateFaceModule visible={createVisible} setLoading={setLoading} onCancel={() => setCreateVisible(false)} />
-                {/* 识别报告组件 */}
-                {status == 3 && <FaceReportModule faceInfo={faceInfo} onCancel={() => setFaceInfo(undefined)} />}
-                {/* 修改face组件 */}
-                {status == 2 && <UpdateFaceModule faceInfo={faceInfo} setLoading={setLoading} onCancel={() => setFaceInfo(undefined)} />}
-                <FooterPage text={'会议线质量保障平台 ©2022 Created by 质量中台 '} link={'https://codeup.aliyun.com/xhzy/xhzy-qa/meeting-frontend/tree/dev'} />
-            </div>
-
-        </MView >
+        <div className={styles.content}>
+            <Input.Group className={styles.action} >
+                <Button type='primary' onClick={() => setCreateVisible(true)} >新增识别</Button>
+            </Input.Group>
+            <Table
+                columns={columns}
+                dataSource={faceList}
+                rowKey='id'
+                pagination={{ total, current: pageNo, showSizeChanger: true }}
+                loading={loading}
+                onChange={onChangeTable}
+                className={styles.table}
+            />
+            {/* 创建face组件 */}
+            <CreateFaceModule visible={createVisible} setLoading={setLoading} onCancel={() => setCreateVisible(false)} />
+            {/* 识别报告组件 */}
+            {status == 3 && <FaceReportModule faceInfo={faceInfo} onCancel={() => setFaceInfo(undefined)} />}
+            {/* 修改face组件 */}
+            {status == 2 && <UpdateFaceModule faceInfo={faceInfo} setLoading={setLoading} onCancel={() => setFaceInfo(undefined)} />}
+        </div>
     )
 }
 
-export default FaceDataTable
+export default FaceDataPage

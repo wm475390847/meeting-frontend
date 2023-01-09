@@ -73,7 +73,7 @@ const CreateFaceModule: React.FC<CreateFaceModuleProps> = (props) => {
                     <Input className={styles.input} placeholder='请输入专题id' />
                 </Form.Item>
                 <Form.Item key={'faceUrl'} label="人脸">
-                    {ossConfig && <UploadImgModule ossConfig={ossConfig} onUploadSuccess={url => setUrl(url)} />}
+                    <UploadImgModule ossConfig={ossConfig} onUploadSuccess={url => setUrl(url)} />
                 </Form.Item>
                 <Form.Item key={'faceDesc'} label='备注信息'>
                     <Input className={styles.input} placeholder='请输入备注信息' />

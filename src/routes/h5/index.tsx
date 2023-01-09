@@ -1,6 +1,5 @@
-import { FooterPage, MView, PageHeader } from "@/components"
 import ToolTipModal from "@/components/ToolTip"
-import { deleteH5, getH5List } from "@/services"
+import { batchUpdate, deleteH5, getH5List } from "@/services"
 import { ColumnsType } from "antd/lib/table"
 import { useEffect, useMemo, useState } from "react"
 import { Button, DatePicker, Input, message, Popconfirm, Space, Table } from 'antd'
@@ -18,7 +17,7 @@ interface SearchH5 {
     meetingEndTime?: number
 }
 
-const H5DataTable: React.FC = () => {
+const H5DataPage: React.FC = () => {
     const RangePicker: any = DatePicker.RangePicker;
     const { Search } = Input
     const [loading, setLoading] = useState(true)
@@ -84,7 +83,7 @@ const H5DataTable: React.FC = () => {
                 width: '15%',
                 render: (_, record) => {
                     return (
-                        <div className={styles.action}>
+                        <div className={styles.tableAction}>
                             <Button disabled={record.caseResult} type="primary" onClick={() => setUpdataH5(record)}>编辑</Button>
                             <Popconfirm title="确定删除？" placement="top" okText="是" cancelText="否" onConfirm={() => fetchDelectH5(record.id)}>
                                 <Button loading={buttonLoading}>删除</Button>
@@ -147,6 +146,15 @@ const H5DataTable: React.FC = () => {
         })
     }
 
+    const fetchBatchUpdate = () => {
+        batchUpdate()
+            .then(res => {
+                message.success(res.message)
+            }).catch(err => {
+                message.error(err.message)
+            })
+    }
+
     useEffect(() => {
         loading && fetchH5List()
     }, [pageNo, loading])
@@ -156,41 +164,37 @@ const H5DataTable: React.FC = () => {
     }, [searchH5])
 
     return (
-        <MView resize>
-            <div>
-                <PageHeader title={"页面保障"} />
-                <Input.Group className={styles.inputGroup}>
+        <div className={styles.content}>
+            <Input.Group className={styles.action}>
+                <div>
+                    <Space className={styles.space} direction="vertical">
+                        <RangePicker onChange={onChange} />
+                    </Space>
+                    <Search className={styles.search} placeholder="H5名称" onSearch={setH5Name} enterButton />
+                </div>
+                <div className={styles.buttonGroup}>
+                    <Popconfirm title="确定更新？" placement="top" okText="是" cancelText="否" onConfirm={() => fetchBatchUpdate()}>
+                        <Button type='primary'>批量更新</Button>
+                    </Popconfirm>
+                    <Button type='primary' onClick={() => setVisible(true)} >新增页面</Button>
+                </div>
+            </Input.Group>
 
-                    <div>
-                        <Space className={styles.space} direction="vertical">
-                            <RangePicker onChange={onChange} />
-                        </Space>
-                        <Search className={styles.search} placeholder="H5名称" onSearch={setH5Name} enterButton />
-                    </div>
-
-                    <div>
-                        <Button type='primary' onClick={() => setVisible(true)} >新增页面</Button>
-                    </div>
-
-                </Input.Group>
-
-                <Table
-                    columns={columns}
-                    dataSource={h5DataList}
-                    rowKey='id'
-                    pagination={{ total, current: pageNo, showSizeChanger: true }}
-                    loading={loading}
-                    onChange={onChangeTable}
-                />
-                {/* 创建h5组件 */}
-                <CreateH5Module visible={visible} setLoading={setLoading} onCancel={() => setVisible(false)} />
-                {/* 修改h5组件 */}
-                <UpdateH5Module h5Info={updateH5} setLoading={setLoading} onCancel={() => setUpdataH5(undefined)} />
-                <FooterPage text={'会议线质量保障平台 ©2022 Created by 质量中台 '} link={'https://codeup.aliyun.com/xhzy/xhzy-qa/meeting-frontend/tree/dev'} />
-            </div>
-
-        </MView >
+            <Table
+                columns={columns}
+                dataSource={h5DataList}
+                rowKey='id'
+                pagination={{ total, current: pageNo, showSizeChanger: true }}
+                loading={loading}
+                onChange={onChangeTable}
+                className={styles.table}
+            />
+            {/* 创建h5组件 */}
+            <CreateH5Module visible={visible} setLoading={setLoading} onCancel={() => setVisible(false)} />
+            {/* 修改h5组件 */}
+            <UpdateH5Module h5Info={updateH5} setLoading={setLoading} onCancel={() => setUpdataH5(undefined)} />
+        </div>
     )
 }
 
-export default H5DataTable
+export default H5DataPage
