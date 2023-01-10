@@ -31,7 +31,7 @@ const CaseDataPage: React.FC = (props) => {
     return [
       {
         title: '序号',
-        width: '5%',
+        width: '6%',
         render: (_text, _record, index) => (pageNo as number - 1) * (pageSize as number) + index + 1
       },
       {
@@ -54,7 +54,7 @@ const CaseDataPage: React.FC = (props) => {
         title: "Result",
         key: "caseResult",
         dataIndex: "caseResult",
-        width: '6%',
+        width: '7%',
         render: (text) => {
           return (
             text ? < Progress type="circle" percent={100} width={30} /> : < Progress status="exception" type="circle" percent={100} width={30} />
@@ -65,7 +65,7 @@ const CaseDataPage: React.FC = (props) => {
         title: "Product",
         key: "productName",
         dataIndex: "productName",
-        width: '6.5%'
+        width: '9%'
       },
       {
         title: "Env",
@@ -77,13 +77,13 @@ const CaseDataPage: React.FC = (props) => {
         title: "Owner",
         key: "caseOwner",
         dataIndex: "caseOwner",
-        width: '6%'
+        width: '10%'
       },
       {
         title: "ExecuteTime",
         key: "excuteTime",
         dataIndex: "excuteTime",
-        width: '10%',
+        width: '15%',
         render: (text) => <div>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</div>
       },
       {

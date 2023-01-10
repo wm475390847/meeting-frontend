@@ -1,7 +1,7 @@
-import { getOssConfig, updateFace } from "@/services";
-import { Button, Modal, Form, Input, message, InputNumber } from "antd";
+import { updateFace } from "@/services";
+import { Button, Modal, Form, Input, message, InputNumber, Select } from "antd";
 import { useEffect, useState } from "react";
-import UploadImgModule from "../ImageUpload";
+import UploadImgModal from "../ImageUpload";
 import styles from './index.module.less'
 
 type UpdateFaceModuleProps = {
@@ -12,11 +12,11 @@ type UpdateFaceModuleProps = {
 
 const UpdateFaceModule: React.FC<UpdateFaceModuleProps> = (props) => {
     const { onCancel, setLoading, faceInfo } = (props)
+    const { Option } = Select;
     const [form] = Form.useForm()
     const [buttonLoading, setButtonLoading] = useState(false)
     const [visible, setVisible] = useState(true)
     const [faceResult, setFaceResult] = useState<FaceResult>()
-    const [ossConfig, setOssConfig] = useState<OssConfig>();
     const [url, setUrl] = useState<string>()
 
     const handleCancel = () => {
@@ -28,20 +28,6 @@ const UpdateFaceModule: React.FC<UpdateFaceModuleProps> = (props) => {
         const metaData = faceInfo?.metaData
         setFaceResult(metaData && JSON.parse(metaData))
     }
-
-    const fetchOssConfig = () => {
-        getOssConfig({ business: 'face' })
-            .then(rep => {
-                setOssConfig(rep.data)
-            }).catch(err => {
-                message.error(err.message)
-            })
-    }
-
-    useEffect(() => {
-        visible && fetchOssConfig()
-    }, [visible])
-
 
     /**
      * 提交
@@ -64,14 +50,16 @@ const UpdateFaceModule: React.FC<UpdateFaceModuleProps> = (props) => {
                 setButtonLoading(false)
                 return
             }
-
             updateFace({
                 id: faceInfo.id,
                 resultData: faceInfo.resultData,
                 metaData: JSON.stringify(temp),
                 faceUrl: url,
                 faceDesc: values.faceDesc,
-                miceId: values.miceId
+                miceId: values.miceId,
+                env: values.env == null ? 0 : 1,
+                account: values.account,
+                password: values.password
             }).then(res => {
                 if (res.success) {
                     message.success(res.message)
@@ -104,14 +92,26 @@ const UpdateFaceModule: React.FC<UpdateFaceModuleProps> = (props) => {
                 wrapperCol={{ span: 15, offset: 1 }}
                 form={form}
             >
-                <Form.Item name='miceId' label="专题Id" initialValue={faceInfo?.miceId} rules={[{ required: true, message: '专题id不能为空' }]}>
+                <Form.Item name='miceId' label="miceId" initialValue={faceInfo?.miceUrl.split(':')[2]} rules={[{ required: true, message: 'miceId不能为空' }]}>
                     <Input className={styles.input} />
                 </Form.Item>
-                <Form.Item name='faceUrl' label="人脸地址" initialValue={faceInfo?.faceUrl} rules={[{ required: true, message: '人脸地址不能为空' }]}>
-                    <Input className={styles.input} />
+                <Form.Item name={'faceUrl'} key={'faceUrl'} label="人像">
+                    <UploadImgModal onUploadSuccess={url => setUrl(url)} />
                 </Form.Item>
                 <Form.Item name='faceDesc' label="描述" initialValue={faceInfo?.faceDesc} >
                     <Input className={styles.input} />
+                </Form.Item>
+                <Form.Item name={'env'} key={'env'} label='环境'>
+                    <Select defaultValue='测试'>
+                        <Option value={0}>测试</Option>
+                        <Option value={1}>生产</Option>
+                    </Select>
+                </Form.Item>
+                <Form.Item name={'account'} key={'account'} initialValue={faceInfo?.account} label="metaos账号" rules={[{ required: true, message: '账号不能为空' }]}>
+                    <Input placeholder='请输入账号' />
+                </Form.Item>
+                <Form.Item name={'password'} key={'password'} label="metaos密码" rules={[{ required: true, message: '密码不能为空' }]}>
+                    <Input.Password placeholder="请输入密码" />
                 </Form.Item>
                 <Form.Item name='total' label="原始素材数" initialValue={faceResult?.total} rules={[{ required: true, message: '原始素材数不能为空' }]}>
                     <InputNumber min={0} className={styles.input} />

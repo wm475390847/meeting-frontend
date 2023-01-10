@@ -2,33 +2,39 @@ import OSS from 'ali-oss';
 import { v4 as uuidv4 } from 'uuid';
 import React, { useState } from 'react';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { message, Upload, Image } from 'antd';
-import styles from './index.module.less';
+import { message, Upload } from 'antd';
 import type { RcFile, UploadFile } from 'antd/es/upload/interface';
-import viewIcon from '@/assets/svg/view.svg';
+import { getOssConfig } from '@/services';
+import { useEffect } from 'react';
 
-type UploadImgModuleProps = {
-  ossConfig?: OssConfig;
-  faceUrl?: string;
-  // viewType: string;
-  // imgVisible: boolean;
+type UploadImgModalProps = {
   onUploadSuccess: (url: string) => void;
 }
 
-const UploadImgModule: React.FC<UploadImgModuleProps> = (props) => {
-  const { ossConfig, faceUrl, onUploadSuccess } = props
+const UploadImgModal: React.FC<UploadImgModalProps> = (props) => {
+  const { onUploadSuccess } = props
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
-  const [fileList, setFileList] = useState<UploadFile[]>();
+  const [ossConfig, setOssConfig] = useState<OssConfig>();
 
-  // const [imgVisible, setImgVisible] = useState(false);
-  // const [viewImgUrl, setViewImgUrl] = useState('');
+  useEffect(() => {
+    fetchOssConfig()
+  }, [])
+
+  const fetchOssConfig = async () => {
+    await getOssConfig({ business: 'face' })
+      .then(rep => {
+        setOssConfig(rep.data)
+      }).catch(err => {
+        message.error(err.message)
+      })
+  }
 
   /**
    * 初始化oss
    * @returns 
    */
-  const assemOSSClient = () => {
+  const assemOSSClient = (ossConfig: OssConfig) => {
     if (ossConfig == null) {
       return null
     }
@@ -42,31 +48,11 @@ const UploadImgModule: React.FC<UploadImgModuleProps> = (props) => {
     return { client };
   };
 
-  const getFileList = () => {
-    return [
-      {
-        uid: '-1',
-        name: 'image.png',
-        status: 'done',
-        url: faceUrl,
-      }
-    ]
-  }
-
-  // const handleView = () => {
-  //   if (viewType === 'image') {
-  //     setViewImgUrl(fileUrl as string);
-  //   } else {
-  //     // setViewVideoUrl(fileUrl);
-  //     // setVideoVisible(true);
-  //   }
-  // }
-
   /**
    * 获取完整的上传路径
    * @returns 
    */
-  const getFullPath = (file: UploadFile) => {
+  const getFullPath = (file: UploadFile, ossConfig: OssConfig) => {
     if (file != null) {
       const temSubMediaTypeArr = file.name.split('.');
       const temSubMediaType = temSubMediaTypeArr[temSubMediaTypeArr.length - 1];
@@ -118,66 +104,50 @@ const UploadImgModule: React.FC<UploadImgModuleProps> = (props) => {
   const uploadButton = (
     <div>
       {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div style={{ marginTop: 8 }}>Upload</div>
+      <div style={{ marginTop: 8 }}>上传</div>
     </div>
   );
 
   return (
-    <><Upload
-      name="avatar"
-      listType="picture-card"
-      className="avatar-uploader"
-      beforeUpload={beforeUpload}
-      showUploadList={false}
-      fileList={getFileList() as UploadFile[]}
-      customRequest={({ file }) => {
-        setLoading(true);
-        const fullPath = getFullPath(file as UploadFile);
-        const client = assemOSSClient()
-        fullPath && client && client.client
-          .put(fullPath, file)
-          .then(() => {
-            message.success('上传成功');
-            if (ossConfig == null) {
-              return
-            }
-            const ossPath = transformCdnUrl(ossConfig, fullPath);
-            onUploadSuccess(ossPath);
-            setLoading(false);
-            getBase64(file as RcFile, (url) => {
+    <>
+      <Upload
+        name="avatar"
+        listType="picture-card"
+        className="avatar-uploader"
+        beforeUpload={beforeUpload}
+        showUploadList={false}
+        customRequest={({ file }) => {
+          if (ossConfig == null) {
+            message.error('oss配置为空')
+            return
+          }
+          setLoading(true);
+          const fullPath = getFullPath(file as UploadFile, ossConfig);
+          const client = assemOSSClient(ossConfig)
+          fullPath && client?.client
+            .put(fullPath, file)
+            .then(() => {
+              message.success('上传成功');
+              if (ossConfig == null) {
+                return
+              }
+              const ossPath = transformCdnUrl(ossConfig, fullPath);
+              onUploadSuccess(ossPath);
               setLoading(false);
-              setImageUrl(url);
+              getBase64(file as RcFile, (url) => {
+                setLoading(false);
+                setImageUrl(url);
+              });
+            })
+            .catch(() => {
+              message.error('上传失败');
             });
-          })
-          .catch(() => {
-            message.error('上传失败');
-          });
-      }}
-    >
-      {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
-    </Upload>
-      {/* <div>
-        {
-          viewType === "image" && (
-            <div className={styles.maskIcon} onClick={handleView}>
-              <img src={viewIcon} alt="" className="img100" />
-            </div>
-          )
-        }
-      </div> */}
-
-      {/* <Image
-        style={{ display: 'none' }}
-        preview={{
-          visible: imgVisible,
-          src: viewImgUrl,
-          onVisibleChange: value => {
-            // imgVisible(value)
-            // setImgVisible(value);
-          },
-        }} /> */}
+        }}
+      >
+        {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+      </Upload>
     </>
   );
 };
 
-export default UploadImgModule;
+export default UploadImgModal;

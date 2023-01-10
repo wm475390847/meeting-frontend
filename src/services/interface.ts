@@ -23,6 +23,9 @@ export interface ICreateFaceReq {
   miceId: string
   faceUrl: string
   faceDesc?: string
+  env: number
+  account: string
+  password: string
 }
 
 /**
@@ -35,6 +38,9 @@ export interface IUpdateFaceReq {
   resultData?: string;
   faceUrl?: string;
   miceId?: string;
+  env: number;
+  account: string;
+  password: string
 }
 
 /**

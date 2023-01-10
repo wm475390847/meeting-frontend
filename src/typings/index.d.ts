@@ -36,10 +36,12 @@ interface ProductInfo {
 interface FaceInfo {
   faceUrl: string
   faceDesc: string
-  miceId: string
+  miceUrl: string
   metaData: string
   resultData: string
   id: number
+  account: string
+  password: string
 }
 
 interface DiffData {
@@ -273,6 +275,11 @@ interface ResultPercent {
   total: number
   success: number
   percent: number
+}
+
+interface Window {
+  md5: any;
+  wx: any;
 }
 
 declare module "*.module.less";
