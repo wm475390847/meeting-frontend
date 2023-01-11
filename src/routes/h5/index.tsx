@@ -1,12 +1,13 @@
-import ToolTipModal from "@/components/ToolTip"
-import { batchUpdate, deleteH5, getH5List } from "@/services"
 import { ColumnsType } from "antd/lib/table"
 import { useEffect, useMemo, useState } from "react"
 import { Button, DatePicker, Input, message, Popconfirm, Space, Table } from 'antd'
-import styles from './index.module.less'
 import moment from "moment"
-import CreateH5Module from "@/components/H5Create"
-import UpdateH5Module from "@/components/H5Update"
+import CreateH5Modal from "@/components/H5Create"
+import UpdateH5Modal from "@/components/H5Update"
+import { PageFooter } from "@/components/PageFooter"
+import ToolTipModal from "@/components/ToolTip"
+import { batchUpdate, deleteH5, getH5List } from "@/services"
+import styles from './index.module.less'
 
 console.log("大丈夫生于天地之间，岂能郁郁久居人下！")
 
@@ -189,10 +190,11 @@ const H5DataPage: React.FC = () => {
                 onChange={onChangeTable}
                 className={styles.table}
             />
+            <PageFooter />
             {/* 创建h5组件 */}
-            <CreateH5Module visible={visible} setLoading={setLoading} onCancel={() => setVisible(false)} />
+            <CreateH5Modal visible={visible} setLoading={setLoading} onCancel={() => setVisible(false)} />
             {/* 修改h5组件 */}
-            <UpdateH5Module h5Info={updateH5} setLoading={setLoading} onCancel={() => setUpdataH5(undefined)} />
+            <UpdateH5Modal h5Info={updateH5} setLoading={setLoading} onCancel={() => setUpdataH5(undefined)} />
         </div>
     )
 }

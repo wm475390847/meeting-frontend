@@ -19,10 +19,8 @@ export const PageLayout: React.FC<LayoutProp> = ({ children, routes }) => {
   const [nickName, setNickName] = useState('');
   const [avatar, setAvatar] = useState('');
   const [userId, setUserId] = useState('');
-  const [year, setYear] = useState<string>();
 
   useEffect(() => {
-    setYear(new Date().getFullYear() as unknown as string)
     getUserInfoMethod();
     const _pathArr: any = location.pathname.split('/');
     if (_pathArr.length === 3) {
@@ -139,14 +137,6 @@ export const PageLayout: React.FC<LayoutProp> = ({ children, routes }) => {
             <Outlet />
           </ScrollView>
         </Content>
-        <Footer className={styles.pageFooter} >会议线质量保障平台 ©2022-{year} Created by 质量中台
-          <Button className={styles.button}
-            key='1'
-            type='link'
-            onClick={() => window.open('https://codeup.aliyun.com/xhzy/xhzy-qa/meeting-frontend/tree/dev')}>
-            {<span>CodeUp地址</span>}
-          </Button>
-        </Footer>
       </Layout>
     </Layout >
   );

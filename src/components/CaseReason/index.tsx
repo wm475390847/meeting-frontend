@@ -7,12 +7,12 @@ import "ace-builds/src-noconflict/theme-cloud9_night";
 import "ace-builds/src-noconflict/ext-language_tools";
 import styles from './index.module.less'
 
-type CaseReasonModuleProps = {
+type CaseReasonModalProps = {
   reason?: string
   onCancel?: () => void
 }
 
-const CasseReasonModule: React.FC<CaseReasonModuleProps> = (props) => {
+const CasseReasonModal: React.FC<CaseReasonModalProps> = (props) => {
   const { reason, onCancel } = props
   const [visible, setVisible] = useState(false)
 
@@ -68,4 +68,4 @@ const CasseReasonModule: React.FC<CaseReasonModuleProps> = (props) => {
   );
 };
 
-export default CasseReasonModule;
+export default CasseReasonModal;

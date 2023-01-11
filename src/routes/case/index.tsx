@@ -1,11 +1,12 @@
 import { Button, Input, Popconfirm, Progress, Select, Table } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import { ColumnsType } from 'antd/lib/table';
-import { getCaseList, getProdectList } from '@/services';
-import styles from './index.module.less'
-import CasseReasonModule from '@/components/CaseReason';
 import moment from 'moment';
+import { getCaseList, getProdectList } from '@/services';
+import CasseReasonModal from '@/components/CaseReason'
 import ToolTipModal from '@/components/ToolTip';
+import { PageFooter } from '@/components/PageFooter';
+import styles from './index.module.less'
 
 interface SearchCase {
   productId?: number
@@ -35,7 +36,7 @@ const CaseDataPage: React.FC = (props) => {
         render: (_text, _record, index) => (pageNo as number - 1) * (pageSize as number) + index + 1
       },
       {
-        title: 'Name',
+        title: '用例名称',
         key: 'caseName',
         dataIndex: 'caseName',
         width: '15%',
@@ -43,7 +44,7 @@ const CaseDataPage: React.FC = (props) => {
         render: (text) => <ToolTipModal linkText={text} buttonText={text} />
       },
       {
-        title: "Desc",
+        title: "描述",
         key: "caseDesc",
         dataIndex: "caseDesc",
         width: '15%',
@@ -51,7 +52,7 @@ const CaseDataPage: React.FC = (props) => {
         render: (text) => <ToolTipModal linkText={text} buttonText={text} />
       },
       {
-        title: "Result",
+        title: "结果",
         key: "caseResult",
         dataIndex: "caseResult",
         width: '7%',
@@ -62,27 +63,27 @@ const CaseDataPage: React.FC = (props) => {
         }
       },
       {
-        title: "Product",
+        title: "产品",
         key: "productName",
         dataIndex: "productName",
         width: '9%'
       },
       {
-        title: "Env",
+        title: "环境",
         key: "env",
         dataIndex: "env",
         width: '6%'
       },
       {
-        title: "Owner",
+        title: "作者",
         key: "caseOwner",
         dataIndex: "caseOwner",
         width: '10%'
       },
       {
-        title: "ExecuteTime",
+        title: "执行时间",
         key: "excuteTime",
-        dataIndex: "excuteTime",
+        dataIndex: "executeTime",
         width: '15%',
         render: (text) => <div>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</div>
       },
@@ -168,13 +169,9 @@ const CaseDataPage: React.FC = (props) => {
     serviceList.length === 0 && fetchProductList()
   }, [serviceList])
 
-  /**
-   *  监听pageNo变化时刷新列表
-   */
   useEffect(() => {
     loading && fetchCaseList()
   }, [pageNo, loading])
-
 
   return (
     <div className={styles.content}>
@@ -204,10 +201,10 @@ const CaseDataPage: React.FC = (props) => {
           <Option value="test">测试环境</Option>
           <Option value="prod">生产环境</Option>
         </Select>
-        <span className={styles.span}>name：</span>
-        <Search placeholder="name" onSearch={setCaseName} enterButton />
-        <span className={styles.span}>owner：</span>
-        <Search placeholder="owner" onSearch={setCaseOwner} enterButton />
+        <span className={styles.span}>用例名称：</span>
+        <Search placeholder="请输入名称" onSearch={setCaseName} enterButton />
+        <span className={styles.span}>作者</span>
+        <Search placeholder="请输入作者" onSearch={setCaseOwner} enterButton />
       </Input.Group>
       <Table
         columns={columns}
@@ -219,7 +216,8 @@ const CaseDataPage: React.FC = (props) => {
         className={styles.table}
       >
       </Table>
-      <CasseReasonModule reason={reason} onCancel={() => setReason(undefined)} />
+      <PageFooter />
+      <CasseReasonModal reason={reason} onCancel={() => setReason(undefined)} />
     </div>
   );
 };

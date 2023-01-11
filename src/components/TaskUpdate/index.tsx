@@ -1,15 +1,15 @@
 import { Button, Modal, Form, Input } from "antd";
 import { useEffect, useState } from "react";
-import UpdateTaskTableModule from "../TaskUpdateTable";
+import UpdateTaskTableModal from "../TaskUpdateTable";
 import styles from './index.module.less'
 
-type UpdateTaskModuleProps = {
+type UpdateTaskModalProps = {
     taskInfo?: TaskInfo
     onCancel?: () => void
     setLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const UpdateTaskModule: React.FC<UpdateTaskModuleProps> = (props) => {
+const UpdateTaskModal: React.FC<UpdateTaskModalProps> = (props) => {
     const { onCancel, taskInfo } = (props)
     const [visible, setVisible] = useState(true)
     const [searchInfo, setSearchInfo] = useState<string>()
@@ -68,4 +68,4 @@ const UpdateTaskModule: React.FC<UpdateTaskModuleProps> = (props) => {
     );
 }
 
-export default UpdateTaskModule
+export default UpdateTaskModal

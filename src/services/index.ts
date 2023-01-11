@@ -86,6 +86,22 @@ export const updateFace: (data: IUpdateFaceReq) => Promise<RequestOpt> = (data) 
 }
 
 /**
+ * 修改人脸识别任务
+ * @param data 
+ * @returns 
+ */
+export const deleteFace: (id: number) => Promise<RequestOpt> = (id) => {
+    return new Promise(async (resolve, reject) => {
+        const res = await request.delete(`/api/face/${id}`)
+        if (res.success) {
+            resolve(res)
+        } else {
+            reject(res)
+        }
+    })
+}
+
+/**
  * 执行人脸识别
  * @param id 
  * @returns 

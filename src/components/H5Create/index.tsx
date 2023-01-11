@@ -4,13 +4,13 @@ import moment from "moment";
 import { useState } from "react";
 import styles from './index.module.less'
 
-type CreateH5ModuleProps = {
+type CreateH5ModalProps = {
     visible: boolean
     onCancel?: () => void
     setLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const CreateH5Module: React.FC<CreateH5ModuleProps> = (props) => {
+const CreateH5Modal: React.FC<CreateH5ModalProps> = (props) => {
     const [form] = Form.useForm()
     const { visible, onCancel, setLoading } = (props)
     const [buttonLoading, setButtonLoading] = useState(false)
@@ -88,4 +88,4 @@ const CreateH5Module: React.FC<CreateH5ModuleProps> = (props) => {
     );
 }
 
-export default CreateH5Module
+export default CreateH5Modal

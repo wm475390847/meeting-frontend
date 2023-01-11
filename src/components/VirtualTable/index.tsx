@@ -1,9 +1,6 @@
 import { Table } from 'antd';
-import classNames from 'classnames';
-import { Console } from 'console';
 import ResizeObserver from 'rc-resize-observer';
-import React, { useEffect, useRef, useState } from 'react';
-import { VariableSizeGrid as Grid } from 'react-window';
+import { useRef, useState } from 'react';
 
 const VirtualTableModal = (props: Parameters<typeof Table>[0]) => {
     const { columns, scroll } = props;

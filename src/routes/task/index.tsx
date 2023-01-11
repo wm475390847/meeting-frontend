@@ -1,14 +1,15 @@
-import ToolTipModal from "@/components/ToolTip"
 import { ColumnsType } from "antd/lib/table"
 import { useEffect, useMemo, useState } from "react"
-import { Button, Input, message, Popconfirm, Spin, Table } from 'antd'
-import styles from './index.module.less'
+import { Button, message, Popconfirm, Spin, Table } from 'antd'
+import moment from "moment"
 import { deleteTask, executeTask, getTaskList } from "@/services"
-import TaskReportModule from "@/components/TaskReport"
+import TaskReportModal from "@/components/TaskReport"
 import { TaskStatusEnum } from "@/constants"
 import { LoadingOutlined } from "@ant-design/icons"
-import moment from "moment"
-import UpdateTaskModule from "@/components/TaskUpdate"
+import ToolTipModal from "@/components/ToolTip"
+import UpdateTaskModal from "@/components/TaskUpdate"
+import { PageFooter } from "@/components/PageFooter"
+import styles from './index.module.less'
 
 const TaskDataPage: React.FC = () => {
     const [loading, setLoading] = useState(true)
@@ -139,10 +140,11 @@ const TaskDataPage: React.FC = () => {
                 onChange={onChangeTable}
                 className={styles.table}
             />
+            <PageFooter></PageFooter>
             {/* 报告组件 */}
-            {status == 3 && <TaskReportModule taskInfo={taskInfo} onCancel={() => setTaskInfo(undefined)} />}
+            {status == 3 && <TaskReportModal taskInfo={taskInfo} onCancel={() => setTaskInfo(undefined)} />}
             {/* 编辑组件 */}
-            {status == 2 && <UpdateTaskModule taskInfo={taskInfo} setLoading={setLoading} onCancel={() => setTaskInfo(undefined)} />}
+            {status == 2 && <UpdateTaskModal taskInfo={taskInfo} setLoading={setLoading} onCancel={() => setTaskInfo(undefined)} />}
         </div>
     )
 }

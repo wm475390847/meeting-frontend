@@ -33,20 +33,17 @@ interface TableTransferProps extends TransferProps<TransferItem> {
     rightColumns: ColumnsType<DataType>;
 }
 
-interface UpdateTaskTableModuleProps {
+interface UpdateTaskTableModalProps {
     taskId: number
 }
 
-const UpdateTaskTableModule: React.FC<UpdateTaskTableModuleProps> = (props) => {
+const UpdateTaskTableModal: React.FC<UpdateTaskTableModalProps> = (props) => {
     const { taskId } = props
     const [total, setTotal] = useState(0)
-
     const [h5List, setH5List] = useState<H5Info[]>()
     const [containTotal, setContainTotal] = useState(0)
     const [containH5List, setContainH5List] = useState<H5Info[]>()
-
     const [mockData, setMockData] = useState<RecordType[]>()
-
     const [disabled, setDisabled] = useState(false);
     const [showSearch, setShowSearch] = useState(false);
     const [pageNo, setPageNo] = useState(1)
@@ -237,4 +234,4 @@ const UpdateTaskTableModule: React.FC<UpdateTaskTableModuleProps> = (props) => {
     );
 };
 
-export default UpdateTaskTableModule;
+export default UpdateTaskTableModal;

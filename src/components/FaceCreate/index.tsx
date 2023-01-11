@@ -3,13 +3,13 @@ import { Button, Modal, Form, Input, message, Select } from "antd";
 import { useState } from "react";
 import UploadImgModule from "../ImageUpload";
 
-type CreateFaceModuleProps = {
+type CreateFaceModalProps = {
     visible: boolean
     onCancel?: () => void
     setLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const CreateFaceModule: React.FC<CreateFaceModuleProps> = (props) => {
+const CreateFaceModal: React.FC<CreateFaceModalProps> = (props) => {
     const { Option } = Select;
     const [form] = Form.useForm()
     const { visible, onCancel, setLoading } = (props)
@@ -33,9 +33,9 @@ const CreateFaceModule: React.FC<CreateFaceModuleProps> = (props) => {
                 miceId: values.miceId,
                 faceUrl: url as string,
                 faceDesc: values.faceDesc,
-                env: values.env == null ? 0 : 1,
+                env: values.env,
                 account: values.account,
-                password: window.md5(values.password)
+                password: values.password
             }).then(res => {
                 if (res.success) {
                     message.success(res.message)
@@ -72,7 +72,7 @@ const CreateFaceModule: React.FC<CreateFaceModuleProps> = (props) => {
                 <Form.Item name={'faceDesc'} key={'faceDesc'} label='备注信息'>
                     <Input placeholder='请输入备注信息' />
                 </Form.Item>
-                <Form.Item name={'env'} key={'env'} label='环境'>
+                <Form.Item name={'env'} key={'env'} label='环境' initialValue={0}>
                     <Select defaultValue='测试'>
                         <Option value={0}>测试</Option>
                         <Option value={1}>生产</Option>
@@ -89,4 +89,4 @@ const CreateFaceModule: React.FC<CreateFaceModuleProps> = (props) => {
     );
 }
 
-export default CreateFaceModule
+export default CreateFaceModal

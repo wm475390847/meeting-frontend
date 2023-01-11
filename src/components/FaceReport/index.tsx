@@ -3,12 +3,12 @@ import { Button, Modal, Form, message, Collapse } from "antd";
 import { useEffect, useState } from "react";
 import styles from './index.module.less'
 
-type FaceReportModuleProps = {
+type FaceReportModalProps = {
     faceInfo?: FaceInfo
     onCancel?: () => void
 }
 
-const FaceReportModule: React.FC<FaceReportModuleProps> = (props) => {
+const FaceReportModal: React.FC<FaceReportModalProps> = (props) => {
     const { onCancel, faceInfo } = props
     const [visible, setVisible] = useState(true)
     const [faceResult, setFaceResult] = useState<FaceReport>()
@@ -99,4 +99,4 @@ const FaceReportModule: React.FC<FaceReportModuleProps> = (props) => {
     )
 }
 
-export default FaceReportModule
+export default FaceReportModal

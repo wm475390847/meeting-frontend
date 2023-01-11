@@ -4,13 +4,13 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import styles from './index.module.less'
 
-type UpdateH5ModuleProps = {
+type UpdateH5ModalProps = {
     h5Info?: H5Info
     onCancel?: () => void
     setLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const UpdateH5Module: React.FC<UpdateH5ModuleProps> = (props) => {
+const UpdateH5Modal: React.FC<UpdateH5ModalProps> = (props) => {
     const { onCancel, setLoading, h5Info } = (props)
     const RangePicker: any = DatePicker.RangePicker;
     const [form] = Form.useForm()
@@ -92,4 +92,4 @@ const UpdateH5Module: React.FC<UpdateH5ModuleProps> = (props) => {
     );
 }
 
-export default UpdateH5Module
+export default UpdateH5Modal

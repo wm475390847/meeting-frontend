@@ -1,12 +1,13 @@
-import ToolTipModal from "@/components/ToolTip"
 import { ColumnsType } from "antd/lib/table"
 import { useEffect, useMemo, useState } from "react"
 import { Button, Input, message, Popconfirm, Table, Image } from 'antd'
+import { deleteFace, executeFace, getFaceList } from "@/services"
+import CreateFaceModal from "@/components/FaceCreate"
+import FaceReportModal from "@/components/FaceReport"
+import UpdateFaceModal from "@/components/FaceUpdate"
+import { PageFooter } from "@/components/PageFooter"
+import ToolTipModal from "@/components/ToolTip"
 import styles from './index.module.less'
-import { executeFace, getFaceList } from "@/services"
-import CreateFaceModule from "@/components/FaceCreate"
-import FaceReportModule from "@/components/FaceReport"
-import UpdateFaceModule from "@/components/FaceUpdate"
 
 const FaceDataPage: React.FC = () => {
     const [loading, setLoading] = useState(true)
@@ -17,7 +18,6 @@ const FaceDataPage: React.FC = () => {
     const [faceList, setFaceList] = useState<FaceInfo[]>()
     const [faceInfo, setFaceInfo] = useState<FaceInfo>()
     const [status, setStatus] = useState<number>(0)
-    // 控制创建face组件开启
     const [createVisible, setCreateVisible] = useState(false)
 
     const columns = useMemo<ColumnsType<any>>(() => {
@@ -46,13 +46,13 @@ const FaceDataPage: React.FC = () => {
                 title: '备注',
                 dataIndex: 'faceDesc',
                 key: 'faceDesc',
-                width: '6%',
+                width: '5%',
             },
             {
                 title: '环境',
                 dataIndex: 'env',
                 key: 'env',
-                width: '6%',
+                width: '5%',
                 render: (text) => {
                     return (text == 0 ? '测试' : '生产')
                 }
@@ -68,7 +68,7 @@ const FaceDataPage: React.FC = () => {
                 title: '操作',
                 dataIndex: 'action',
                 key: 'action',
-                width: '15%',
+                width: '20%',
                 render: (_, record) => {
                     return (
                         <div className={styles.tableAction}>
@@ -76,7 +76,10 @@ const FaceDataPage: React.FC = () => {
                             <Popconfirm title="确定执行？" placement="top" okText="是" cancelText="否" onConfirm={() => fetchExecuteFace(record.id)}>
                                 <Button loading={buttonLoading}>执行</Button>
                             </Popconfirm>
-                            <Button onClick={() => { setFaceInfo(record), setStatus(3) }}> 结果</Button>
+                            <Button disabled={record.newResult == null} onClick={() => { setFaceInfo(record), setStatus(3) }}> 结果</Button>
+                            <Popconfirm title='确定删除？' placement="top" okText="是" cancelText="否" onConfirm={() => fetchDeleteFace(record.id)}>
+                                <Button loading={buttonLoading}>删除</Button>
+                            </Popconfirm>
                         </div >
                     )
                 }
@@ -112,6 +115,16 @@ const FaceDataPage: React.FC = () => {
             }).finally(() => setButtongLoading(false))
     }
 
+    const fetchDeleteFace = (id: number) => {
+        deleteFace(id)
+            .then(res => {
+                message.info(res.message)
+                setLoading(true)
+            }).catch(err => {
+                message.error(err.message)
+            }).finally(() => setButtongLoading(false))
+    }
+
     useEffect(() => {
         loading && fetchFaceList()
     }, [pageNo, loading])
@@ -130,13 +143,14 @@ const FaceDataPage: React.FC = () => {
                 onChange={onChangeTable}
                 className={styles.table}
             />
+            <PageFooter />
             {/* 创建face组件 */}
-            <CreateFaceModule visible={createVisible} setLoading={setLoading} onCancel={() => setCreateVisible(false)} />
+            <CreateFaceModal visible={createVisible} setLoading={setLoading} onCancel={() => setCreateVisible(false)} />
             {/* 识别报告组件 */}
-            {status == 3 && <FaceReportModule faceInfo={faceInfo} onCancel={() => setFaceInfo(undefined)} />}
+            {status == 3 && <FaceReportModal faceInfo={faceInfo} onCancel={() => setFaceInfo(undefined)} />}
             {/* 修改face组件 */}
-            {status == 2 && <UpdateFaceModule faceInfo={faceInfo} setLoading={setLoading} onCancel={() => setFaceInfo(undefined)} />}
-        </div>
+            {status == 2 && <UpdateFaceModal faceInfo={faceInfo} setLoading={setLoading} onCancel={() => setFaceInfo(undefined)} />}
+        </div >
     )
 }
 
