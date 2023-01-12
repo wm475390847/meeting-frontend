@@ -26,7 +26,7 @@ const CaseDataPage: React.FC = (props) => {
   const [caseList, setCaseList] = useState<CaseInfo[]>()
   const [reason, setReason] = useState()
   const [searchCase, setSearchCase] = useState<SearchCase>()
-  const [serviceList, setServiceList] = useState<ServiceInfo[]>([])
+  const [productList, setProductList] = useState<ServiceInfo[]>([])
   const [buttonLoading, setButtongLoading] = useState(false)
 
   const columns = useMemo<ColumnsType<any>>(() => {
@@ -143,39 +143,21 @@ const CaseDataPage: React.FC = (props) => {
   const fetchProductList = () => {
     getProdectList()
       .then(data => {
-        setServiceList(data)
+        setProductList(data)
         setLoading(false)
       })
   }
 
-  const setProductId = (value: String) => {
-    setSearchCase({ ...searchCase, productId: value as unknown as number })
-    setLoading(true)
-  };
-
-  const setResult = (value: string) => {
-    setSearchCase({ ...searchCase, caseResult: value as unknown as boolean })
-    setLoading(true)
-  }
-
-  const setEnv = (value: string) => {
-    setSearchCase({ ...searchCase, env: value })
-    setLoading(true)
-  }
-
-  const setCaseOwner = (value: string) => {
-    setSearchCase({ ...searchCase, caseOwner: value })
-    setLoading(true)
-  }
-
-  const setCaseName = (value: string) => {
-    setSearchCase({ ...searchCase, caseName: value })
+  const handleProvinceChange = (key: string, value: any) => {
+    const sc: { [key: string]: any } = { ...searchCase };
+    sc[key] = value
+    setSearchCase(sc)
     setLoading(true)
   }
 
   useEffect(() => {
-    serviceList.length === 0 && fetchProductList()
-  }, [serviceList])
+    productList.length === 0 && fetchProductList()
+  }, [productList])
 
   useEffect(() => {
     loading && fetchCaseList()
@@ -183,9 +165,13 @@ const CaseDataPage: React.FC = (props) => {
 
   return (
     <div className={styles.content}>
-      <Input.Group className={styles.action}>
+      <div className={styles.action}>
         <span className={styles.span}>结果：
-          <Select className={styles.select} defaultValue="全部" onChange={setResult} >
+          <Select
+            className={styles.select}
+            placeholder='请选择执行结果'
+            defaultValue="全部"
+            onSelect={(e: any) => { handleProvinceChange('caseResult', e) }} >
             <Option value="">全部</Option>
             <Option value="true">成功</Option>
             <Option value="false">失败</Option>
@@ -193,11 +179,15 @@ const CaseDataPage: React.FC = (props) => {
         </span>
 
         <span className={styles.span}>产品：
-          <Select className={styles.select} defaultValue={"全部"} onChange={setProductId}>
+          <Select
+            className={styles.select}
+            defaultValue={"全部"}
+            onSelect={(e: any) => { handleProvinceChange('productId', e) }}
+          >
             <OptGroup label="全部">
               <Option value="">全部</Option>
             </OptGroup>
-            {serviceList?.map((service: ServiceInfo) => (
+            {productList?.map((service: ServiceInfo) => (
               <OptGroup label={service.serviceName} key={service.serviceName}>
                 {service.products.map((product: ProductInfo) => (
                   <Option value={product.id} key={product.id}>{product.productName}</Option>))}
@@ -207,22 +197,36 @@ const CaseDataPage: React.FC = (props) => {
         </span>
 
         <span className={styles.span}>环境：
-          <Select className={styles.select} defaultValue="全部" onChange={setEnv}>
+          <Select
+            className={styles.select}
+            defaultValue="全部"
+            onSelect={(e: any) => { handleProvinceChange('env', e) }} >
             <Option value="">全部</Option>
             <Option value="test">测试环境</Option>
             <Option value="prod">生产环境</Option>
           </Select>
         </span>
 
-        <span className={styles.span}>用例名称：
-          <Search className={styles.search} placeholder="请输入用例名称" onSearch={setCaseName} enterButton />
+        <span className={styles.span}>
+          <Search
+            className={styles.search}
+            placeholder="请输入用例名称"
+            onSearch={(e: any) => { handleProvinceChange('caseName', e) }}
+            enterButton
+            allowClear
+          />
         </span>
 
-        <span className={styles.span}>作者：
-          <Search className={styles.search} placeholder="请输入作者" onSearch={setCaseOwner} enterButton />
+        <span className={styles.span}>
+          <Search
+            className={styles.search}
+            placeholder="请输入作者"
+            onSearch={(e: any) => { handleProvinceChange('owner', e) }}
+            enterButton
+            allowClear
+          />
         </span>
-
-      </Input.Group>
+      </div>
       <Table
         columns={columns}
         dataSource={caseList}

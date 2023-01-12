@@ -166,12 +166,12 @@ const H5DataPage: React.FC = () => {
 
     return (
         <div className={styles.content}>
-            <Input.Group className={styles.action}>
+            <div className={styles.action}>
                 <div>
                     <Space className={styles.space} direction="vertical">
                         <RangePicker onChange={onChange} />
                     </Space>
-                    <Search className={styles.search} placeholder="H5名称" onSearch={setH5Name} enterButton />
+                    <Search className={styles.search} placeholder="请输入H5名称" onSearch={setH5Name} enterButton />
                 </div>
                 <div className={styles.buttonGroup}>
                     <Popconfirm title="确定更新？" placement="top" okText="是" cancelText="否" onConfirm={() => fetchBatchUpdate()}>
@@ -179,7 +179,7 @@ const H5DataPage: React.FC = () => {
                     </Popconfirm>
                     <Button type='primary' onClick={() => setVisible(true)} >新增页面</Button>
                 </div>
-            </Input.Group>
+            </div>
 
             <Table
                 columns={columns}

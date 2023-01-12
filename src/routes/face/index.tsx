@@ -131,9 +131,11 @@ const FaceDataPage: React.FC = () => {
 
     return (
         <div className={styles.content}>
-            <Input.Group className={styles.action} >
-                <Button type='primary' onClick={() => setCreateVisible(true)} >新增人脸</Button>
-            </Input.Group>
+            <div className={styles.action}>
+                <Button type='primary' onClick={() => setCreateVisible(true)}>新增人脸</Button>
+                <Button type='primary'>批量执行</Button>
+            </div>
+
             <Table
                 columns={columns}
                 dataSource={faceList}

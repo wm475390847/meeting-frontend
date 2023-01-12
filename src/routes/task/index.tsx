@@ -130,7 +130,10 @@ const TaskDataPage: React.FC = () => {
 
     return (
         <div className={styles.content}>
-            <Button className={styles.button} type='primary'>新增任务</Button>
+            <div className={styles.action}>
+                <Button type='primary'>新增任务</Button>
+            </div>
+
             <Table
                 columns={columns}
                 dataSource={taskList}
