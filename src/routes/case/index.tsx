@@ -1,8 +1,8 @@
-import { Button, Input, Popconfirm, Progress, Select, Table } from 'antd';
+import { Button, Input, message, Popconfirm, Progress, Select, Table } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import { ColumnsType } from 'antd/lib/table';
 import moment from 'moment';
-import { getCaseList, getProdectList } from '@/services';
+import { deleteCase, getCaseList, getProdectList } from '@/services';
 import CasseReasonModal from '@/components/CaseReason'
 import ToolTipModal from '@/components/ToolTip';
 import { PageFooter } from '@/components/PageFooter';
@@ -27,6 +27,7 @@ const CaseDataPage: React.FC = (props) => {
   const [reason, setReason] = useState()
   const [searchCase, setSearchCase] = useState<SearchCase>()
   const [serviceList, setServiceList] = useState<ServiceInfo[]>([])
+  const [buttonLoading, setButtongLoading] = useState(false)
 
   const columns = useMemo<ColumnsType<any>>(() => {
     return [
@@ -95,9 +96,9 @@ const CaseDataPage: React.FC = (props) => {
         render: (_, record) => {
           return (
             <div className={styles.tableAction}>
-              {<Button disabled={record.caseResult} type="primary" onClick={() => setReason(record.caseReason)}>查看</Button>}
-              <Popconfirm title="亲~功能未完成哦！" okText="是" cancelText="否">
-                <Button >删除</Button>
+              <Button disabled={record.caseResult} type="primary" onClick={() => setReason(record.caseReason)}>查看</Button>
+              <Popconfirm title="确定删除？" placement="top" okText="是" cancelText="否" onConfirm={() => fetchDeleteCase(record.id)}>
+                <Button loading={buttonLoading}>删除</Button>
               </Popconfirm>
             </div >
           )
@@ -113,9 +114,16 @@ const CaseDataPage: React.FC = (props) => {
     setLoading(true)
   }
 
-  /**
-   * 获取报告
-   */
+  const fetchDeleteCase = (id: number) => {
+    deleteCase(id)
+      .then(res => {
+        message.info(res.message)
+        setLoading(true)
+      }).catch(err => {
+        message.error(err.message)
+      }).finally(() => setButtongLoading(false))
+  }
+
   const fetchCaseList = () => {
     getCaseList({
       pageNo: pageNo,
@@ -176,35 +184,44 @@ const CaseDataPage: React.FC = (props) => {
   return (
     <div className={styles.content}>
       <Input.Group className={styles.action}>
-        <span>结果：</span>
-        <Select className={styles.select} defaultValue="全部" onChange={setResult} >
-          <Option value="">全部</Option>
-          <Option value="true">成功</Option>
-          <Option value="false">失败</Option>
-        </Select>
-
-        <span className={styles.span}>产品：</span>
-        <Select className={styles.select} defaultValue={"全部"} onChange={setProductId}>
-          <OptGroup label="全部">
+        <span className={styles.span}>结果：
+          <Select className={styles.select} defaultValue="全部" onChange={setResult} >
             <Option value="">全部</Option>
-          </OptGroup>
-          {serviceList?.map((service: ServiceInfo) => (
-            <OptGroup label={service.serviceName} key={service.serviceName}>
-              {service.products.map((product: ProductInfo) => (
-                <Option value={product.id} key={product.id}>{product.productName}</Option>))}
+            <Option value="true">成功</Option>
+            <Option value="false">失败</Option>
+          </Select>
+        </span>
+
+        <span className={styles.span}>产品：
+          <Select className={styles.select} defaultValue={"全部"} onChange={setProductId}>
+            <OptGroup label="全部">
+              <Option value="">全部</Option>
             </OptGroup>
-          ))}
-        </Select>
-        <span className={styles.span}>环境：</span>
-        <Select className={styles.select} defaultValue="全部" onChange={setEnv}>
-          <Option value="">全部</Option>
-          <Option value="test">测试环境</Option>
-          <Option value="prod">生产环境</Option>
-        </Select>
-        <span className={styles.span}>用例名称：</span>
-        <Search placeholder="请输入名称" onSearch={setCaseName} enterButton />
-        <span className={styles.span}>作者</span>
-        <Search placeholder="请输入作者" onSearch={setCaseOwner} enterButton />
+            {serviceList?.map((service: ServiceInfo) => (
+              <OptGroup label={service.serviceName} key={service.serviceName}>
+                {service.products.map((product: ProductInfo) => (
+                  <Option value={product.id} key={product.id}>{product.productName}</Option>))}
+              </OptGroup>
+            ))}
+          </Select>
+        </span>
+
+        <span className={styles.span}>环境：
+          <Select className={styles.select} defaultValue="全部" onChange={setEnv}>
+            <Option value="">全部</Option>
+            <Option value="test">测试环境</Option>
+            <Option value="prod">生产环境</Option>
+          </Select>
+        </span>
+
+        <span className={styles.span}>用例名称：
+          <Search className={styles.search} placeholder="请输入用例名称" onSearch={setCaseName} enterButton />
+        </span>
+
+        <span className={styles.span}>作者：
+          <Search className={styles.search} placeholder="请输入作者" onSearch={setCaseOwner} enterButton />
+        </span>
+
       </Input.Group>
       <Table
         columns={columns}

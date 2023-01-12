@@ -30,6 +30,12 @@ export const request = {
     });
   },
 
+  deleteTtp: (url: string, data = {}) => {
+    return _request(`${'http://test.ttp.xinhuazhiyun.com'}${'/ttp-backend'}${addGetParams(url, data)}`, {
+      method: 'DELETE',
+    });
+  },
+
   get: (url: string, data = {}) => {
     return _request(`${API_PREFIX}${addGetParams(url, data)}`, {
       method: 'GET',

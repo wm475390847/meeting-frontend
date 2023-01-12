@@ -22,6 +22,18 @@ export const getCaseList: (data: ISearchCaseListReq) => Promise<IPageRequest<Cas
     })
 }
 
+export const deleteCase: (id: number) => Promise<RequestOpt> = (id) => {
+    return new Promise(async (resolve, reject) => {
+        const res = await request.deleteTtp(`/cases/${id}`)
+        if (res.success) {
+            resolve(res)
+        } else {
+            reject(res)
+        }
+    })
+}
+
+
 /**
  * 获取产品列表
  * @returns 
