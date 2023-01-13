@@ -12,6 +12,7 @@ interface ErrorWithResponse extends Error {
 }
 
 export interface RequestOpt {
+  map(arg0: (e: any) => void): unknown;
   code: string
   data: any
   message?: null | string

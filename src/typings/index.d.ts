@@ -2,6 +2,11 @@ interface IRouterProps {
   path: string
 }
 
+interface PieData {
+  type: string
+  value: number
+}
+
 interface IPageRequest<T> {
   current: number
   pages: number

@@ -3,7 +3,6 @@ import { request } from "@/utils/tool"
 import { ISearchCaseListReq } from "./interface"
 import { ICreateFaceReq, ISearchFaceListReq, IUpdateFaceReq } from "./interface"
 import { ICreateH5Req, ISearchH5Req, IUpdateH5Req } from "./interface"
-import { ISearchProductListReq } from "./interface"
 import { ISearchTaskListReq } from "./interface"
 
 /**
@@ -13,7 +12,7 @@ import { ISearchTaskListReq } from "./interface"
  */
 export const getCaseList: (data: ISearchCaseListReq) => Promise<IPageRequest<CaseInfo>> = (data) => {
     return new Promise(async (resolve, reject) => {
-        const res = await request.getTtp(`/cases`, data)
+        const res = await request.get(`/cases`, data)
         if (res.success) {
             resolve(res.data)
         } else {
@@ -22,9 +21,9 @@ export const getCaseList: (data: ISearchCaseListReq) => Promise<IPageRequest<Cas
     })
 }
 
-export const deleteCase: (id: number) => Promise<RequestOpt> = (id) => {
+export const getCaseCount: () => Promise<RequestOpt> = () => {
     return new Promise(async (resolve, reject) => {
-        const res = await request.deleteTtp(`/cases/${id}`)
+        const res = await request.get(`/cases/count`)
         if (res.success) {
             resolve(res)
         } else {
@@ -33,6 +32,16 @@ export const deleteCase: (id: number) => Promise<RequestOpt> = (id) => {
     })
 }
 
+export const deleteCase: (id: number) => Promise<RequestOpt> = (id) => {
+    return new Promise(async (resolve, reject) => {
+        const res = await request.delete(`/cases/${id}`)
+        if (res.success) {
+            resolve(res)
+        } else {
+            reject(res)
+        }
+    })
+}
 
 /**
  * 获取产品列表
@@ -40,7 +49,7 @@ export const deleteCase: (id: number) => Promise<RequestOpt> = (id) => {
  */
 export const getProdectList: () => Promise<ServiceInfo[]> = () => {
     return new Promise(async (resolve, reject) => {
-        const res = await request.getTtp(`/products/group`)
+        const res = await request.get(`/cases/products/group`)
         if (res.success) {
             resolve(res.data)
         } else {
@@ -260,17 +269,6 @@ export const getOssConfig: (data: { business: string }) => Promise<RequestOpt> =
         const res = await request.get(`/api/oss/sts`, data)
         if (res.success) {
             resolve(res)
-        } else {
-            reject(res)
-        }
-    })
-}
-
-export const getProductList: (data: ISearchProductListReq) => Promise<IPageRequest<ProductInfo>> = (data) => {
-    return new Promise(async (resolve, reject) => {
-        const res = await request.getTtp(`/products`, data)
-        if (res.success) {
-            resolve(res.data)
         } else {
             reject(res)
         }
