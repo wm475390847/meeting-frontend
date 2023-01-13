@@ -18,7 +18,7 @@ interface SearchH5 {
     meetingEndTime?: number
 }
 
-const H5DataPage: React.FC = () => {
+const H5Page: React.FC = () => {
     const RangePicker: any = DatePicker.RangePicker;
     const { Search } = Input
     const [loading, setLoading] = useState(true)
@@ -180,17 +180,20 @@ const H5DataPage: React.FC = () => {
                     <Button type='primary' onClick={() => setVisible(true)} >新增页面</Button>
                 </div>
             </div>
-
-            <Table
-                columns={columns}
-                dataSource={h5DataList}
-                rowKey='id'
-                pagination={{ total, current: pageNo, showSizeChanger: true }}
-                loading={loading}
-                onChange={onChangeTable}
-                className={styles.table}
-            />
-            <PageFooter />
+            <div>
+                <Table
+                    columns={columns}
+                    dataSource={h5DataList}
+                    rowKey='id'
+                    pagination={{ total, current: pageNo, showSizeChanger: true }}
+                    loading={loading}
+                    onChange={onChangeTable}
+                    className={styles.table}
+                />
+            </div>
+            <div>
+                <PageFooter />
+            </div>
             {/* 创建h5组件 */}
             <CreateH5Modal visible={visible} setLoading={setLoading} onCancel={() => setVisible(false)} />
             {/* 修改h5组件 */}
@@ -199,4 +202,4 @@ const H5DataPage: React.FC = () => {
     )
 }
 
-export default H5DataPage
+export default H5Page

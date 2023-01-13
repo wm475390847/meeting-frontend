@@ -16,7 +16,7 @@ interface SearchCase {
   caseName?: string
 }
 
-const CaseDataPage: React.FC = (props) => {
+const CaseListPage: React.FC = (props) => {
   const { Option, OptGroup } = Select;
   const { Search } = Input
   const [pageNo, setPageNo] = useState(1)
@@ -227,20 +227,25 @@ const CaseDataPage: React.FC = (props) => {
           />
         </span>
       </div>
-      <Table
-        columns={columns}
-        dataSource={caseList}
-        rowKey='id'
-        onChange={onChangeTable}
-        pagination={{ total, current: pageNo, showSizeChanger: true }}
-        loading={loading}
-        className={styles.table}
-      >
-      </Table>
-      <PageFooter />
+      <div>
+        <Table
+          columns={columns}
+          dataSource={caseList}
+          rowKey='id'
+          onChange={onChangeTable}
+          pagination={{ total, current: pageNo, showSizeChanger: true }}
+          loading={loading}
+          className={styles.table}
+        />
+      </div>
+
+      <div>
+        <PageFooter />
+      </div>
+
       <CasseReasonModal reason={reason} onCancel={() => setReason(undefined)} />
     </div>
   );
 };
 
-export default CaseDataPage;
+export default CaseListPage;

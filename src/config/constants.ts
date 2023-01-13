@@ -5,8 +5,11 @@ export const PageTitle = {
   page: '页面保障',
   task: '任务管理',
   face: '人脸检测',
-  case: '用例列表',
+  case: '用例管理',
+  caseData: '用例数据',
+  caseList: '用例列表',
 };
+
 export const Doc = [
   'doc',
   'docs',

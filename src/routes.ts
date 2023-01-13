@@ -1,40 +1,11 @@
 import React, {
 } from 'react';
 import { PageTitle } from '@/config';
-import TaskDataPage from './routes/task';
-import H5DataPage from './routes/h5';
-import FaceDataPage from './routes/face';
-import CaseDataPage from './routes/case';
-// import LiveListConfig from '@/routes/liveListConfig';
-// import CultureGalleryConfig from '@/routes/cultureGalleryConfig';
-// import SpaceConfig from '@/routes/spaceConfig';
-// import BigBoardConfig from '@/routes/bigBoardConfig';
-// import LiveConfig from '@/routes/liveConfig';
-// import CarouselConfig from '@/routes/carouselConfig';
-// import ActivityConfig from '@/routes/activityConfig';
-// import MessageConfig from '@/routes/messageConfig';
-// import PrizeConfig from '@/routes/prizeConfig';
-// import CreateCarConfig from '@/routes/createCarConfig';
-// import LanternConfig from '@/routes/lanternConfig';
-// import Task from '@/routes/task';
-// import TaskDetail from '@/routes/taskDetail';
-// import SubTaskDetail from '@/routes/subTaskDetail';
-// import SignConfig from '@/routes/signConfig';
-// import LevelMange from '@/routes/levelMange';
-// import ShopFourManage from '@/routes/shopFourManage';
-// import Invitation from '@/routes/invitation';
-// import ShareConfig from '@/routes/shareConfig';
-// import SourceConfig from '@/routes/sourceConfig';
-// import NpcConfig from '@/routes/npcConfig';
-// import PublishHall from '@/routes/publishHall';
-// import GoodsConfig from '@/routes/goodsConfig';
-// import Shopkeeper from '@/routes/shopkeeper';
-// import Blacklist from '@/routes/blacklist';
-// import VerificationCode from '@/routes/verificationCode';
-// import PanoConfig from '@/routes/panoConfig';
-// import BigHouse from '@/routes/bigHouse';
-// import VoteConfig from '@/routes/voteConfig';
-// import FanrongFactory from '@/routes/fanrong-factory';
+import TaskPage from './routes/task';
+import H5Page from './routes/h5';
+import FacePage from './routes/face';
+import CaseListPage from './routes/case/caseList';
+import CaseDataPage from './routes/case/caseData';
 
 export interface RouteBase {
   name: string;
@@ -49,26 +20,38 @@ const routes: RouteBase[] = [
   {
     name: PageTitle.page,
     path: '/app/page',
-    element: H5DataPage,
+    element: H5Page,
     children: [],
   },
   {
     name: PageTitle.task,
     path: '/app/task',
-    element: TaskDataPage,
+    element: TaskPage,
     children: [],
   },
   {
     name: PageTitle.face,
     path: '/app/face',
-    element: FaceDataPage,
+    element: FacePage,
     children: [],
   },
   {
     name: PageTitle.case,
     path: '/app/case',
-    element: CaseDataPage,
-    children: [],
+    children: [
+      // {
+      //   name: PageTitle.caseData,
+      //   path: '/app/case/caseData',
+      //   element: CaseDataPage,
+      //   children: [],
+      // },
+      {
+        name: PageTitle.caseList,
+        path: '/app/case/caseList',
+        element: CaseListPage,
+        children: []
+      }
+    ],
   },
 
   //   {

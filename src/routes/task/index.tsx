@@ -11,7 +11,7 @@ import UpdateTaskModal from "@/components/TaskUpdate"
 import { PageFooter } from "@/components/PageFooter"
 import styles from './index.module.less'
 
-const TaskDataPage: React.FC = () => {
+const TaskPage: React.FC = () => {
     const [loading, setLoading] = useState(true)
     const [pageNo, setPageNo] = useState(1)
     const [pageSize, setPageSize] = useState(10)
@@ -133,17 +133,21 @@ const TaskDataPage: React.FC = () => {
             <div className={styles.action}>
                 <Button type='primary'>新增任务</Button>
             </div>
+            <div>
+                <Table
+                    columns={columns}
+                    dataSource={taskList}
+                    rowKey='id'
+                    pagination={{ total, current: pageNo, showSizeChanger: true }}
+                    loading={loading}
+                    onChange={onChangeTable}
+                    className={styles.table}
+                />
+            </div>
+            <div>
+                <PageFooter />
+            </div>
 
-            <Table
-                columns={columns}
-                dataSource={taskList}
-                rowKey='id'
-                pagination={{ total, current: pageNo, showSizeChanger: true }}
-                loading={loading}
-                onChange={onChangeTable}
-                className={styles.table}
-            />
-            <PageFooter></PageFooter>
             {/* 报告组件 */}
             {status == 3 && <TaskReportModal taskInfo={taskInfo} onCancel={() => setTaskInfo(undefined)} />}
             {/* 编辑组件 */}
@@ -152,4 +156,4 @@ const TaskDataPage: React.FC = () => {
     )
 }
 
-export default TaskDataPage
+export default TaskPage
