@@ -25,6 +25,13 @@ const addGetParams = (url: string, data = {}) => {
 // url 接口, data 入参, options 配置
 export const request = {
 
+  ciPost: (url: string, data = {}, options?: any) => {
+    return _request(`${url}`, {
+      method: 'POST',
+      body: options?.stringify ? JSON.stringify(data) : data,
+    });
+  },
+
   get: (url: string, data = {}) => {
     return _request(`${API_PREFIX}${addGetParams(url, data)}`, {
       method: 'GET',

@@ -2,11 +2,12 @@ import { Button, Input, message, Popconfirm, Progress, Select, Table } from 'ant
 import React, { useEffect, useMemo, useState } from 'react';
 import { ColumnsType } from 'antd/lib/table';
 import moment from 'moment';
-import { deleteCase, getCaseList, getProdectList } from '@/services';
+import { deleteCase, executeCase, getCaseList, getProdectList } from '@/services';
 import CasseReasonModal from '@/components/CaseReason'
 import ToolTipModal from '@/components/ToolTip';
 import { PageFooter } from '@/components/PageFooter';
 import styles from './index.module.less'
+import { mkdirSync } from 'fs';
 
 interface SearchCase {
   productId?: number
@@ -100,6 +101,7 @@ const CaseListPage: React.FC = (props) => {
               <Popconfirm title="确定删除？" placement="top" okText="是" cancelText="否" onConfirm={() => fetchDeleteCase(record.id)}>
                 <Button loading={buttonLoading}>删除</Button>
               </Popconfirm>
+              <Button disabled={!record.ciJobId} onClick={() => { fetchExecuteCase(record.ciJobId, record.caseName) }}>执行</Button>
             </div >
           )
         }
@@ -121,6 +123,16 @@ const CaseListPage: React.FC = (props) => {
         setLoading(true)
       }).catch(err => {
         message.error(err.message)
+      }).finally(() => setButtongLoading(false))
+  }
+
+  const fetchExecuteCase = (ciJobId: number, caseName: string) => {
+    executeCase(ciJobId, caseName)
+      .then(data => {
+        message.info('执行成功')
+        setLoading(true)
+      }).catch(err => {
+        message.error('执行失败')
       }).finally(() => setButtongLoading(false))
   }
 

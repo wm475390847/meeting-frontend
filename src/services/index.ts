@@ -43,6 +43,23 @@ export const deleteCase: (id: number) => Promise<RequestOpt> = (id) => {
     })
 }
 
+export const executeCase: (jobId: number, caseName: string) => Promise<RequestOpt> = (jobId, caseName) => {
+    const data = {
+        "jobId": `${jobId}`,
+        "customParameters": {
+            "case_names": `${caseName}`
+        }
+    }
+    return new Promise(async (resolve, reject) => {
+        const res = await request.ciPost(`http://cloudwings.xinhuazhiyun.com/api/ci/executeJobByParams`, data)
+        if (res.success) {
+            resolve(res)
+        } else {
+            reject(res)
+        }
+    })
+}
+
 /**
  * 获取产品列表
  * @returns 

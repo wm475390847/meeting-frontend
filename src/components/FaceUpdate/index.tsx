@@ -110,8 +110,8 @@ const UpdateFaceModal: React.FC<UpdateFaceModalProps> = (props) => {
                 <Form.Item name={'account'} key={'account'} initialValue={faceInfo?.account} label="metaos账号" rules={[{ required: true, message: '账号不能为空' }]}>
                     <Input placeholder='请输入账号' />
                 </Form.Item>
-                <Form.Item name={'password'} key={'password'} initialValue={faceInfo?.password} label="metaos密码" rules={[{ required: true, message: '密码不能为空' }]}>
-                    <Input.Password placeholder="请输入密码" />
+                <Form.Item name={'password'} key={'password'} label="metaos密码">
+                    <Input.Password placeholder="请输入密码，无修改可不填" />
                 </Form.Item>
                 <Form.Item name='total' label="原始素材数" initialValue={faceResult?.total} rules={[{ required: true, message: '原始素材数不能为空' }]}>
                     <InputNumber min={0} className={styles.input} />
