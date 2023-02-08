@@ -86,14 +86,14 @@ const CaseListPage: React.FC = (props) => {
         title: "执行时间",
         key: "excuteTime",
         dataIndex: "executeTime",
-        width: '15%',
+        width: '10%',
         render: (text) => <div>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</div>
       },
       {
         title: '操作',
         dataIndex: 'action',
         key: 'action',
-        width: '15%',
+        width: '20%',
         render: (_, record) => {
           return (
             <div className={styles.tableAction}>

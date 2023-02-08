@@ -11,9 +11,9 @@ import styles from './index.module.less';
 import adminLogo from '@/assets/svg/adminLogo.svg';
 import logoutIcon from '@/assets/svg/menu_logout.svg';
 
-const { Sider, Content, Header, Footer } = Layout;
+const { Sider, Content, Header } = Layout;
 
-export const PageLayout: React.FC<LayoutProp> = ({ children, routes }) => {
+export const PageLayout: React.FC<LayoutProp> = ({ routes }) => {
   const [selectKey, setSelectKey] = useState(null);
   const [openKeys, setOpenKeys] = useState<any[]>([]);
   const [nickName, setNickName] = useState('');
@@ -96,7 +96,6 @@ export const PageLayout: React.FC<LayoutProp> = ({ children, routes }) => {
         theme="light"
         breakpoint="lg"
         collapsedWidth="0"
-        width={232}
       >
         <div className={styles.logo}>
           <img src={adminLogo} alt="" />
@@ -106,6 +105,7 @@ export const PageLayout: React.FC<LayoutProp> = ({ children, routes }) => {
             <Menu
               className={styles.menu}
               mode="inline"
+              defaultOpenKeys={[menuItems[0].key]}
               selectedKeys={[selectKey] as unknown as string[]}
               openKeys={openKeys}
               items={menuItems}

@@ -15,7 +15,7 @@ const UpdateFaceModal: React.FC<UpdateFaceModalProps> = (props) => {
     const { Option } = Select;
     const [form] = Form.useForm()
     const [buttonLoading, setButtonLoading] = useState(false)
-    const [visible, setVisible] = useState(true)
+    const [visible, setVisible] = useState(false)
     const [faceResult, setFaceResult] = useState<FaceResult>()
     const [url, setUrl] = useState<string>()
 

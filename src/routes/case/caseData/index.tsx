@@ -1,5 +1,4 @@
 import styles from './index.module.less'
-
 import React, { useEffect, useState } from 'react';
 import PieModal from '@/components/Pie';
 import { getCaseCount } from '@/services';
@@ -15,12 +14,10 @@ const CaseDataPage: React.FC = () => {
         const data: any[] = resp.data
         data.forEach((e: any) => {
           if (e.env == 'test') {
-            console.log(e.caseCountList);
             const a = e.caseCountList.map((item: any) => ({ type: item.productName, value: item.count }));
             setTestCaseCountList(a)
           }
           if (e.env == 'prod') {
-            console.log(e.caseCountList);
             const b = e.caseCountList.map((item: any) => ({ type: item.productName, value: item.count }));
             setProdCaseCountList(b)
           }
