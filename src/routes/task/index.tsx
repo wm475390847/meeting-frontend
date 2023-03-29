@@ -1,5 +1,5 @@
 import { ColumnsType } from "antd/lib/table"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { Button, message, Popconfirm, Spin, Table } from 'antd'
 import moment from "moment"
 import { deleteTask, executeTask, getTaskList } from "@/services"
@@ -123,6 +123,19 @@ const TaskPage: React.FC = () => {
                 message.error(err.message)
             }).finally(() => setButtongLoading(false))
     }
+
+    useEffect(() => {
+        const temp = setInterval(() => {
+            if (taskList) {
+                if (taskList.map(item => item.status).includes(2)) {
+                    fetchTaskList()
+                }
+            }
+        }, 10000)
+        return () => {
+            clearInterval(temp)
+        }
+    }, [taskList])
 
     useEffect(() => {
         loading && fetchTaskList()
