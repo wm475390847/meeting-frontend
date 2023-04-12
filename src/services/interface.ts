@@ -115,3 +115,12 @@ export interface IUpdateTaskReq {
   taskName?: string
   id: number
 }
+
+/**
+ * 获取h5列表请求
+ */
+export interface ISearchPerformanceReq {
+  pageNo: number
+  pageSize: number
+  performanceName?: string
+}

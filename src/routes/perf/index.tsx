@@ -2,27 +2,30 @@ import { ColumnsType } from "antd/lib/table"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { Button, message, Popconfirm, Spin, Table } from 'antd'
 import moment from "moment"
-import { deleteTask, executeTask, getTaskList } from "@/services"
-import TaskReportModal from "@/components/TaskReport"
+import { deletePerformance, getPerfList, startPerformance } from "@/services"
 import { TaskStatusEnum } from "@/constants"
 import { LoadingOutlined } from "@ant-design/icons"
-import ToolTipModal from "@/components/ToolTip"
-import UpdateTaskModal from "@/components/TaskUpdate"
 import { PageFooter } from "@/components/PageFooter"
 import styles from './index.module.less'
+import PerfReportModal from "@/components/PerfReport"
 
-const TaskPage: React.FC = () => {
+interface SearchPerf {
+    performanceName: string
+}
+
+const PerfPage: React.FC = () => {
     const [loading, setLoading] = useState(true)
     const [pageNo, setPageNo] = useState(1)
     const [pageSize, setPageSize] = useState(10)
     const [total, setTotal] = useState(0)
-    const [taskList, setTaskList] = useState<TaskInfo[]>()
+    const [performanceList, setPerformanceList] = useState<PerformanceInfo[]>()
     const [buttonLoading, setButtongLoading] = useState(false)
     const [status, setStatus] = useState<number>(0)
-    const [taskInfo, setTaskInfo] = useState<TaskInfo>()
+    const [perfId, setPerfId] = useState<number>()
     const antIcon = <LoadingOutlined style={{ fontSize: 15 }} spin />;
     const timerRef = useRef<any>(null)
-    const taskListRef = useRef<TaskInfo[]>([])
+    const performanceListRef = useRef<PerformanceInfo[]>([])
+    const [searchPerf, setSearchPerf] = useState<SearchPerf>();
 
     const columns = useMemo<ColumnsType<any>>(() => {
         return [
@@ -32,17 +35,10 @@ const TaskPage: React.FC = () => {
                 render: (_text, _record, index) => (pageNo as number - 1) * (pageSize as number) + index + 1
             },
             {
-                title: '定时表达式',
-                dataIndex: 'cron',
-                key: 'cron',
+                title: '名称',
+                dataIndex: 'performanceName',
+                key: 'performanceName',
                 width: '10%'
-            },
-            {
-                title: '任务名称',
-                dataIndex: 'taskName',
-                key: 'taskName',
-                width: '15%',
-                render: (text) => <ToolTipModal linkText={text} buttonText={text} />
             },
             {
                 title: '状态',
@@ -52,14 +48,14 @@ const TaskPage: React.FC = () => {
                 render: (status) => <div>{TaskStatusEnum[status]} {status === 2 && < Spin indicator={antIcon} />}</div>
             },
             {
-                title: '执行时间',
+                title: '最新执行时间',
                 dataIndex: 'executeTime',
                 key: 'executeTime',
                 width: '15%',
                 render: (_, record) => record.executeTime && moment(record.executeTime).format('YYYY-MM-DD HH:mm:ss')
             },
             {
-                title: '执行耗时(s)',
+                title: '最新执行耗时(s)',
                 dataIndex: 'elapsedTime',
                 key: 'elapsedTime',
                 width: '10%',
@@ -73,12 +69,12 @@ const TaskPage: React.FC = () => {
                 render: (_, record) => {
                     return (
                         <div className={styles.tableAction}>
-                            <Popconfirm title='确定执行？' placement="top" okText="是" cancelText="否" onConfirm={() => fetchExecuteTask(record.id)}>
+                            <Popconfirm title='确定执行？' placement="top" okText="是" cancelText="否" onConfirm={() => fetchStartPerformance(record.id)}>
                                 <Button type="primary" loading={buttonLoading}>执行</Button>
                             </Popconfirm>
-                            {/* <Button onClick={() => { setTaskInfo(record), setStatus(2) }}>编辑</Button> */}
-                            <Button onClick={() => { setTaskInfo(record), setStatus(3) }}>报告</Button>
-                            <Popconfirm title='确定删除？' placement="top" okText="是" cancelText="否" onConfirm={() => fetchDelectTask(record.id)}>
+                            <Button onClick={() => { setPerfId(record.id) }}>报告</Button>
+                            <Button onClick={() => { null }}>编辑</Button>
+                            <Popconfirm title='确定删除？' placement="top" okText="是" cancelText="否" onConfirm={() => fetchDelectPerformence(record.id)}>
                                 <Button loading={buttonLoading}>删除</Button>
                             </Popconfirm>
                         </div >
@@ -95,19 +91,20 @@ const TaskPage: React.FC = () => {
         setLoading(true)
     }
 
-    const fetchTaskList = () => {
-        getTaskList({
+    const fetchPerformanceList = () => {
+        getPerfList({
             pageNo: pageNo,
             pageSize: pageSize,
+            performanceName: searchPerf?.performanceName,
         }).then(data => {
-            setTaskList(data.records)
+            setPerformanceList(data.records)
             setTotal(data.total)
             setLoading(false)
         })
     }
 
-    const fetchExecuteTask = (taskId: number) => {
-        executeTask(taskId)
+    const fetchStartPerformance = (id: number) => {
+        startPerformance(id)
             .then(res => {
                 message.info(res.message)
                 setLoading(true)
@@ -116,8 +113,8 @@ const TaskPage: React.FC = () => {
             }).finally(() => setButtongLoading(false))
     }
 
-    const fetchDelectTask = (taskId: number) => {
-        deleteTask(taskId)
+    const fetchDelectPerformence = (id: number) => {
+        deletePerformance(id)
             .then(res => {
                 message.info(res.message)
                 setLoading(true)
@@ -128,22 +125,22 @@ const TaskPage: React.FC = () => {
 
     useEffect(() => {
         timerRef.current = setInterval(() => {
-            if (taskListRef.current && taskListRef.current.map(item => item.status).includes(2)) {
+            if (performanceListRef.current && performanceListRef.current.map(item => item.status).includes(2)) {
                 console.log("存在运行中的任务");
-                fetchTaskList()
+                perfId && fetchStartPerformance(perfId)
             }
         }, 10000)
         return () => { clearInterval(timerRef.current) }
-    }, [taskInfo])
+    }, [perfId])
 
     useEffect(() => {
-        if (taskList) {
-            taskListRef.current = taskList
+        if (performanceList) {
+            performanceListRef.current = performanceList
         }
-    }, [taskList])
+    }, [performanceList])
 
     useEffect(() => {
-        loading && fetchTaskList()
+        loading && fetchPerformanceList()
     }, [pageNo, loading])
 
     return (
@@ -154,7 +151,7 @@ const TaskPage: React.FC = () => {
             <div>
                 <Table
                     columns={columns}
-                    dataSource={taskList}
+                    dataSource={performanceList}
                     rowKey='id'
                     pagination={{ total, current: pageNo, showSizeChanger: true }}
                     loading={loading}
@@ -167,11 +164,11 @@ const TaskPage: React.FC = () => {
             </div>
 
             {/* 报告组件 */}
-            {status == 3 && <TaskReportModal taskInfo={taskInfo} onCancel={() => setTaskInfo(undefined)} />}
+            {<PerfReportModal perfId={perfId} onCancel={() => setPerfId(undefined)} />}
             {/* 编辑组件 */}
-            {status == 2 && <UpdateTaskModal taskInfo={taskInfo} setLoading={setLoading} onCancel={() => setTaskInfo(undefined)} />}
+            {/* {status == 2 && <UpdateTaskModal taskInfo={taskInfo} setLoading={setLoading} onCancel={() => setTaskInfo(undefined)} />} */}
         </div>
     )
 }
 
-export default TaskPage
+export default PerfPage

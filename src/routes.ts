@@ -4,6 +4,7 @@ import H5Page from './routes/h5';
 import FacePage from './routes/face';
 import CaseListPage from './routes/case/caseList';
 import CaseDataPage from './routes/case/caseData';
+import PerfPage from './routes/perf';
 
 export interface RouteBase {
   name: string;
@@ -50,6 +51,12 @@ const routes: RouteBase[] = [
         children: []
       }
     ],
+  },
+  {
+    name: PageTitle.perf,
+    path: '/app/perf',
+    element: PerfPage,
+    children: []
   },
 ];
 export default routes;

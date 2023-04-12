@@ -276,6 +276,28 @@ interface ExecuteResult {
   result: boolean
 }
 
+interface PerformanceInfo {
+  id: number
+  performanceName: string
+  requestData: JSON
+  threadData: JSON
+  jmxPath: string
+  executeTime: string
+  elapsedTime: number
+  status: number
+  gmtCreate: string
+  gmtModified: string
+}
+
+interface PerfReportHistory {
+  id: number
+  perfId: number
+  reportPath: string
+  gmtCreate: string
+  gmtModified: string
+}
+
+
 interface ResultPercent {
   total: number
   success: number

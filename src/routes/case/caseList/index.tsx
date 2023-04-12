@@ -1,5 +1,5 @@
 import { Button, Input, message, Popconfirm, Progress, Select, Table } from 'antd';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { ColumnsType } from 'antd/lib/table';
 import moment from 'moment';
 import { deleteCase, executeCase, getCaseList, getProdectList } from '@/services';
@@ -7,7 +7,6 @@ import CasseReasonModal from '@/components/CaseReason'
 import ToolTipModal from '@/components/ToolTip';
 import { PageFooter } from '@/components/PageFooter';
 import styles from './index.module.less'
-import { mkdirSync } from 'fs';
 
 interface SearchCase {
   productId?: number
