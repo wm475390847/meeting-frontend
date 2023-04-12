@@ -3,8 +3,23 @@
 }
 
 .action {
+    display: flex;
+    justify-content: space-between;
     margin-left: 20px;
     margin-right: 20px;
+
+    .buttonGroup {
+        display: flex;
+        align-items: center;
+
+        button {
+            margin-right: 8px;
+
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+    }
 }
 
 .tableAction {

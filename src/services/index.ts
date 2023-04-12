@@ -124,6 +124,21 @@ export const startPerformance: (id: number) => Promise<RequestOpt> = (id) => {
 }
 
 /**
+ * 批量更新性能测试
+ * @returns 
+ */
+export const batchUpdatePerformance: () => Promise<RequestOpt> = () => {
+    return new Promise(async (resolve, reject) => {
+        const res = await request.put(`/ttp/perf/batchUpdate`)
+        if (res.success) {
+            resolve(res)
+        } else {
+            reject(res)
+        }
+    })
+}
+
+/**
  * 删除性能测试
  * @param perfId 性能测试id
  * @returns 

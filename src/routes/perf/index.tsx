@@ -2,7 +2,7 @@ import { ColumnsType } from "antd/lib/table"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { Button, message, Popconfirm, Spin, Table } from 'antd'
 import moment from "moment"
-import { deletePerformance, getPerfList, startPerformance } from "@/services"
+import { batchUpdatePerformance, deletePerformance, getPerfList, startPerformance } from "@/services"
 import { TaskStatusEnum } from "@/constants"
 import { LoadingOutlined } from "@ant-design/icons"
 import { PageFooter } from "@/components/PageFooter"
@@ -20,7 +20,6 @@ const PerfPage: React.FC = () => {
     const [total, setTotal] = useState(0)
     const [performanceList, setPerformanceList] = useState<PerformanceInfo[]>()
     const [buttonLoading, setButtongLoading] = useState(false)
-    const [status, setStatus] = useState<number>(0)
     const [perfId, setPerfId] = useState<number>()
     const antIcon = <LoadingOutlined style={{ fontSize: 15 }} spin />;
     const timerRef = useRef<any>(null)
@@ -113,6 +112,16 @@ const PerfPage: React.FC = () => {
             }).finally(() => setButtongLoading(false))
     }
 
+    const fetchBathUpdatePerformance = () => {
+        batchUpdatePerformance()
+            .then(req => {
+                message.info(req.message)
+                setLoading(true)
+            }).catch(err => {
+                message.error(err.message)
+            })
+    }
+
     const fetchDelectPerformence = (id: number) => {
         deletePerformance(id)
             .then(res => {
@@ -126,12 +135,11 @@ const PerfPage: React.FC = () => {
     useEffect(() => {
         timerRef.current = setInterval(() => {
             if (performanceListRef.current && performanceListRef.current.map(item => item.status).includes(2)) {
-                console.log("存在运行中的任务");
-                perfId && fetchStartPerformance(perfId)
+                fetchPerformanceList()
             }
-        }, 10000)
+        }, 5000)
         return () => { clearInterval(timerRef.current) }
-    }, [perfId])
+    }, [])
 
     useEffect(() => {
         if (performanceList) {
@@ -146,8 +154,18 @@ const PerfPage: React.FC = () => {
     return (
         <div className={styles.content}>
             <div className={styles.action}>
-                <Button type='primary'>新增任务</Button>
+                <div>
+
+                </div>
+                <div className={styles.buttonGroup}>
+                    <Button type='primary' onClick={() => null} >新增压测任务</Button>
+                    <Popconfirm title="确定更新？" placement="top" okText="是" cancelText="否" onConfirm={() => fetchBathUpdatePerformance()}>
+                        <Button type='primary' >批量更新</Button>
+                    </Popconfirm>
+
+                </div>
             </div>
+
             <div>
                 <Table
                     columns={columns}

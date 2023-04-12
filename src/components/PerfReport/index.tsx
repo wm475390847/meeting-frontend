@@ -19,10 +19,15 @@ const PerfReportModal: React.FC<PerfReportModalProps> = (props) => {
     const columns = useMemo<ColumnsType<any>>(() => {
         return [
             {
+                title: '序号',
+                width: '5%',
+                render: (text, record, index) => `${index + 1}`
+            },
+            {
                 title: '报告地址',
                 dataIndex: 'reportPath',
                 key: 'reportPath',
-                width: '15%',
+                width: '10%',
                 ellipsis: true,
                 render: (text) => <Button style={{ padding: '0' }} type="link" key={"link"} onClick={() => window.open(text)}> {"点我查看报告"}</ Button>
             },
