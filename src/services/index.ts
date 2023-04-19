@@ -261,6 +261,17 @@ export const executeTask: (taskId: number) => Promise<RequestOpt> = (taskId) => 
     })
 }
 
+export const executeHistory: (historyId: number) => Promise<RequestOpt> = (historyId) => {
+    return new Promise(async (resolve, reject) => {
+        const res = await request.post(`/conference/task/executeHistory/${historyId}`)
+        if (res.success) {
+            resolve(res)
+        } else {
+            reject(res)
+        }
+    })
+}
+
 export const deleteTask: (taskId: number) => Promise<RequestOpt> = (taskId) => {
     return new Promise(async (resolve, reject) => {
         const res = await request.delete(`/conference/task/${taskId}`)

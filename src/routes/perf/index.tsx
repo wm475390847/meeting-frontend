@@ -40,6 +40,13 @@ const PerfPage: React.FC = () => {
                 width: '10%'
             },
             {
+                title: '请求参数',
+                dataIndex: 'requestData',
+                key: 'requestData',
+                width: '10%',
+                render: (requestData) => requestData as string
+            },
+            {
                 title: '状态',
                 dataIndex: 'status',
                 key: 'status',

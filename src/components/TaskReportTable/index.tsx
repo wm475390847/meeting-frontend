@@ -3,7 +3,7 @@ import VirtualTable from "../VirtualTable";
 import { ColumnsType } from "antd/lib/table";
 import moment from "moment";
 import { Button, message, Image, Popover } from "antd";
-import { getTaskReport as getTaskReportList } from "@/services";
+import { executeHistory, getTaskReport as getTaskReportList } from "@/services";
 import styles from './index.module.less'
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { defaultImage } from "@/constants";
@@ -16,6 +16,7 @@ type TaskReportTableModalProps = {
 const TaskReportTableModal: React.FC<TaskReportTableModalProps> = (prop) => {
     const { result, taskId } = prop
     const [reportList, setReportList] = useState<TaskReport[]>()
+    const [buttonLoading, setButtongLoading] = useState<boolean>(false)
 
     const columns = useMemo<ColumnsType<any>>(() => {
         return [
@@ -89,9 +90,29 @@ const TaskReportTableModal: React.FC<TaskReportTableModalProps> = (prop) => {
                 key: 'executeTime',
                 width: 200,
                 render: (text) => <div>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</div>
+            },
+            {
+                title: '操作',
+                dataIndex: 'action',
+                key: 'action',
+                width: 100,
+                render: (_, record) => {
+                    return (
+                        record.result == false && <Button type="primary" loading={buttonLoading} onClick={() => { fetchExecuteHistory(record.id) }}>执行</Button>
+                    )
+                }
             }
         ]
     }, [result])
+
+    const fetchExecuteHistory = (id: number) => {
+        executeHistory(id)
+            .then(rep => {
+                message.info(rep.message)
+            }).catch(err => {
+                message.info(err.message)
+            }).finally(() => setButtongLoading(false))
+    }
 
     const fetchReportList = (result: boolean, taskId: number) => {
         getTaskReportList({
