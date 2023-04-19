@@ -98,7 +98,9 @@ const TaskReportTableModal: React.FC<TaskReportTableModalProps> = (prop) => {
                 width: 100,
                 render: (_, record) => {
                     return (
-                        record.result == false && <Button type="primary" loading={buttonLoading} onClick={() => { fetchExecuteHistory(record.id) }}>执行</Button>
+                        <div className={styles.tableAction}>
+                            <Button disabled={record.result != false} type="primary" loading={buttonLoading} onClick={() => { fetchExecuteHistory(record.id) }}>执行</Button>
+                        </div>
                     )
                 }
             }
