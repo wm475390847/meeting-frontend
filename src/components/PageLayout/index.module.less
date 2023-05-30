@@ -64,3 +64,37 @@
     }
   }
 }
+
+.popoverWrapper {
+  background-color: #fff;
+
+  .popLine {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 32px;
+    padding: 0 16px;
+    margin-bottom: 5px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: all .3s;
+    border-radius: 4px;
+    overflow: hidden;
+
+    &.noHover {
+      &:hover {
+        background-color: #fff !important;
+      }
+    }
+
+    .icon {
+      height: 15px;
+      width: 15px;
+      margin-right: 8px;
+    }
+
+    &:hover {
+      background-color: #f4f4f4;
+    }
+  }
+}
