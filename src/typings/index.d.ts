@@ -38,7 +38,7 @@ interface ProductInfo {
   productName: string
 }
 
-interface FaceInfo {
+interface Face {
   faceUrl: string
   faceDesc: string
   miceUrl: string
@@ -47,6 +47,7 @@ interface FaceInfo {
   id: number
   account: string
   password: string
+  env: number
 }
 
 interface DiffData {
@@ -90,7 +91,7 @@ interface OssConfig {
   fileId: string
 }
 
-interface H5Info {
+interface H5 {
   h5Name: string
   h5Url: string
   id: number
@@ -246,7 +247,7 @@ interface FaceReport {
   videoDiffList: string[]
 }
 
-interface TaskInfo {
+interface Task {
   taskName: string
   id: number
   caseIds: number[]

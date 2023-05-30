@@ -6,9 +6,7 @@ import { deleteTask, executeTask, getTaskList } from "@/services"
 import TaskReportModal from "@/components/TaskReport"
 import { TaskStatusEnum } from "@/constants"
 import { LoadingOutlined } from "@ant-design/icons"
-import ToolTipModal from "@/components/ToolTip"
-import UpdateTaskModal from "@/components/TaskUpdate"
-import { PageFooter } from "@/components/PageFooter"
+import ToolTipModule from "@/components/ToolTip"
 import styles from './index.module.less'
 
 const TaskPage: React.FC = () => {
@@ -16,13 +14,13 @@ const TaskPage: React.FC = () => {
     const [pageNo, setPageNo] = useState(1)
     const [pageSize, setPageSize] = useState(10)
     const [total, setTotal] = useState(0)
-    const [taskList, setTaskList] = useState<TaskInfo[]>()
+    const [taskList, setTaskList] = useState<Task[]>()
     const [buttonLoading, setButtongLoading] = useState(false)
     const [status, setStatus] = useState<number>(0)
-    const [taskInfo, setTaskInfo] = useState<TaskInfo>()
+    const [task, setTask] = useState<Task>()
     const antIcon = <LoadingOutlined style={{ fontSize: 15 }} spin />;
     const timerRef = useRef<any>(null)
-    const taskListRef = useRef<TaskInfo[]>([])
+    const taskListRef = useRef<Task[]>([])
 
     const columns = useMemo<ColumnsType<any>>(() => {
         return [
@@ -42,7 +40,7 @@ const TaskPage: React.FC = () => {
                 dataIndex: 'taskName',
                 key: 'taskName',
                 width: '15%',
-                render: (text) => <ToolTipModal linkText={text} buttonText={text} />
+                render: (text) => <ToolTipModule linkText={text} buttonText={text} />
             },
             {
                 title: '状态',
@@ -77,7 +75,7 @@ const TaskPage: React.FC = () => {
                                 <Button type="primary" loading={buttonLoading}>执行</Button>
                             </Popconfirm>
                             {/* <Button onClick={() => { setTaskInfo(record), setStatus(2) }}>编辑</Button> */}
-                            <Button onClick={() => { setTaskInfo(record), setStatus(3) }}>报告</Button>
+                            <Button onClick={() => { setTask(record), setStatus(3) }}>报告</Button>
                             <Popconfirm title='确定删除？' placement="top" okText="是" cancelText="否" onConfirm={() => fetchDelectTask(record.id)}>
                                 <Button loading={buttonLoading}>删除</Button>
                             </Popconfirm>
@@ -134,7 +132,7 @@ const TaskPage: React.FC = () => {
             }
         }, 10000)
         return () => { clearInterval(timerRef.current) }
-    }, [taskInfo])
+    }, [task])
 
     useEffect(() => {
         if (taskList) {
@@ -162,14 +160,8 @@ const TaskPage: React.FC = () => {
                     className={styles.table}
                 />
             </div>
-            <div>
-                <PageFooter />
-            </div>
-
             {/* 报告组件 */}
-            {status == 3 && <TaskReportModal taskInfo={taskInfo} onCancel={() => setTaskInfo(undefined)} />}
-            {/* 编辑组件 */}
-            {status == 2 && <UpdateTaskModal taskInfo={taskInfo} setLoading={setLoading} onCancel={() => setTaskInfo(undefined)} />}
+            {status == 3 && <TaskReportModal taskInfo={task} onCancel={() => setTask(undefined)} />}
         </div>
     )
 }

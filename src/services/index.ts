@@ -159,7 +159,7 @@ export const deletePerformance: (id: number) => Promise<RequestOpt> = (id) => {
  * @param data 
  * @return
  */
-export const getFaceList: (data: ISearchFaceListReq) => Promise<IPageRequest<FaceInfo>> = (data) => {
+export const getFaceList: (data: ISearchFaceListReq) => Promise<IPageRequest<Face>> = (data) => {
     return new Promise(async (resolve, reject) => {
         const res = await request.get(`/conference/faces`, data)
         if (res.success) {
@@ -283,7 +283,7 @@ export const deleteTask: (taskId: number) => Promise<RequestOpt> = (taskId) => {
     })
 }
 
-export const getTaskList: (data: ISearchTaskListReq) => Promise<IPageRequest<TaskInfo>> = (data) => {
+export const getTaskList: (data: ISearchTaskListReq) => Promise<IPageRequest<Task>> = (data) => {
     return new Promise(async (resolve, reject) => {
         const res = await request.get(`/conference/tasks`, data)
         if (res.success) {
@@ -316,7 +316,7 @@ export const getTaskResultPercent: (taskId: number) => Promise<RequestOpt> = (ta
     })
 }
 
-export const getH5List: (data: ISearchH5Req) => Promise<IPageRequest<H5Info>> = (data) => {
+export const getH5List: (data: ISearchH5Req) => Promise<IPageRequest<H5>> = (data) => {
     return new Promise(async (resolve, reject) => {
         const res = await request.get(`/conference/pages`, data)
         if (res.success) {

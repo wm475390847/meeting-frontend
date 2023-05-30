@@ -7,21 +7,22 @@ import type { RcFile, UploadFile } from 'antd/es/upload/interface';
 import { getOssConfig } from '@/services';
 import { useEffect } from 'react';
 
-type UploadImgModalProps = {
+type UploadImgModuleProps = {
+  photo?: string
   onUploadSuccess: (url: string) => void;
 }
 
-const UploadImgModal: React.FC<UploadImgModalProps> = (props) => {
-  const { onUploadSuccess } = props
+const UploadImgModule: React.FC<UploadImgModuleProps> = (props) => {
+  const { photo, onUploadSuccess } = props
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
   const [ossConfig, setOssConfig] = useState<OssConfig>();
 
   useEffect(() => {
-    fetchOssConfig()
+    handleOssConfig()
   }, [])
 
-  const fetchOssConfig = async () => {
+  const handleOssConfig = async () => {
     await getOssConfig({ business: 'face' })
       .then(rep => {
         setOssConfig(rep.data)
@@ -144,10 +145,11 @@ const UploadImgModal: React.FC<UploadImgModalProps> = (props) => {
             });
         }}
       >
-        {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+        {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
+          : photo ? <img src={photo} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
       </Upload>
     </>
   );
 };
 
-export default UploadImgModal;
+export default UploadImgModule;

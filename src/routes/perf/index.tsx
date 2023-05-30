@@ -5,7 +5,6 @@ import moment from "moment"
 import { batchUpdatePerformance, deletePerformance, getPerfList, startPerformance } from "@/services"
 import { TaskStatusEnum } from "@/constants"
 import { LoadingOutlined } from "@ant-design/icons"
-import { PageFooter } from "@/components/PageFooter"
 import styles from './index.module.less'
 import PerfReportModal from "@/components/PerfReport"
 
@@ -75,12 +74,12 @@ const PerfPage: React.FC = () => {
                 render: (_, record) => {
                     return (
                         <div className={styles.tableAction}>
-                            <Popconfirm title='确定执行？' placement="top" okText="是" cancelText="否" onConfirm={() => fetchStartPerformance(record.id)}>
+                            <Popconfirm title='确定执行？' placement="top" okText="是" cancelText="否" onConfirm={() => handleStartPerformance(record.id)}>
                                 <Button type="primary" loading={buttonLoading}>执行</Button>
                             </Popconfirm>
                             <Button onClick={() => { setPerfId(record.id) }}>报告</Button>
                             <Button onClick={() => { null }}>编辑</Button>
-                            <Popconfirm title='确定删除？' placement="top" okText="是" cancelText="否" onConfirm={() => fetchDelectPerformence(record.id)}>
+                            <Popconfirm title='确定删除？' placement="top" okText="是" cancelText="否" onConfirm={() => handleDelectPerformence(record.id)}>
                                 <Button loading={buttonLoading}>删除</Button>
                             </Popconfirm>
                         </div >
@@ -97,7 +96,7 @@ const PerfPage: React.FC = () => {
         setLoading(true)
     }
 
-    const fetchPerformanceList = () => {
+    const handlePerformanceList = () => {
         getPerfList({
             pageNo: pageNo,
             pageSize: pageSize,
@@ -109,7 +108,7 @@ const PerfPage: React.FC = () => {
         })
     }
 
-    const fetchStartPerformance = (id: number) => {
+    const handleStartPerformance = (id: number) => {
         startPerformance(id)
             .then(res => {
                 message.info(res.message)
@@ -119,7 +118,7 @@ const PerfPage: React.FC = () => {
             }).finally(() => setButtongLoading(false))
     }
 
-    const fetchBathUpdatePerformance = () => {
+    const handleBathUpdatePerformance = () => {
         batchUpdatePerformance()
             .then(req => {
                 message.info(req.message)
@@ -129,7 +128,7 @@ const PerfPage: React.FC = () => {
             })
     }
 
-    const fetchDelectPerformence = (id: number) => {
+    const handleDelectPerformence = (id: number) => {
         deletePerformance(id)
             .then(res => {
                 message.info(res.message)
@@ -142,7 +141,7 @@ const PerfPage: React.FC = () => {
     useEffect(() => {
         timerRef.current = setInterval(() => {
             if (performanceListRef.current && performanceListRef.current.map(item => item.status).includes(2)) {
-                fetchPerformanceList()
+                handlePerformanceList()
             }
         }, 5000)
         return () => { clearInterval(timerRef.current) }
@@ -155,18 +154,18 @@ const PerfPage: React.FC = () => {
     }, [performanceList])
 
     useEffect(() => {
-        loading && fetchPerformanceList()
+        loading && handlePerformanceList()
     }, [pageNo, loading])
 
     return (
-        <div className={styles.content}>
+        <div>
             <div className={styles.action}>
                 <div>
 
                 </div>
                 <div className={styles.buttonGroup}>
                     <Button type='primary' onClick={() => null} >新增压测任务</Button>
-                    <Popconfirm title="确定更新？" placement="top" okText="是" cancelText="否" onConfirm={() => fetchBathUpdatePerformance()}>
+                    <Popconfirm title="确定更新？" placement="top" okText="是" cancelText="否" onConfirm={() => handleBathUpdatePerformance()}>
                         <Button type='primary' >批量更新</Button>
                     </Popconfirm>
 
@@ -184,10 +183,6 @@ const PerfPage: React.FC = () => {
                     className={styles.table}
                 />
             </div>
-            <div>
-                <PageFooter />
-            </div>
-
             {/* 报告组件 */}
             {<PerfReportModal perfId={perfId} onCancel={() => setPerfId(undefined)} />}
             {/* 编辑组件 */}

@@ -1,11 +1,11 @@
 import { getTaskResultPercent } from "@/services";
 import { Button, Collapse, Form, message, Modal } from "antd";
 import { useEffect, useState } from "react";
-import TaskReportTableModal from "../TaskReportTable";
+import TaskReportTableModule from "../TaskReportTable";
 import styles from './index.module.less'
 
 type TaskReportModalProps = {
-    taskInfo?: TaskInfo
+    taskInfo?: Task
     onCancel?: () => void
 }
 
@@ -69,13 +69,13 @@ const TaskReportModal: React.FC<TaskReportModalProps> = (props) => {
                 {
                     resultPercent && resultPercent.total - resultPercent.success != 0 &&
                     <Panel header='失败' key='2' >
-                        <TaskReportTableModal result={false} taskId={taskInfo?.id as number} />
+                        <TaskReportTableModule result={false} taskId={taskInfo?.id as number} />
                     </Panel>
                 }
                 {
                     resultPercent && resultPercent.success != 0 &&
                     <Panel header='成功' key='1'>
-                        <TaskReportTableModal result={true} taskId={taskInfo?.id as number} />
+                        <TaskReportTableModule result={true} taskId={taskInfo?.id as number} />
                     </Panel>
                 }
             </Collapse >

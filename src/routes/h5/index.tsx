@@ -2,11 +2,9 @@ import { ColumnsType } from "antd/lib/table"
 import { useEffect, useMemo, useState } from "react"
 import { Button, DatePicker, Input, message, Popconfirm, Space, Table } from 'antd'
 import moment from "moment"
-import CreateH5Modal from "@/components/H5Create"
-import UpdateH5Modal from "@/components/H5Update"
-import { PageFooter } from "@/components/PageFooter"
-import ToolTipModal from "@/components/ToolTip"
+import ToolTipModule from "@/components/ToolTip"
 import { batchUpdate, deleteH5, getH5List } from "@/services"
+import H5Module from "@/components/H5"
 import styles from './index.module.less'
 
 console.log("大丈夫生于天地之间，岂能郁郁久居人下！")
@@ -25,11 +23,11 @@ const H5Page: React.FC = () => {
     const [pageNo, setPageNo] = useState(1)
     const [pageSize, setPageSize] = useState(10)
     const [total, setTotal] = useState(0)
-    const [h5DataList, setH5DataList] = useState<H5Info[]>()
+    const [h5List, setH5List] = useState<H5[]>()
     const [buttonLoading, setButtongLoading] = useState(false)
     const [searchH5, setSearchH5] = useState<SearchH5>()
-    const [updateH5, setUpdataH5] = useState<H5Info>()
-    const [visible, setVisible] = useState(false)
+    const [h5, setH5] = useState<H5>()
+    const [type, setType] = useState<number>(0)
 
     const columns = useMemo<ColumnsType<any>>(() => {
         return [
@@ -43,7 +41,7 @@ const H5Page: React.FC = () => {
                 dataIndex: 'meetingName',
                 key: 'meetingName',
                 width: '15%',
-                render: (text) => <ToolTipModal linkText={text} buttonText={text} />
+                render: (text) => <ToolTipModule linkText={text} buttonText={text} />
             },
             {
                 title: 'url',
@@ -51,19 +49,19 @@ const H5Page: React.FC = () => {
                 key: 'h5Url',
                 width: '20%',
                 ellipsis: true,
-                render: (text) => <ToolTipModal linkText={text} isWindowOpen={true} buttonText={text} />
+                render: (text) => <ToolTipModule linkText={text} isWindowOpen={true} buttonText={text} />
             },
             {
                 title: 'H5名称',
                 dataIndex: 'h5Name',
                 key: 'h5Name',
                 width: '20%',
-                render: (text) => <ToolTipModal linkText={text} buttonText={text} />
+                render: (text) => <ToolTipModule linkText={text} buttonText={text} />
             },
             {
                 title: '会议时间',
-                dataIndex: 'meetingStartTime',
-                key: 'meetingStartTime',
+                dataIndex: 'meetingTime',
+                key: 'meetingTime',
                 width: '10%',
                 sorter: (a, b) => moment(a.meetingStartTime).unix() - moment(b.meetingStartTime).unix(),
                 render: (_, record) =>
@@ -85,8 +83,8 @@ const H5Page: React.FC = () => {
                 render: (_, record) => {
                     return (
                         <div className={styles.tableAction}>
-                            <Button disabled={record.caseResult} type="primary" onClick={() => setUpdataH5(record)}>编辑</Button>
-                            <Popconfirm title="确定删除？" placement="top" okText="是" cancelText="否" onConfirm={() => fetchDelectH5(record.id)}>
+                            <Button disabled={record.caseResult} type="primary" onClick={() => { setH5(record), setType(2) }}>编辑</Button>
+                            <Popconfirm title="确定删除？" placement="top" okText="是" cancelText="否" onConfirm={() => handleDelectH5(record.id)}>
                                 <Button loading={buttonLoading}>删除</Button>
                             </Popconfirm>
                         </div >
@@ -103,18 +101,18 @@ const H5Page: React.FC = () => {
         setLoading(true)
     }
 
-    const fetchDelectH5 = (id: number) => {
+    const handleDelectH5 = (id: number) => {
         setButtongLoading(true)
         deleteH5(id)
             .then(res => {
                 message.info(res.message)
                 setLoading(true)
-            }).catch(err => {
-                message.error(err.message)
-            }).finally(() => setButtongLoading(false))
+            })
+            .catch(err => message.error(err.message))
+            .finally(() => setButtongLoading(false))
     }
 
-    const fetchH5List = () => {
+    const handleGetH5List = () => {
         getH5List({
             pageNo: pageNo,
             pageSize: pageSize,
@@ -123,7 +121,7 @@ const H5Page: React.FC = () => {
             meetingStartTime: searchH5?.meetingStartTime,
             meetingEndTime: searchH5?.meetingEndTime
         }).then(data => {
-            setH5DataList(data.records)
+            setH5List(data.records)
             setTotal(data.total)
             setLoading(false)
         })
@@ -133,7 +131,7 @@ const H5Page: React.FC = () => {
         setSearchH5({ ...searchH5, h5Name: value })
     }
 
-    const onChange = (value: string) => {
+    const handleSeatchH5 = (value: string) => {
         if (!Array.isArray(value)) {
             setSearchH5({
                 meetingStartTime: undefined,
@@ -147,7 +145,7 @@ const H5Page: React.FC = () => {
         })
     }
 
-    const fetchBatchUpdate = () => {
+    const handleBatchUpdate = () => {
         batchUpdate()
             .then(res => {
                 message.success(res.message)
@@ -157,7 +155,7 @@ const H5Page: React.FC = () => {
     }
 
     useEffect(() => {
-        loading && fetchH5List()
+        loading && handleGetH5List()
     }, [pageNo, loading])
 
     useEffect(() => {
@@ -165,40 +163,35 @@ const H5Page: React.FC = () => {
     }, [searchH5])
 
     return (
-        <div className={styles.content}>
+        <>
             <div className={styles.action}>
                 <div>
                     <Space className={styles.space} direction="vertical">
-                        <RangePicker onChange={onChange} />
+                        <RangePicker onChange={handleSeatchH5} />
                     </Space>
                     <Search className={styles.search} placeholder="请输入H5名称" onSearch={setH5Name} enterButton />
                 </div>
                 <div className={styles.buttonGroup}>
-                    <Popconfirm title="确定更新？" placement="top" okText="是" cancelText="否" onConfirm={() => fetchBatchUpdate()}>
-                        <Button type='primary'>批量更新</Button>
+                    <Popconfirm title="确定批量更新？" placement="top" okText="是" cancelText="否" onConfirm={() => handleBatchUpdate()}>
+                        <Button type='primary'>更新H5</Button>
                     </Popconfirm>
-                    <Button type='primary' onClick={() => setVisible(true)} >新增页面</Button>
+                    <Button type='primary' onClick={() => setType(1)}>新增H5</Button>
                 </div>
             </div>
-            <div>
-                <Table
-                    columns={columns}
-                    dataSource={h5DataList}
-                    rowKey='id'
-                    pagination={{ total, current: pageNo, showSizeChanger: true }}
-                    loading={loading}
-                    onChange={onChangeTable}
-                    className={styles.table}
-                />
-            </div>
-            <div>
-                <PageFooter />
-            </div>
-            {/* 创建h5组件 */}
-            <CreateH5Modal visible={visible} setLoading={setLoading} onCancel={() => setVisible(false)} />
-            {/* 修改h5组件 */}
-            <UpdateH5Modal h5Info={updateH5} setLoading={setLoading} onCancel={() => setUpdataH5(undefined)} />
-        </div>
+
+            <Table
+                columns={columns}
+                dataSource={h5List}
+                rowKey='id'
+                pagination={{ total, current: pageNo, showSizeChanger: true }}
+                loading={loading}
+                onChange={onChangeTable}
+                className={styles.table}
+            />
+
+            {/*H5组件 */}
+            <H5Module type={type} h5Info={h5} setLoading={setLoading} onCancel={() => setType(0)} />
+        </>
     )
 }
 

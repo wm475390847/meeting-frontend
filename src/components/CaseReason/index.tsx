@@ -7,29 +7,29 @@ import "ace-builds/src-noconflict/theme-cloud9_night";
 import "ace-builds/src-noconflict/ext-language_tools";
 import styles from './index.module.less'
 
-type CaseReasonModalProps = {
+type CaseReasonModuleProps = {
   reason?: string
   onCancel?: () => void
 }
 
-const CasseReasonModal: React.FC<CaseReasonModalProps> = (props) => {
+const CasseReasonModule: React.FC<CaseReasonModuleProps> = (props) => {
   const { reason, onCancel } = props
-  const [visible, setVisible] = useState(false)
+  const [open, setOpen] = useState(false)
 
   const handleCancel = () => {
-    setVisible(false)
+    setOpen(false)
     onCancel && onCancel()
   }
 
   useEffect(() => {
-    reason && setVisible(true)
+    reason && setOpen(true)
   }, [reason])
 
   useEffect(() => {
-    if (visible) {
+    if (open) {
       console.log(document.querySelector('.ant-modal-body'))
     }
-  }, [visible])
+  }, [open])
 
   const onChange = () => {
   }
@@ -37,7 +37,7 @@ const CasseReasonModal: React.FC<CaseReasonModalProps> = (props) => {
   return (
     <Modal className={styles.modal}
       title="详细信息"
-      visible={visible}
+      open={open}
       footer={<Button type='primary' onClick={() => handleCancel()}>确定</Button>}
       onCancel={handleCancel}
       destroyOnClose
@@ -68,4 +68,4 @@ const CasseReasonModal: React.FC<CaseReasonModalProps> = (props) => {
   );
 };
 
-export default CasseReasonModal;
+export default CasseReasonModule;

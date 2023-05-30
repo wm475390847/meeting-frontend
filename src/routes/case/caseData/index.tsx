@@ -8,7 +8,7 @@ const CaseDataPage: React.FC = () => {
   const [prodCaseCountList, setProdCaseCountList] = useState<PieData[]>([]);
   const [testCaseCountList, setTestCaseCountList] = useState<PieData[]>([]);
 
-  const fetchGetCaseCount = () => {
+  const handleGetCaseCount = () => {
     getCaseCount()
       .then(resp => {
         const data: any[] = resp.data
@@ -26,7 +26,7 @@ const CaseDataPage: React.FC = () => {
   }
 
   useEffect(() => {
-    fetchGetCaseCount()
+    handleGetCaseCount()
   }, [])
 
   return (

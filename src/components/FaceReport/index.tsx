@@ -3,12 +3,12 @@ import { Button, Modal, Form, message, Collapse } from "antd";
 import { useEffect, useState } from "react";
 import styles from './index.module.less'
 
-type FaceReportModalProps = {
-    faceInfo?: FaceInfo
+type FaceReportModuleProps = {
+    faceInfo?: Face
     onCancel?: () => void
 }
 
-const FaceReportModal: React.FC<FaceReportModalProps> = (props) => {
+const FaceReportModule: React.FC<FaceReportModuleProps> = (props) => {
     const { onCancel, faceInfo } = props
     const [visible, setVisible] = useState(true)
     const [faceResult, setFaceResult] = useState<FaceReport>()
@@ -23,7 +23,7 @@ const FaceReportModal: React.FC<FaceReportModalProps> = (props) => {
         onCancel && onCancel()
     }
 
-    const fetchGetResult = () => {
+    const handleGetResult = () => {
         getFaceResult(faceInfo?.id as number)
             .then(rep => {
                 setFaceResult(rep.data)
@@ -43,7 +43,7 @@ const FaceReportModal: React.FC<FaceReportModalProps> = (props) => {
     }, [faceInfo])
 
     useEffect(() => {
-        visible && fetchGetResult()
+        visible && handleGetResult()
     }, [visible])
 
     return (
@@ -99,4 +99,4 @@ const FaceReportModal: React.FC<FaceReportModalProps> = (props) => {
     )
 }
 
-export default FaceReportModal
+export default FaceReportModule

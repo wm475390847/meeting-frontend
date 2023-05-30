@@ -3,9 +3,8 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { ColumnsType } from 'antd/lib/table';
 import moment from 'moment';
 import { deleteCase, executeCase, getCaseList, getProdectList } from '@/services';
-import CasseReasonModal from '@/components/CaseReason'
-import ToolTipModal from '@/components/ToolTip';
-import { PageFooter } from '@/components/PageFooter';
+import CasseReasonModule from '@/components/CaseReason'
+import ToolTipModule from '@/components/ToolTip';
 import styles from './index.module.less'
 
 interface SearchCase {
@@ -42,7 +41,7 @@ const CaseListPage: React.FC = (props) => {
         dataIndex: 'caseName',
         width: '15%',
         ellipsis: true,
-        render: (text) => <ToolTipModal linkText={text} buttonText={text} />
+        render: (text) => <ToolTipModule linkText={text} buttonText={text} />
       },
       {
         title: "描述",
@@ -50,7 +49,7 @@ const CaseListPage: React.FC = (props) => {
         dataIndex: "caseDesc",
         width: '15%',
         ellipsis: true,
-        render: (text) => <ToolTipModal linkText={text} buttonText={text} />
+        render: (text) => <ToolTipModule linkText={text} buttonText={text} />
       },
       {
         title: "结果",
@@ -97,10 +96,10 @@ const CaseListPage: React.FC = (props) => {
           return (
             <div className={styles.tableAction}>
               <Button disabled={record.caseResult} type="primary" onClick={() => setReason(record.caseReason)}>查看</Button>
-              <Popconfirm title="确定删除？" placement="top" okText="是" cancelText="否" onConfirm={() => fetchDeleteCase(record.id)}>
+              <Popconfirm title="确定删除？" placement="top" okText="是" cancelText="否" onConfirm={() => handleDeleteCase(record.id)}>
                 <Button loading={buttonLoading}>删除</Button>
               </Popconfirm>
-              <Button disabled={!record.ciJobId} onClick={() => { fetchExecuteCase(record.ciJobId, record.caseName) }}>执行</Button>
+              <Button disabled={!record.ciJobId} onClick={() => { handleExecuteCase(record.ciJobId, record.caseName) }}>执行</Button>
             </div >
           )
         }
@@ -115,7 +114,7 @@ const CaseListPage: React.FC = (props) => {
     setLoading(true)
   }
 
-  const fetchDeleteCase = (id: number) => {
+  const handleDeleteCase = (id: number) => {
     deleteCase(id)
       .then(res => {
         message.info(res.message)
@@ -125,7 +124,7 @@ const CaseListPage: React.FC = (props) => {
       }).finally(() => setButtongLoading(false))
   }
 
-  const fetchExecuteCase = (ciJobId: number, caseName: string) => {
+  const handleExecuteCase = (ciJobId: number, caseName: string) => {
     executeCase(ciJobId, caseName)
       .then(data => {
         message.info('执行成功')
@@ -135,7 +134,7 @@ const CaseListPage: React.FC = (props) => {
       }).finally(() => setButtongLoading(false))
   }
 
-  const fetchCaseList = () => {
+  const handleCaseList = () => {
     getCaseList({
       pageNo: pageNo,
       pageSize: pageSize,
@@ -151,7 +150,7 @@ const CaseListPage: React.FC = (props) => {
     })
   }
 
-  const fetchProductList = () => {
+  const handleProductList = () => {
     getProdectList()
       .then(data => {
         setProductList(data)
@@ -167,17 +166,19 @@ const CaseListPage: React.FC = (props) => {
   }
 
   useEffect(() => {
-    productList.length === 0 && fetchProductList()
+    productList.length === 0 && handleProductList()
   }, [productList])
 
   useEffect(() => {
-    loading && fetchCaseList()
+    loading && handleCaseList()
   }, [pageNo, loading])
 
   return (
-    <div className={styles.content}>
+    <div >
       <div className={styles.action}>
-        <span className={styles.span}>结果：
+
+        <div className={styles.container}>
+          <span className={styles.span}>结果：</span>
           <Select
             className={styles.select}
             placeholder='请选择执行结果'
@@ -187,9 +188,10 @@ const CaseListPage: React.FC = (props) => {
             <Option value="true">成功</Option>
             <Option value="false">失败</Option>
           </Select>
-        </span>
+        </div>
 
-        <span className={styles.span}>产品：
+        <div className={styles.container}>
+          <span className={styles.span}>产品：</span>
           <Select
             className={styles.select}
             defaultValue={"全部"}
@@ -205,9 +207,11 @@ const CaseListPage: React.FC = (props) => {
               </OptGroup>
             ))}
           </Select>
-        </span>
+        </div>
 
-        <span className={styles.span}>环境：
+
+        <div className={styles.container}>
+          <span className={styles.span}>环境：</span>
           <Select
             className={styles.select}
             defaultValue="全部"
@@ -216,9 +220,11 @@ const CaseListPage: React.FC = (props) => {
             <Option value="test">测试环境</Option>
             <Option value="prod">生产环境</Option>
           </Select>
-        </span>
+        </div>
 
-        <span className={styles.span}>
+
+        <div className={styles.container} >
+          <span className={styles.span}>用例名称：</span>
           <Search
             className={styles.search}
             placeholder="请输入用例名称"
@@ -226,9 +232,10 @@ const CaseListPage: React.FC = (props) => {
             enterButton
             allowClear
           />
-        </span>
+        </div>
 
-        <span className={styles.span}>
+        <div className={styles.container}>
+          <span className={styles.span}>用例作者：</span>
           <Search
             className={styles.search}
             placeholder="请输入作者"
@@ -236,7 +243,7 @@ const CaseListPage: React.FC = (props) => {
             enterButton
             allowClear
           />
-        </span>
+        </div>
       </div>
       <div>
         <Table
@@ -249,13 +256,8 @@ const CaseListPage: React.FC = (props) => {
           className={styles.table}
         />
       </div>
-
-      <div>
-        <PageFooter />
-      </div>
-
-      <CasseReasonModal reason={reason} onCancel={() => setReason(undefined)} />
-    </div>
+      <CasseReasonModule reason={reason} onCancel={() => setReason(undefined)} />
+    </div >
   );
 };
 

@@ -2,13 +2,13 @@ import { Button, Tooltip } from 'antd';
 import React from 'react';
 import styles from './index.module.less'
 
-type ToolTipProps = {
+type ToolTipModuleProps = {
     buttonText?: string
     linkText: string
     isWindowOpen?: boolean
 }
 
-const ToolTipModal: React.FC<ToolTipProps> = (props) => {
+const ToolTipModule: React.FC<ToolTipModuleProps> = (props) => {
     const { linkText: text, isWindowOpen, buttonText: buttonContent } = props
 
     return (
@@ -34,4 +34,4 @@ const ToolTipModal: React.FC<ToolTipProps> = (props) => {
     );
 };
 
-export default ToolTipModal;
+export default ToolTipModule;

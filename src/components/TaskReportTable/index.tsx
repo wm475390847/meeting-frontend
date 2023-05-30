@@ -8,12 +8,12 @@ import styles from './index.module.less'
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { defaultImage } from "@/constants";
 
-type TaskReportTableModalProps = {
+type TaskReportTableModuleProps = {
     result?: boolean
     taskId: number
 }
 
-const TaskReportTableModal: React.FC<TaskReportTableModalProps> = (prop) => {
+const TaskReportTableModule: React.FC<TaskReportTableModuleProps> = (prop) => {
     const { result, taskId } = prop
     const [reportList, setReportList] = useState<TaskReport[]>()
     const [buttonLoading, setButtongLoading] = useState<boolean>(false)
@@ -99,7 +99,7 @@ const TaskReportTableModal: React.FC<TaskReportTableModalProps> = (prop) => {
                 render: (_, record) => {
                     return (
                         <div className={styles.tableAction}>
-                            <Button disabled={record.result != false} type="primary" loading={buttonLoading} onClick={() => { fetchExecuteHistory(record.id) }}>执行</Button>
+                            <Button disabled={record.result != false} type="primary" loading={buttonLoading} onClick={() => { handleExecuteHistory(record.id) }}>执行</Button>
                         </div>
                     )
                 }
@@ -107,7 +107,7 @@ const TaskReportTableModal: React.FC<TaskReportTableModalProps> = (prop) => {
         ]
     }, [result])
 
-    const fetchExecuteHistory = (id: number) => {
+    const handleExecuteHistory = (id: number) => {
         executeHistory(id)
             .then(rep => {
                 message.info(rep.message)
@@ -116,7 +116,7 @@ const TaskReportTableModal: React.FC<TaskReportTableModalProps> = (prop) => {
             }).finally(() => setButtongLoading(false))
     }
 
-    const fetchReportList = (result: boolean, taskId: number) => {
+    const handleReportList = (result: boolean, taskId: number) => {
         getTaskReportList({
             result: result,
             taskId: taskId
@@ -128,7 +128,7 @@ const TaskReportTableModal: React.FC<TaskReportTableModalProps> = (prop) => {
     }
 
     useEffect(() => {
-        result != null && fetchReportList(result, taskId)
+        result != null && handleReportList(result, taskId)
     }, [result])
 
     return (
@@ -141,4 +141,4 @@ const TaskReportTableModal: React.FC<TaskReportTableModalProps> = (prop) => {
     )
 };
 
-export default TaskReportTableModal;
+export default TaskReportTableModule;

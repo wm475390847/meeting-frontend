@@ -13,6 +13,7 @@ export interface RouteBase {
   children: RouteBase[];
   /** 在左侧菜单中进行隐藏 */
   hideInMenu?: boolean;
+  icon: string
 }
 
 const routes: RouteBase[] = [
@@ -21,18 +22,21 @@ const routes: RouteBase[] = [
     path: '/app/page',
     element: H5Page,
     children: [],
+    icon: "CalendarOutlined"
   },
   {
     name: PageTitle.task,
     path: '/app/task',
     element: TaskPage,
     children: [],
+    icon: "ControlOutlined"
   },
   {
     name: PageTitle.face,
     path: '/app/face',
     element: FacePage,
     children: [],
+    icon: "TeamOutlined"
   },
   {
     name: PageTitle.case,
@@ -43,20 +47,24 @@ const routes: RouteBase[] = [
         path: '/app/case/caseData',
         element: CaseDataPage,
         children: [],
+        icon: "PieChartOutlined"
       },
       {
         name: PageTitle.caseList,
         path: '/app/case/caseList',
         element: CaseListPage,
-        children: []
+        children: [],
+        icon: "UnorderedListOutlined"
       }
     ],
+    icon: "DashboardOutlined"
   },
   {
     name: PageTitle.perf,
     path: '/app/perf',
     element: PerfPage,
-    children: []
+    children: [],
+    icon: "SisternodeOutlined"
   },
 ];
 export default routes;

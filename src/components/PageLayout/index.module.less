@@ -1,28 +1,25 @@
-.pageLayout {
-  width: 100%;
-  height: 100%;
+.layout {
+
+  min-height: 100vh;
 
   .logo {
     width: 100%;
-    height: 64px;
+    height: 60px;
     display: flex;
     justify-content: space-around;
     align-items: center;
     padding-top: 20px;
+    align-content: flex-end;
+    flex-wrap: wrap;
 
     img {
       display: block;
-      width: 190px;
-      height: 40px;
+      width: 200px;
+      height: 50px;
     }
   }
 
-  .menuWrapper {
-    width: 100%;
-    height: calc(~"100% - 64px");
-  }
-
-  .pageHeader {
+  .header {
     position: relative;
     z-index: 2;
     height: 68px;
@@ -33,13 +30,13 @@
     background: #fff;
     box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.05);
 
-    .pageTitle {
+    .title {
       font-size: 20px;
       font-family: PingFangSC-Semibold;
       color: rgba(0, 0, 0, .85);
     }
 
-    .userInfo {
+    .user {
       width: 32px;
       height: 32px;
       border-radius: 50%;
@@ -59,129 +56,11 @@
         object-fit: cover;
       }
     }
-  }
-
-  .pageFooter {
-    position: relative;
-    z-index: 2;
-    height: 68px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 30px;
-    background: #fff;
-    box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.05);
-    justify-content: center;
 
     .button {
-      padding: '0'
-    }
-  }
-
-  .pageSider {
-    background: #f8f8f8;
-  }
-
-  .menu {
-    background-color: #f8f8f8;
-    padding: 16px 10px;
-
-    .menuFirstItem {
-      color: rgba(0, 0, 0, .65);
-
-      &:global(.ant-menu-submenu-selected) {
-        color: rgba(0, 0, 0, .85) !important;
-      }
-
-      .menuItem {
-        padding: 0 30px !important;
-      }
-
-      :global(.ant-menu-submenu-title > .ant-menu-submenu-arrow) {
-        color: rgba(0, 0, 0, .65) !important;
-      }
-
-      &:hover {
-        :global(.ant-menu-submenu-title > .ant-menu-submenu-arrow) {
-          color: rgba(0, 0, 0, .85) !important;
-        }
-      }
-
-      :global(.ant-menu-submenu-title) {
-        padding: 0 16px !important;
-
-        &:hover {
-          color: rgba(0, 0, 0, .85) !important;
-        }
-      }
-    }
-
-    .menuItem {
-      height: 42px;
-      line-height: 42px;
-      margin: 0 !important;
-      padding: 0 16px !important;
-      color: rgba(0, 0, 0, .6);
-
-      &:active {
-        background-color: #EFEFEF;
-      }
-
-      &:global(.ant-menu-item a) {
-        color: rgba(0, 0, 0, .6);
-      }
-
-      &:global(.ant-menu-item-selected) {
-        background-color: #EFEFEF;
-        border-radius: 3px;
-        overflow: hidden;
-        color: rgba(0, 0, 0, .85);
-
-        a {
-          font-family: PingFangSC-Medium;
-          color: rgba(0, 0, 0, 85);
-        }
-      }
-
-      &:global(.ant-menu-item-active a) {
-        color: rgba(0, 0, 0, .85);
-      }
-
-      &::after {
-        display: none;
-      }
-    }
-  }
-}
-
-.popoverWrapper {
-  background-color: #fff;
-
-  .popLine {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    height: 32px;
-    padding: 0 16px;
-    margin-bottom: 5px;
-    background-color: #fff;
-    cursor: pointer;
-    transition: all .3s;
-    border-radius: 4px;
-    overflow: hidden;
-
-    &.noHover {
-      &:hover {
-        background-color: #fff !important;
-      }
-    }
-
-    .iocn {
-      margin-right: 8px;
-    }
-
-    &:hover {
-      background-color: #f4f4f4;
+      font-size: 16;
+      width: 40;
+      height: 40;
     }
   }
 }
