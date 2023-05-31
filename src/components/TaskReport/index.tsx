@@ -12,7 +12,7 @@ type TaskReportModalProps = {
 const TaskReportModal: React.FC<TaskReportModalProps> = (props) => {
     const { onCancel, taskInfo } = props
     const { Panel } = Collapse
-    const [visible, setVisible] = useState(true)
+    const [open, setOpen] = useState(true)
     const [resultPercent, setResultPercent] = useState<ResultPercent>()
 
     const onChange = (key: string | string[]) => {
@@ -20,7 +20,7 @@ const TaskReportModal: React.FC<TaskReportModalProps> = (props) => {
     };
 
     const handleCancel = () => {
-        setVisible(false)
+        setOpen(false)
         onCancel && onCancel()
     }
 
@@ -34,17 +34,17 @@ const TaskReportModal: React.FC<TaskReportModalProps> = (props) => {
     }
 
     useEffect(() => {
-        taskInfo && setVisible(true)
+        taskInfo && setOpen(true)
     }, [taskInfo])
 
     useEffect(() => {
-        visible && getPercent()
-    }, [visible])
+        open && getPercent()
+    }, [open])
 
     return (
         <Modal
             title="执行结果"
-            visible={visible}
+            open={open}
             className={styles.modal}
             onCancel={handleCancel}
             footer={<Button type='primary' onClick={() => handleCancel()}>确定</Button>}

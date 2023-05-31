@@ -2,9 +2,10 @@ import { PageTitle } from '@/config';
 import TaskPage from './routes/task';
 import H5Page from './routes/h5';
 import FacePage from './routes/face';
-import CaseListPage from './routes/case/caseList';
 import CaseDataPage from './routes/case/caseData';
 import PerfPage from './routes/perf';
+import ProductListPage from './routes/case/productList';
+import ProductDetailPage from './components/ProductDetail';
 
 export interface RouteBase {
   name: string;
@@ -43,6 +44,13 @@ const routes: RouteBase[] = [
     path: '/app/case',
     children: [
       {
+        name: PageTitle.productList,
+        path: '/app/case/productList',
+        element: ProductListPage,
+        children: [],
+        icon: "UnorderedListOutlined"
+      },
+      {
         name: PageTitle.caseData,
         path: '/app/case/caseData',
         element: CaseDataPage,
@@ -51,11 +59,12 @@ const routes: RouteBase[] = [
       },
       {
         name: PageTitle.caseList,
-        path: '/app/case/caseList',
-        element: CaseListPage,
+        path: '/app/case/productList/productDetail/:productName',
+        element: ProductDetailPage,
         children: [],
-        icon: "UnorderedListOutlined"
-      }
+        icon: "UnorderedListOutlined",
+        hideInMenu: true
+      },
     ],
     icon: "DashboardOutlined"
   },

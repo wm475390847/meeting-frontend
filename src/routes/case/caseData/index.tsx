@@ -1,6 +1,6 @@
 import styles from './index.module.less'
 import React, { useEffect, useState } from 'react';
-import PieModal from '@/components/Pie';
+import PieModule from '@/components/Pie';
 import { getCaseCount } from '@/services';
 
 
@@ -31,8 +31,8 @@ const CaseDataPage: React.FC = () => {
 
   return (
     <div className={styles.pieGroup}>
-      <PieModal data={testCaseCountList} env='test' />
-      <PieModal data={prodCaseCountList} env='prod' />
+      <PieModule data={testCaseCountList} env='test' />
+      <PieModule data={prodCaseCountList} env='prod' />
     </div>
   );
 };

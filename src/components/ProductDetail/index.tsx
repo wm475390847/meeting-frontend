@@ -1,22 +1,22 @@
-import { Button, Input, message, Popconfirm, Progress, Select, Table } from 'antd';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { Breadcrumb, Button, Input, message, Popconfirm, Progress, Select, Table } from 'antd';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { ColumnsType } from 'antd/lib/table';
 import moment from 'moment';
-import { deleteCase, executeCase, getCaseList, getProdectList } from '@/services';
+import { deleteCase, executeCase, getCaseList, getProductGroup } from '@/services';
 import CasseReasonModule from '@/components/CaseReason'
 import ToolTipModule from '@/components/ToolTip';
 import styles from './index.module.less'
+import { Link, useLocation, useParams } from 'react-router-dom';
 
 interface SearchCase {
-  productId?: number
   caseResult?: boolean
   env?: string
   caseOwner?: string
   caseName?: string
 }
 
-const CaseListPage: React.FC = (props) => {
-  const { Option, OptGroup } = Select;
+const ProductDetailPage: React.FC = () => {
+  const { Option } = Select;
   const { Search } = Input
   const [pageNo, setPageNo] = useState(1)
   const [pageSize, setPageSize] = useState(10)
@@ -25,21 +25,24 @@ const CaseListPage: React.FC = (props) => {
   const [caseList, setCaseList] = useState<CaseInfo[]>()
   const [reason, setReason] = useState()
   const [searchCase, setSearchCase] = useState<SearchCase>()
-  const [productList, setProductList] = useState<ServiceInfo[]>([])
   const [buttonLoading, setButtongLoading] = useState(false)
+  const { productName } = useParams<{ productName: string }>();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const productId = searchParams.get("id");
 
   const columns = useMemo<ColumnsType<any>>(() => {
     return [
       {
         title: '序号',
-        width: '6%',
+        width: '10%',
         render: (_text, _record, index) => (pageNo as number - 1) * (pageSize as number) + index + 1
       },
       {
         title: '用例名称',
         key: 'caseName',
         dataIndex: 'caseName',
-        width: '15%',
+        width: '20%',
         ellipsis: true,
         render: (text) => <ToolTipModule linkText={text} buttonText={text} />
       },
@@ -47,7 +50,7 @@ const CaseListPage: React.FC = (props) => {
         title: "描述",
         key: "caseDesc",
         dataIndex: "caseDesc",
-        width: '15%',
+        width: '20%',
         ellipsis: true,
         render: (text) => <ToolTipModule linkText={text} buttonText={text} />
       },
@@ -55,7 +58,7 @@ const CaseListPage: React.FC = (props) => {
         title: "结果",
         key: "caseResult",
         dataIndex: "caseResult",
-        width: '7%',
+        width: '5%',
         render: (text) => {
           return (
             text ? < Progress type="circle" percent={100} width={30} /> : < Progress status="exception" type="circle" percent={100} width={30} />
@@ -63,35 +66,29 @@ const CaseListPage: React.FC = (props) => {
         }
       },
       {
-        title: "产品",
-        key: "productName",
-        dataIndex: "productName",
-        width: '9%'
-      },
-      {
         title: "环境",
         key: "env",
         dataIndex: "env",
-        width: '6%'
+        width: '5%'
       },
       {
         title: "作者",
         key: "caseOwner",
         dataIndex: "caseOwner",
-        width: '10%'
+        width: '5%'
       },
       {
         title: "执行时间",
         key: "excuteTime",
         dataIndex: "executeTime",
-        width: '10%',
+        width: '15%',
         render: (text) => <div>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</div>
       },
       {
         title: '操作',
         dataIndex: 'action',
         key: 'action',
-        width: '20%',
+        width: '25%',
         render: (_, record) => {
           return (
             <div className={styles.tableAction}>
@@ -134,12 +131,12 @@ const CaseListPage: React.FC = (props) => {
       }).finally(() => setButtongLoading(false))
   }
 
-  const handleCaseList = () => {
+  const handleGetCaseList = () => {
     getCaseList({
       pageNo: pageNo,
       pageSize: pageSize,
+      productId: productId as unknown as number,
       caseResult: searchCase?.caseResult,
-      productId: searchCase?.productId,
       env: searchCase?.env,
       caseOwner: searchCase?.caseOwner,
       caseName: searchCase?.caseName
@@ -150,14 +147,6 @@ const CaseListPage: React.FC = (props) => {
     })
   }
 
-  const handleProductList = () => {
-    getProdectList()
-      .then(data => {
-        setProductList(data)
-        setLoading(false)
-      })
-  }
-
   const handleProvinceChange = (key: string, value: any) => {
     const sc: { [key: string]: any } = { ...searchCase };
     sc[key] = value
@@ -166,17 +155,19 @@ const CaseListPage: React.FC = (props) => {
   }
 
   useEffect(() => {
-    productList.length === 0 && handleProductList()
-  }, [productList])
-
-  useEffect(() => {
-    loading && handleCaseList()
+    loading && handleGetCaseList()
   }, [pageNo, loading])
 
   return (
     <div >
-      <div className={styles.action}>
+      <Breadcrumb>
+        <Breadcrumb.Item>
+          <Link to="/app/case/productList">产品列表</Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>{productName}</Breadcrumb.Item>
+      </Breadcrumb>
 
+      <div className={styles.action}>
         <div className={styles.container}>
           <span className={styles.span}>结果：</span>
           <Select
@@ -189,26 +180,6 @@ const CaseListPage: React.FC = (props) => {
             <Option value="false">失败</Option>
           </Select>
         </div>
-
-        <div className={styles.container}>
-          <span className={styles.span}>产品：</span>
-          <Select
-            className={styles.select}
-            defaultValue={"全部"}
-            onSelect={(e: any) => { handleProvinceChange('productId', e) }}
-          >
-            <OptGroup label="全部">
-              <Option value="">全部</Option>
-            </OptGroup>
-            {productList?.map((service: ServiceInfo) => (
-              <OptGroup label={service.serviceName} key={service.serviceName}>
-                {service.products.map((product: ProductInfo) => (
-                  <Option value={product.id} key={product.id}>{product.productName}</Option>))}
-              </OptGroup>
-            ))}
-          </Select>
-        </div>
-
 
         <div className={styles.container}>
           <span className={styles.span}>环境：</span>
@@ -261,4 +232,4 @@ const CaseListPage: React.FC = (props) => {
   );
 };
 
-export default CaseListPage;
+export default ProductDetailPage;

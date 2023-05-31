@@ -9,6 +9,7 @@ import routes from './routes';
 import { PageLayoutModule } from './components/PageLayout';
 import moment from 'moment';
 import NotFound from './components/NotFound';
+import ProductDetailPage from './components/ProductDetail';
 moment.locale('zh-cn')
 
 const routeList: any[] = [];
@@ -44,6 +45,7 @@ const App = () => {
           )}>
             {routeList}
           </Route>
+          {/* <Route path="/app/case/productList/productDetail/:productName" element={<ProductDetailPage />} /> */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

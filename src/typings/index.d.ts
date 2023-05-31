@@ -36,6 +36,9 @@ interface ServiceInfo {
 interface ProductInfo {
   id: number
   productName: string
+  serviceName: string
+  caseCount: string
+  casePercent: string
 }
 
 interface Face {

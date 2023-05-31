@@ -6,14 +6,14 @@ import VirtualTable from "../VirtualTable";
 import moment from "moment";
 import { ColumnsType } from "antd/lib/table";
 
-type PerfReportModalProps = {
+type PerfReportModuleProps = {
     perfId?: number
     onCancel?: () => void
 }
 
-const PerfReportModal: React.FC<PerfReportModalProps> = (props) => {
+const PerfReportModule: React.FC<PerfReportModuleProps> = (props) => {
     const { onCancel, perfId } = props
-    const [visible, setVisible] = useState(false)
+    const [open, setOpen] = useState(false)
     const [perfReportHistoryList, setPerfReportHistoryList] = useState<PerfReportHistory[]>()
 
     const columns = useMemo<ColumnsType<any>>(() => {
@@ -50,11 +50,11 @@ const PerfReportModal: React.FC<PerfReportModalProps> = (props) => {
 
 
     const handleCancel = () => {
-        setVisible(false)
+        setOpen(false)
         onCancel && onCancel()
     }
 
-    const fetchGetReport = () => {
+    const handleGetPerfReportList = () => {
         getPerfReportList(perfId as number)
             .then(rep => {
                 setPerfReportHistoryList(rep.data)
@@ -64,17 +64,17 @@ const PerfReportModal: React.FC<PerfReportModalProps> = (props) => {
     }
 
     useEffect(() => {
-        perfId && setVisible(true)
+        perfId && setOpen(true)
     }, [perfId])
 
     useEffect(() => {
-        visible && fetchGetReport()
-    }, [visible])
+        open && handleGetPerfReportList()
+    }, [open])
 
     return (
         <Modal
             title="压测结果"
-            visible={visible}
+            open={open}
             className={styles.modal}
             onCancel={handleCancel}
             footer={<Button type='primary' onClick={() => handleCancel()}>确定</Button>}
@@ -90,4 +90,4 @@ const PerfReportModal: React.FC<PerfReportModalProps> = (props) => {
     )
 };
 
-export default PerfReportModal;
+export default PerfReportModule;

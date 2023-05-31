@@ -1,6 +1,6 @@
 import { RequestOpt } from "@/utils/request"
 import { request } from "@/utils/tool"
-import { ISearchCaseListReq, ISearchPerformanceReq } from "./interface"
+import { ISearchCaseListReq, ISearchPerformanceReq, ISearchProductListReq } from "./interface"
 import { ICreateFaceReq, ISearchFaceListReq, IUpdateFaceReq } from "./interface"
 import { ICreateH5Req, ISearchH5Req, IUpdateH5Req } from "./interface"
 import { ISearchTaskListReq } from "./interface"
@@ -60,11 +60,22 @@ export const executeCase: (jobId: number, caseName: string) => Promise<RequestOp
     })
 }
 
+
+export const getProductList: (data: ISearchProductListReq) => Promise<IPageRequest<ProductInfo>> = (data) => {
+    return new Promise(async (resolve, reject) => {
+        const res = await request.get(`/ttp/products`, data)
+        if (res.success) {
+            resolve(res.data)
+        } else {
+            reject(res)
+        }
+    })
+}
 /**
- * 获取产品列表
+ * 获取产品分组
  * @returns 
  */
-export const getProdectList: () => Promise<ServiceInfo[]> = () => {
+export const getProductGroup: () => Promise<ServiceInfo[]> = () => {
     return new Promise(async (resolve, reject) => {
         const res = await request.get(`/ttp/products/group`)
         if (res.success) {

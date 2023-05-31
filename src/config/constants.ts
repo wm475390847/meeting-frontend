@@ -6,6 +6,7 @@ export const PageTitle = {
   task: '任务管理',
   face: '人脸检测',
   case: '用例管理',
+  productList: '产品列表',
   caseData: '用例数据',
   caseList: '用例列表',
   interface: '接口测试',

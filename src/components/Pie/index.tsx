@@ -1,11 +1,11 @@
 import { Pie } from "@ant-design/charts";
 
-type PieModalProps = {
+type PieModuleProps = {
     data: PieData[]
     env: string
 }
 
-const PieModal: React.FC<PieModalProps> = (props) => {
+const PieModule: React.FC<PieModuleProps> = (props) => {
     const { data, env } = props
 
     const config = {
@@ -57,4 +57,4 @@ const PieModal: React.FC<PieModalProps> = (props) => {
     );
 };
 
-export default PieModal;
+export default PieModule;

@@ -6,7 +6,7 @@ import { batchUpdatePerformance, deletePerformance, getPerfList, startPerformanc
 import { TaskStatusEnum } from "@/constants"
 import { LoadingOutlined } from "@ant-design/icons"
 import styles from './index.module.less'
-import PerfReportModal from "@/components/PerfReport"
+import PerfReportModule from "@/components/PerfReport"
 
 interface SearchPerf {
     performanceName: string
@@ -164,11 +164,10 @@ const PerfPage: React.FC = () => {
 
                 </div>
                 <div className={styles.buttonGroup}>
-                    <Button type='primary' onClick={() => null} >新增压测任务</Button>
+                    <Button type='primary' onClick={() => null} >新增项目</Button>
                     <Popconfirm title="确定更新？" placement="top" okText="是" cancelText="否" onConfirm={() => handleBathUpdatePerformance()}>
                         <Button type='primary' >批量更新</Button>
                     </Popconfirm>
-
                 </div>
             </div>
 
@@ -184,7 +183,7 @@ const PerfPage: React.FC = () => {
                 />
             </div>
             {/* 报告组件 */}
-            {<PerfReportModal perfId={perfId} onCancel={() => setPerfId(undefined)} />}
+            {<PerfReportModule perfId={perfId} onCancel={() => setPerfId(undefined)} />}
             {/* 编辑组件 */}
             {/* {status == 2 && <UpdateTaskModal taskInfo={taskInfo} setLoading={setLoading} onCancel={() => setTaskInfo(undefined)} />} */}
         </div>

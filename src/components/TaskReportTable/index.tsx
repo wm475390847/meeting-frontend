@@ -116,7 +116,7 @@ const TaskReportTableModule: React.FC<TaskReportTableModuleProps> = (prop) => {
             }).finally(() => setButtongLoading(false))
     }
 
-    const handleReportList = (result: boolean, taskId: number) => {
+    const handleTaskReportList = (result: boolean, taskId: number) => {
         getTaskReportList({
             result: result,
             taskId: taskId
@@ -128,7 +128,7 @@ const TaskReportTableModule: React.FC<TaskReportTableModuleProps> = (prop) => {
     }
 
     useEffect(() => {
-        result != null && handleReportList(result, taskId)
+        result != null && handleTaskReportList(result, taskId)
     }, [result])
 
     return (
