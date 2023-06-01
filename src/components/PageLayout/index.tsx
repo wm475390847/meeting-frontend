@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect, useState } from 'react';
-import { Layout, Menu, Popover, message, Button, theme } from 'antd';
+import { Layout, Menu, Popover, message, Button, theme, Breadcrumb } from 'antd';
 import classnames from 'classnames';
 import { Outlet, Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
@@ -169,8 +169,8 @@ export const PageLayoutModule: React.FC<LayoutPropModule> = ({ routes }) => {
             </Popover>
           </Header>
 
-          <Content style={{ margin: '24px 16px 0', height: '100%' }}>
-            <div style={{ padding: 20, minHeight: 300, background: colorBgContainer, height: '100%', width: '100%' }}>
+          <Content style={{ margin: '20px 15px 0', height: '100%' }}>
+            <div style={{ padding: 24, minHeight: 360, background: colorBgContainer }}>
               <Outlet />
             </div>
           </Content>

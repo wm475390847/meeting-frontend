@@ -147,7 +147,7 @@ const TaskPage: React.FC = () => {
     return (
         <div className={styles.content}>
             <div className={styles.action}>
-                <Button type='primary'>新增任务</Button>
+                <Button type='primary' disabled={true}>新增任务</Button>
             </div>
             <div>
                 <Table

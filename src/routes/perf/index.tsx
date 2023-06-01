@@ -164,7 +164,7 @@ const PerfPage: React.FC = () => {
 
                 </div>
                 <div className={styles.buttonGroup}>
-                    <Button type='primary' onClick={() => null} >新增项目</Button>
+                    <Button type='primary' onClick={() => null} disabled={true}>新增项目</Button>
                     <Popconfirm title="确定更新？" placement="top" okText="是" cancelText="否" onConfirm={() => handleBathUpdatePerformance()}>
                         <Button type='primary' >批量更新</Button>
                     </Popconfirm>

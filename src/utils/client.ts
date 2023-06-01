@@ -75,9 +75,10 @@ export class Client {
         return this.request.get(this.addTimestamp(fullUrl), config);
     }
 
-    public async post(url: string, data?: any, contentType?: string, config?: AxiosRequestConfig<any>): Promise<AxiosResponse<any, any>> {
+    public async post(url: string, data?: any, otheBasePath?: boolean, contentType?: string, config?: AxiosRequestConfig<any>): Promise<AxiosResponse<any, any>> {
         const newConfig = contentType && this.getConfig(contentType)
-        return this.request.post(this.addTimestamp(`${BASE_PATH}${url}`), data, newConfig ? newConfig : config);
+        const fullUrl = otheBasePath ? this.addTimestamp(`${url}`) : this.addTimestamp(`${BASE_PATH}${url}`)
+        return this.request.post(fullUrl, data, newConfig ? newConfig : config);
     }
 
     public async put(url: string, data?: any, contentType?: string, config?: AxiosRequestConfig<any>): Promise<AxiosResponse<any, any>> {
@@ -101,15 +102,6 @@ export class Client {
         const t = `_t=${Date.now()}`;
         const sep = url.includes('?') ? '&' : '?';
         return url + sep + t;
-    }
-
-    private retuenLoginPage() {
-        //返回登录页面
-        const loginPageUrl = '/login';
-        const newUrl = `${loginPageUrl}`;
-        if (location.pathname != '/login') {
-            window.location.href = newUrl;
-        }
     }
 
     private getConfig(contentType: string): AxiosRequestConfig {

@@ -172,10 +172,10 @@ const H5Page: React.FC = () => {
                     <Search className={styles.search} placeholder="请输入H5名称" onSearch={setH5Name} enterButton />
                 </div>
                 <div className={styles.buttonGroup}>
-                    <Popconfirm title="确定批量更新？" placement="top" okText="是" cancelText="否" onConfirm={() => handleBatchUpdate()}>
-                        <Button type='primary'>更新H5</Button>
-                    </Popconfirm>
                     <Button type='primary' onClick={() => setType(1)}>新增H5</Button>
+                    <Popconfirm title="确定批量更新？" placement="top" okText="是" cancelText="否" onConfirm={() => handleBatchUpdate()}>
+                        <Button >更新H5</Button>
+                    </Popconfirm>
                 </div>
             </div>
 

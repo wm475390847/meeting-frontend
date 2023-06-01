@@ -2,14 +2,14 @@ import './styles/index.less';
 import './index.css';
 import { Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ConfigProvider } from 'antd';
+import { ConfigProvider, Watermark } from 'antd';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import zhCN from 'antd/es/locale/zh_CN';
 import routes from './routes';
 import { PageLayoutModule } from './components/PageLayout';
 import moment from 'moment';
 import NotFound from './components/NotFound';
-import ProductDetailPage from './components/ProductDetail';
+import zhCN from 'antd/lib/locale/zh_CN';
+import HomePage from './routes/home';
 moment.locale('zh-cn')
 
 const routeList: any[] = [];
@@ -45,7 +45,7 @@ const App = () => {
           )}>
             {routeList}
           </Route>
-          {/* <Route path="/app/case/productList/productDetail/:productName" element={<ProductDetailPage />} /> */}
+          <Route path='/app/home' element={<HomePage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
