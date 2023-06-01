@@ -1,5 +1,5 @@
 import _request from '@/utils/request';
-import { API_PREFIX, Image, Video, Doc, File } from '@/constants'
+import { BASE_PATH, Image, Video, Doc, File } from '@/constants'
 import qs from 'qs';
 
 interface IObjectAny {
@@ -33,24 +33,24 @@ export const request = {
   },
 
   get: (url: string, data = {}) => {
-    return _request(`${API_PREFIX}${addGetParams(url, data)}`, {
+    return _request(`${BASE_PATH}${addGetParams(url, data)}`, {
       method: 'GET',
     });
   },
   post: (url: string, data = {}, options?: any) => {
-    return _request(`${API_PREFIX}${url}`, {
+    return _request(`${BASE_PATH}${url}`, {
       method: 'POST',
       body: options?.stringify ? JSON.stringify(data) : data,
     });
   },
   put: (url: string, data = {}, options?: any) => {
-    return _request(`${API_PREFIX}${url}`, {
+    return _request(`${BASE_PATH}${url}`, {
       method: 'PUT',
       body: options?.stringify ? JSON.stringify(data) : data,
     });
   },
   delete: (url: string, data = {}, options?: any) => {
-    return _request(`${API_PREFIX}${url}`, {
+    return _request(`${BASE_PATH}${url}`, {
       method: 'DELETE',
       body: options?.stringify ? JSON.stringify(data) : data,
     });

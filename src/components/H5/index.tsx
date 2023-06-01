@@ -26,16 +26,6 @@ const H5Module: React.FC<H5ModuleProps> = (props) => {
         onCancel && onCancel()
     }
 
-    // const handleGetMeetingTime = (value: string) => {
-    //     if (!Array.isArray(value)) {
-    //         setStartTime(undefined)
-    //         setEndTime(undefined)
-    //         return
-    //     }
-    //     setStartTime(moment(value[0]).valueOf())
-    //     setEndTime(moment(value[1]).valueOf())
-    // }
-
     const handleGetMeetingTime = (value: string) => {
         console.log(value);
 

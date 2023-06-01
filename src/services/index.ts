@@ -3,6 +3,10 @@ import { ISearchCaseListReq, ISearchPerformanceReq, ISearchProductListReq } from
 import { ICreateFaceReq, ISearchFaceListReq, IUpdateFaceReq } from "./interface"
 import { ICreateH5Req, ISearchH5Req, IUpdateH5Req } from "./interface"
 import { ISearchTaskListReq } from "./interface"
+import { Client } from "@/utils"
+
+
+const client = new Client({})
 
 /**
  * 获取用例列表
@@ -77,11 +81,13 @@ export const getProductList: (data: ISearchProductListReq) => Promise<IPageReque
 export const getProductGroup: () => Promise<ServiceInfo[]> = () => {
     return new Promise(async (resolve, reject) => {
         const res = await request.get(`/ttp/products/group`)
-        if (res.success) {
-            resolve(res.data)
-        } else {
-            reject(res)
-        }
+            .then((res: any) => {
+                if (res.success) {
+                    resolve(res.data)
+                } else {
+                    reject(res)
+                }
+            })
     })
 }
 
@@ -93,6 +99,22 @@ export const getProductGroup: () => Promise<ServiceInfo[]> = () => {
 export const deleteProduct: (id: number) => Promise<RequestOpt> = (id) => {
     return new Promise(async (resolve, reject) => {
         const res = await request.delete(`/ttp/products/${id}`)
+        if (res.success) {
+            resolve(res)
+        } else {
+            reject(res)
+        }
+    })
+}
+
+/**
+ * 删除产品
+ * @param data 查询数据
+ * @returns 
+ */
+export const createProduct: (data: { productName: string, serviceId: number }) => Promise<RequestOpt> = (data) => {
+    return new Promise(async (resolve, reject) => {
+        const res = await request.post(`/ttp/products`, data)
         if (res.success) {
             resolve(res)
         } else {

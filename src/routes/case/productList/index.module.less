@@ -1,23 +1,13 @@
 .action {
     display: flex;
+    align-items: center;
     justify-content: space-between;
 
-    .container {
-        display: flex;
-        align-items: center;
+    button {
+        margin-right: 8px;
 
-        .span {
-            margin-right: 5px;
-        }
-
-        .search {
-            width: 200px;
-            margin-left: 5px;
-        }
-
-        .select {
-            width: 120px;
-            margin-left: 5px;
+        &:last-child {
+            margin-right: 0;
         }
     }
 }

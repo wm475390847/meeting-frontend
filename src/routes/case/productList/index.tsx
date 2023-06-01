@@ -1,9 +1,10 @@
 import { Breadcrumb, Button, Popconfirm, Table, message } from 'antd';
 import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { ColumnsType } from 'antd/lib/table';
-import { deleteProduct, getProductList } from '@/services';
+import { createProduct, deleteProduct, getProductList } from '@/services';
 import styles from './index.module.less'
 import { Link, useNavigate } from 'react-router-dom';
+import ProductModule from '@/components/Product';
 
 const ProductListPage: React.FC = () => {
   const [pageNo, setPageNo] = useState(1)
@@ -11,7 +12,8 @@ const ProductListPage: React.FC = () => {
   const [loading, setLoading] = useState(true)
   const [total, setTotal] = useState(0)
   const [productList, setProductList] = useState<ProductInfo[]>()
-  const [buttonLoading, setButtongLoading] = useState(false)
+  const [buttonLoading, setButtonLoading] = useState(false)
+  const [type, setType] = useState(0)
   const navigate = useNavigate();
 
   const columns = useMemo<ColumnsType<any>>(() => {
@@ -100,14 +102,14 @@ const ProductListPage: React.FC = () => {
   }
 
   const handleDeleteProduct = (id: number) => {
-    setButtongLoading(true)
+    setButtonLoading(true)
     deleteProduct(id)
       .then(res => {
         message.info(res.message)
         setLoading(true)
       })
       .catch(err => message.error(err.message))
-      .finally(() => setButtongLoading(false))
+      .finally(() => setButtonLoading(false))
   }
 
   useEffect(() => {
@@ -116,11 +118,14 @@ const ProductListPage: React.FC = () => {
 
   return (
     <>
-      <Breadcrumb>
-        <Breadcrumb.Item>
-          <Link to="/app/case/productList">产品列表</Link>
-        </Breadcrumb.Item>
-      </Breadcrumb>
+      <div className={styles.action}>
+        <Breadcrumb>
+          <Breadcrumb.Item>
+            <Link to="/app/case/productList">产品列表</Link>
+          </Breadcrumb.Item>
+        </Breadcrumb>
+        <Button type='primary' onClick={() => setType(1)}>创建产品</Button>
+      </div >
 
       <Table
         columns={columns}
@@ -143,6 +148,7 @@ const ProductListPage: React.FC = () => {
         }
         }
       />
+      <ProductModule type={type} onCancel={() => setType(0)} setLoading={setLoading} />
     </>
   );
 };
