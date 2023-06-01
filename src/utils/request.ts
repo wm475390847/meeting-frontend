@@ -11,17 +11,6 @@ interface ErrorWithResponse extends Error {
   response?: Response;
 }
 
-export interface RequestOpt {
-  map(arg0: (e: any) => void): unknown;
-  code: string
-  data: any
-  message?: null | string
-  pageNo?: number
-  pageSize?: number
-  requestId?: null | string | number
-  success: boolean
-  total?: number
-}
 
 function checkStatus({ response, options, url }: ICheckStatusProps): Response {
   if (response.status >= 200 && response.status < 300) {

@@ -1,10 +1,9 @@
-import { Breadcrumb, Button, Popconfirm, Table } from 'antd';
-import React, { useEffect, useMemo, useState } from 'react';
+import { Breadcrumb, Button, Popconfirm, Table, message } from 'antd';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { ColumnsType } from 'antd/lib/table';
-import { getProductList } from '@/services';
-import ToolTipModule from '@/components/ToolTip';
+import { deleteProduct, getProductList } from '@/services';
 import styles from './index.module.less'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const ProductListPage: React.FC = () => {
   const [pageNo, setPageNo] = useState(1)
@@ -13,6 +12,7 @@ const ProductListPage: React.FC = () => {
   const [total, setTotal] = useState(0)
   const [productList, setProductList] = useState<ProductInfo[]>()
   const [buttonLoading, setButtongLoading] = useState(false)
+  const navigate = useNavigate();
 
   const columns = useMemo<ColumnsType<any>>(() => {
     return [
@@ -56,19 +56,25 @@ const ProductListPage: React.FC = () => {
         width: '20%',
         render: (_, record) => {
           return (
-            <div className={styles.tableAction}>
-              <Link
-                to={{
-                  pathname: `/app/case/productList/productDetail/${record.productName}`,
-                  search: `?id=${record.id}`
-                }}
+            <Popconfirm
+              title="确定删除？"
+              placement="top"
+              okText="是"
+              cancelText="否"
+              onConfirm={e => {
+                e?.stopPropagation()
+                handleDeleteProduct(record.id)
+              }}
+              onCancel={e => e?.stopPropagation()}
+            >
+              <Button
+                loading={buttonLoading}
+                type='primary'
+                onClick={e => e.stopPropagation()}
               >
-                <Button type='primary'>查看用例</Button>
-              </Link>
-              <Popconfirm title="确定删除？" placement="top" okText="是" cancelText="否">
-                <Button style={{ marginLeft: '8px' }} loading={buttonLoading}>删除</Button>
-              </Popconfirm>
-            </div >
+                删除
+              </Button>
+            </Popconfirm>
           )
         }
       }
@@ -79,7 +85,7 @@ const ProductListPage: React.FC = () => {
     const { current, pageSize } = value
     setPageNo(current)
     setPageSize(pageSize)
-    setLoading(true)
+    setLoading(false)
   }
 
   const handleGetProductList = () => {
@@ -91,6 +97,17 @@ const ProductListPage: React.FC = () => {
       setTotal(data.total)
       setLoading(false)
     })
+  }
+
+  const handleDeleteProduct = (id: number) => {
+    setButtongLoading(true)
+    deleteProduct(id)
+      .then(res => {
+        message.info(res.message)
+        setLoading(true)
+      })
+      .catch(err => message.error(err.message))
+      .finally(() => setButtongLoading(false))
   }
 
   useEffect(() => {
@@ -113,6 +130,18 @@ const ProductListPage: React.FC = () => {
         pagination={{ total, current: pageNo, showSizeChanger: true }}
         loading={loading}
         className={styles.table}
+        onRow={record => {
+          return {
+            onClick: () => {
+              navigate({
+                pathname: `/app/case/productList/productDetail/${record.productName}`,
+                search: `?id=${record.id}`
+              })
+            },
+            style: { cursor: 'pointer' }
+          }
+        }
+        }
       />
     </>
   );

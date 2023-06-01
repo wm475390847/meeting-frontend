@@ -1,4 +1,3 @@
-import { RequestOpt } from "@/utils/request"
 import { request } from "@/utils/tool"
 import { ISearchCaseListReq, ISearchPerformanceReq, ISearchProductListReq } from "./interface"
 import { ICreateFaceReq, ISearchFaceListReq, IUpdateFaceReq } from "./interface"
@@ -80,6 +79,22 @@ export const getProductGroup: () => Promise<ServiceInfo[]> = () => {
         const res = await request.get(`/ttp/products/group`)
         if (res.success) {
             resolve(res.data)
+        } else {
+            reject(res)
+        }
+    })
+}
+
+/**
+ * 删除产品
+ * @param data 查询数据
+ * @returns 
+ */
+export const deleteProduct: (id: number) => Promise<RequestOpt> = (id) => {
+    return new Promise(async (resolve, reject) => {
+        const res = await request.delete(`/ttp/products/${id}`)
+        if (res.success) {
+            resolve(res)
         } else {
             reject(res)
         }

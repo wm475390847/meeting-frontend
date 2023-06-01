@@ -1,5 +1,4 @@
 import { env } from './env';
-import { RoomEnum } from '@/types';
 
 export const PageTitle = {
   page: '页面保障',

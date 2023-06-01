@@ -1,3 +1,16 @@
+interface RequestOpt {
+  map(arg0: (e: any) => void): unknown;
+  code: string
+  data: any
+  message?: null | string
+  pageNo?: number
+  pageSize?: number
+  requestId?: null | string | number
+  success: boolean
+  total?: number
+}
+
+
 interface IRouterProps {
   path: string
 }
