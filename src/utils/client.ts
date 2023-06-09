@@ -2,6 +2,7 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import { BASE_PATH, DOMAIN } from "@/constants";
 import qs from 'qs';
 import { message } from "antd";
+import Cookies from "js-cookie";
 
 export class Client {
     /**
@@ -47,7 +48,10 @@ export class Client {
                 if (err && err.response) {
                     switch (err.response.status) {
                         case 400: err.message = '请求错误(400)'; break;
-                        case 401: err.message = '未授权，请重新登录(401)'; break;
+                        case 401:
+                            err.message = '未授权，请重新登录(401)';
+                            this.logout();
+                            break;
                         case 403: err.message = '拒绝访问(403)'; break;
                         case 404: err.message = '请求出错(404)'; break;
                         case 408: err.message = '请求超时(408)'; break;
@@ -92,6 +96,12 @@ export class Client {
 
     public async delete(url: string, config?: AxiosRequestConfig<any>): Promise<AxiosResponse<any, any>> {
         return this.request.delete(this.addTimestamp(`${BASE_PATH}${url}`), config);
+    }
+
+    public logout() {
+        Cookies.remove('dingtalk_sso_jwt', { path: '/', domain: '.xinhuazhiyun.com' });
+        let url = location.href;
+        window.location.href = `http://sso.xinhuazhiyun.com/login.html?redirectUri=${encodeURIComponent(url)}`;
     }
 
     /**

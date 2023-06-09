@@ -12,6 +12,7 @@ import personIcon from '@/assets/svg/person.svg';
 import { Footer } from 'antd/lib/layout/layout';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import * as Icon from "@ant-design/icons";
+import { Client } from '@/utils';
 type LayoutPropModule = {
   children?: ReactElement | ReactElement[];
   routes: RouteBase[];
@@ -56,9 +57,7 @@ export const PageLayoutModule: React.FC<LayoutPropModule> = ({ routes }) => {
    * 退出登录
    */
   const handleLogout = () => {
-    Cookies.remove('dingtalk_sso_jwt', { path: '/', domain: '.xinhuazhiyun.com' });
-    let url = location.href;
-    location.href = `http://sso.xinhuazhiyun.com/login.html?redirectUri=${encodeURIComponent(url)}`;
+    new Client({}).logout()
   }
 
   /**
@@ -136,6 +135,7 @@ export const PageLayoutModule: React.FC<LayoutPropModule> = ({ routes }) => {
   return (
     <>
       <Layout className={styles.layout}>
+
         <Sider collapsed={collapsed}>
           <div className={styles.logo}>
             <img src={logo} alt="" />
@@ -151,8 +151,10 @@ export const PageLayoutModule: React.FC<LayoutPropModule> = ({ routes }) => {
         </Sider>
 
         <Layout>
+
           <Header className={styles.header}>
-            <Button className={styles.button}
+            <Button
+              className={styles.button}
               type="text"
               icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
               onClick={() => setCollapsed(!collapsed)} />
@@ -174,14 +176,12 @@ export const PageLayoutModule: React.FC<LayoutPropModule> = ({ routes }) => {
               <Outlet />
             </div>
           </Content>
-          <Footer style={{ textAlign: 'center' }}>会议线质量保障平台 ©2022 - {new Date().getFullYear()} Created by 质量中台
-            < Button className={styles.button}
-              key='1'
-              type='link'
-              onClick={() => window.open('https://codeup.aliyun.com/xhzy/xhzy-qa/meeting-frontend/tree/dev')}>
-              {< span > CodeUp地址</span >}
-            </Button >
+
+          <Footer style={{ textAlign: 'center' }}>
+            数字企业·质量保障平台 | ©2022 - {new Date().getFullYear()} Created by 质量保障组 |
+            <a href='https://codeup.aliyun.com/xhzy/xhzy-qa/meeting-frontend/tree/dev' target='_blank'> CodeUp地址 </a>
           </Footer>
+
         </Layout>
       </Layout>
     </>

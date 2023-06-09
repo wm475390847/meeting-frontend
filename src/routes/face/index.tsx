@@ -73,10 +73,10 @@ const FacePage: React.FC = () => {
                     return (
                         <div className={styles.tableAction}>
                             <Button type="primary" onClick={() => { setFace(record), setType(2) }} loading={buttonLoading}>编辑</Button>
-                            <Popconfirm title="确定执行？" placement="top" okText="是" cancelText="否" onConfirm={() => fetchExecuteFace(record.id)}>
-                                <Button loading={buttonLoading}>执行</Button>
+                            <Popconfirm title="确定执行？" placement="top" okText="是" cancelText="否" onConfirm={() => fetchExecuteFace(record.id)} disabled={true}>
+                                <Button disabled={true} loading={buttonLoading}>执行</Button>
                             </Popconfirm>
-                            <Button disabled={record.newResult == null} onClick={() => { setFace(record), setStatus(3) }}> 结果</Button>
+                            <Button disabled={record.newResult == null} onClick={() => { setFace(record), setStatus(3) }} style={{ marginLeft: '8px' }}> 结果</Button>
                             <Popconfirm title='确定删除？' placement="top" okText="是" cancelText="否" onConfirm={() => fetchDeleteFace(record.id)}>
                                 <Button loading={buttonLoading}>删除</Button>
                             </Popconfirm>
