@@ -46,7 +46,7 @@ export default defineConfig(({ command }) => {
     },
 
     server: {
-      port: 3002,
+      port: 3000,
       proxy: {
         '/meeting-backend': {
           target: 'http://test.qa-meeting.xinhuazhiyun.com',
