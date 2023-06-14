@@ -35,14 +35,14 @@ const ProductDetailPage: React.FC = () => {
     return [
       {
         title: '序号',
-        width: '10%',
+        width: '6%',
         render: (_text, _record, index) => (pageNo as number - 1) * (pageSize as number) + index + 1
       },
       {
         title: '用例名称',
         key: 'caseName',
         dataIndex: 'caseName',
-        width: '20%',
+        width: '15%',
         ellipsis: true,
         render: (text) => <ToolTipModule linkText={text} buttonText={text} />
       },
@@ -58,7 +58,7 @@ const ProductDetailPage: React.FC = () => {
         title: "结果",
         key: "caseResult",
         dataIndex: "caseResult",
-        width: '5%',
+        width: '6%',
         render: (text) => {
           return (
             text ? < Progress type="circle" percent={100} width={30} /> : < Progress status="exception" type="circle" percent={100} width={30} />
@@ -69,13 +69,13 @@ const ProductDetailPage: React.FC = () => {
         title: "环境",
         key: "env",
         dataIndex: "env",
-        width: '5%'
+        width: '6%'
       },
       {
         title: "作者",
         key: "caseOwner",
         dataIndex: "caseOwner",
-        width: '5%'
+        width: '7%'
       },
       {
         title: "执行时间",
@@ -88,7 +88,7 @@ const ProductDetailPage: React.FC = () => {
         title: '操作',
         dataIndex: 'action',
         key: 'action',
-        width: '25%',
+        width: '20%',
         render: (_, record) => {
           return (
             <div className={styles.tableAction}>
