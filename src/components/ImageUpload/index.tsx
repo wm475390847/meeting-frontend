@@ -13,7 +13,7 @@ type UploadImgModuleProps = {
 }
 
 const UploadImgModule: React.FC<UploadImgModuleProps> = (props) => {
-  const { photo, onUploadSuccess } = props
+  const { photo: currentImageUrl, onUploadSuccess } = props
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
   const [ossConfig, setOssConfig] = useState<OssConfig>();
@@ -109,44 +109,56 @@ const UploadImgModule: React.FC<UploadImgModuleProps> = (props) => {
     </div>
   );
 
+  /**
+   * 上传图片
+   * @param file 文件
+   * @returns 
+   */
+  const uploadPhoto = (file: any) => {
+    if (ossConfig == null) {
+      message.error('OSS配置为空')
+      return
+    }
+    setLoading(true);
+    const fullPath = getFullPath(file as UploadFile, ossConfig);
+    const client = assemOSSClient(ossConfig)
+
+    if (!fullPath || !client) {
+      message.error('OSS客户端无效');
+      setLoading(false);
+      return;
+    }
+
+    client.client
+      .put(fullPath, file)
+      .then(() => {
+        setLoading(false);
+        const ossPath = transformCdnUrl(ossConfig, fullPath);
+        onUploadSuccess(ossPath);
+        getBase64(file as RcFile, (url) => {
+          setImageUrl(url);
+        });
+        message.success('上传成功');
+      })
+      .catch((err) => {
+        setLoading(false);
+        message.error(`上传失败: ${err}`);
+      });
+  }
+
   return (
     <>
       <Upload
         name="avatar"
         listType="picture-card"
-        className="avatar-uploader"
         beforeUpload={beforeUpload}
         showUploadList={false}
-        customRequest={({ file }) => {
-          if (ossConfig == null) {
-            message.error('oss配置为空')
-            return
-          }
-          setLoading(true);
-          const fullPath = getFullPath(file as UploadFile, ossConfig);
-          const client = assemOSSClient(ossConfig)
-          fullPath && client?.client
-            .put(fullPath, file)
-            .then(() => {
-              message.success('上传成功');
-              if (ossConfig == null) {
-                return
-              }
-              const ossPath = transformCdnUrl(ossConfig, fullPath);
-              onUploadSuccess(ossPath);
-              setLoading(false);
-              getBase64(file as RcFile, (url) => {
-                setLoading(false);
-                setImageUrl(url);
-              });
-            })
-            .catch(() => {
-              message.error('上传失败');
-            });
-        }}
+        customRequest={({ file }) => uploadPhoto(file)}
       >
-        {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
-          : photo ? <img src={photo} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+        {/* 如果存在图片就将图片显示在上传框上 */}
+
+        {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%', height: '100%', borderRadius: '8px' }} />
+          : currentImageUrl ? <img src={currentImageUrl} alt="avatar" style={{ width: '100%', height: '100%', borderRadius: '8px' }} /> : uploadButton}
       </Upload>
     </>
   );

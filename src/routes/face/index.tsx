@@ -133,7 +133,7 @@ const FacePage: React.FC = () => {
         <div>
             <div className={styles.action}>
                 <Button type='primary' onClick={() => setType(1)}>新增人脸</Button>
-                <Button type='primary' disabled={true} >批量执行</Button>
+                <Button type='primary' disabled={true}>批量执行</Button>
             </div>
             <div>
                 <Table
@@ -147,7 +147,7 @@ const FacePage: React.FC = () => {
                 />
             </div>
             {/* Face组件 */}
-            <FaceModule type={type} face={face} setLoading={setLoading} onCancel={() => setType(0)} />
+            <FaceModule type={type} face={face} setLoading={setLoading} onCancel={() => { setType(0), setFace(undefined) }} />
             {/* 识别报告组件 */}
             {status == 3 && <FaceReportModal faceInfo={face} onCancel={() => setFace(undefined)} />}
         </div >
