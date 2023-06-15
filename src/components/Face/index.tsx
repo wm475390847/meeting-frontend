@@ -1,7 +1,7 @@
 import { createFace, updateFace } from "@/services";
 import { Button, Modal, Form, Input, message, Select, InputNumber } from "antd";
 import { useEffect, useState } from "react";
-import UploadImgModule from "../ImageUpload";
+import UploadImgModule from "../UploadImg";
 import styles from './index.module.less'
 
 type FaceModuleProps = {
@@ -143,7 +143,7 @@ const FaceModule: React.FC<FaceModuleProps> = (props) => {
                         <Input placeholder='请输入miceId' />
                     </Form.Item>
                     <Form.Item name='faceUrl' key={'faceUrl'} label="人像">
-                        <UploadImgModule photo={face?.faceUrl} onUploadSuccess={faceUrl => setFaceUrl(faceUrl)} />
+                        <UploadImgModule currentImgUrl={face?.faceUrl} onUploadSuccess={faceUrl => setFaceUrl(faceUrl)} />
                     </Form.Item>
                     <Form.Item name='faceDesc' key={'faceDesc'} label='备注信息'>
                         <Input placeholder='请输入备注信息' />

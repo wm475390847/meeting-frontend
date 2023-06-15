@@ -8,12 +8,12 @@ import { getOssConfig } from '@/services';
 import { useEffect } from 'react';
 
 type UploadImgModuleProps = {
-  photo?: string
+  currentImgUrl?: string
   onUploadSuccess: (url: string) => void;
 }
 
 const UploadImgModule: React.FC<UploadImgModuleProps> = (props) => {
-  const { photo: currentImageUrl, onUploadSuccess } = props
+  const { currentImgUrl, onUploadSuccess } = props
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
   const [ossConfig, setOssConfig] = useState<OssConfig>();
@@ -100,16 +100,6 @@ const UploadImgModule: React.FC<UploadImgModuleProps> = (props) => {
   };
 
   /**
-   * 上传按钮
-   */
-  const uploadButton = (
-    <div>
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div style={{ marginTop: 8 }}>上传</div>
-    </div>
-  );
-
-  /**
    * 上传图片
    * @param file 文件
    * @returns 
@@ -158,7 +148,13 @@ const UploadImgModule: React.FC<UploadImgModuleProps> = (props) => {
         {/* 如果存在图片就将图片显示在上传框上 */}
 
         {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%', height: '100%', borderRadius: '8px' }} />
-          : currentImageUrl ? <img src={currentImageUrl} alt="avatar" style={{ width: '100%', height: '100%', borderRadius: '8px' }} /> : uploadButton}
+          : currentImgUrl ?
+            <img src={currentImgUrl} alt="avatar" style={{ width: '100%', height: '100%', borderRadius: '8px' }} />
+            :
+            <div>
+              {loading ? <LoadingOutlined /> : <PlusOutlined />}
+              <div style={{ marginTop: 8 }}>上传</div>
+            </div>}
       </Upload>
     </>
   );
