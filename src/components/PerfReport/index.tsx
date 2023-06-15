@@ -1,5 +1,5 @@
 import { getPerfReportList } from "@/services";
-import { Button, Collapse, message, Modal } from "antd";
+import { Button, message, Modal } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import styles from './index.module.less'
 import VirtualTable from "../VirtualTable";

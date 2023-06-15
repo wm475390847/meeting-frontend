@@ -3,7 +3,6 @@ import { Button, Modal, Form, Space, DatePicker, Input, message } from "antd";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import styles from './index.module.less'
-import { values } from "lodash";
 
 type H5ModuleProps = {
     type: number

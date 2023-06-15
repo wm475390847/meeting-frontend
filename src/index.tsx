@@ -9,7 +9,6 @@ import { PageLayoutModule } from './components/PageLayout';
 import moment from 'moment';
 import NotFound from './components/NotFound';
 import zhCN from 'antd/lib/locale/zh_CN';
-import HomePage from './routes/home';
 moment.locale('zh-cn')
 
 const routeList: any[] = [];
@@ -45,7 +44,6 @@ const App = () => {
           )}>
             {routeList}
           </Route>
-          <Route path='/app/home' element={<HomePage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
