@@ -1,8 +1,7 @@
 import styles from './index.module.less'
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import PieModule from '@/components/Pie';
-import { getCaseCount } from '@/services';
-
+import {getCaseCount} from '@/services';
 
 const CaseDataPage: React.FC = () => {
   const [prodCaseCountList, setProdCaseCountList] = useState<PieData[]>([]);

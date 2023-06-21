@@ -1,10 +1,10 @@
-import { getPerfReportList } from "@/services";
-import { Button, message, Modal } from "antd";
-import { useEffect, useMemo, useState } from "react";
+import {getPerfReportList} from "@/services";
+import {Button, message, Modal} from "antd";
+import React, {useEffect, useMemo, useState} from "react";
 import styles from './index.module.less'
 import VirtualTable from "../VirtualTable";
 import moment from "moment";
-import { ColumnsType } from "antd/lib/table";
+import {ColumnsType} from "antd/lib/table";
 
 type PerfReportModuleProps = {
     perfId?: number
@@ -15,7 +15,6 @@ const PerfReportModule: React.FC<PerfReportModuleProps> = (props) => {
     const { onCancel, perfId } = props
     const [open, setOpen] = useState(false)
     const [perfReportHistoryList, setPerfReportHistoryList] = useState<PerfReportHistory[]>()
-
     const columns = useMemo<ColumnsType<any>>(() => {
         return [
             {
@@ -48,7 +47,6 @@ const PerfReportModule: React.FC<PerfReportModuleProps> = (props) => {
         ]
     }, [perfId])
 
-
     const handleCancel = () => {
         setOpen(false)
         onCancel && onCancel()
@@ -56,11 +54,8 @@ const PerfReportModule: React.FC<PerfReportModuleProps> = (props) => {
 
     const handleGetPerfReportList = () => {
         getPerfReportList(perfId as number)
-            .then(rep => {
-                setPerfReportHistoryList(rep.data)
-            }).catch(err => {
-                message.error(err.message)
-            })
+            .then(rep => setPerfReportHistoryList(rep.data))
+            .catch(err => message.error(err.message))
     }
 
     useEffect(() => {

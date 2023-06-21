@@ -1,11 +1,10 @@
 import OSS from 'ali-oss';
-import { v4 as uuidv4 } from 'uuid';
-import React, { useState } from 'react';
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { message, Upload } from 'antd';
-import type { RcFile, UploadFile } from 'antd/es/upload/interface';
-import { getOssConfig } from '@/services';
-import { useEffect } from 'react';
+import {v4 as uuidv4} from 'uuid';
+import React, {useEffect, useState} from 'react';
+import {LoadingOutlined, PlusOutlined} from '@ant-design/icons';
+import {message, Upload} from 'antd';
+import type {RcFile, UploadFile} from 'antd/es/upload/interface';
+import {getOssConfig} from '@/services';
 
 type UploadImgModuleProps = {
   currentImgUrl?: string
@@ -13,22 +12,19 @@ type UploadImgModuleProps = {
 }
 
 const UploadImgModule: React.FC<UploadImgModuleProps> = (props) => {
-  const { currentImgUrl, onUploadSuccess } = props
+  const {currentImgUrl, onUploadSuccess} = props
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
   const [ossConfig, setOssConfig] = useState<OssConfig>();
 
   useEffect(() => {
-    handleOssConfig()
+    handleOssConfig().then(r => r)
   }, [])
 
   const handleOssConfig = async () => {
-    await getOssConfig({ business: 'face' })
-      .then(rep => {
-        setOssConfig(rep.data)
-      }).catch(err => {
-        message.error(err.message)
-      })
+    await getOssConfig({business: 'face'})
+        .then(rep => setOssConfig(rep.data))
+        .catch(err => message.error(err.message))
   }
 
   /**
@@ -58,10 +54,9 @@ const UploadImgModule: React.FC<UploadImgModuleProps> = (props) => {
       const temSubMediaTypeArr = file.name.split('.');
       const temSubMediaType = temSubMediaTypeArr[temSubMediaTypeArr.length - 1];
       const fileName = uuidv4() + '.' + temSubMediaType;
-      const fullPath = ossConfig && ossConfig.uploadPath + `/${fileName}`;
-      return fullPath;
+      return ossConfig && ossConfig.uploadPath + `/${fileName}`;
     } else {
-      message.error('文件为空')
+      message.error('文件为空').then(r => r)
     }
   }
 
@@ -90,11 +85,11 @@ const UploadImgModule: React.FC<UploadImgModuleProps> = (props) => {
   const beforeUpload = (file: UploadFile) => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {
-      message.error('只能上传 JPG/PNG 文件!');
+      message.error('只能上传 JPG/PNG 文件!').then(r => r);
     }
     const isLt2M = file.size as number / 1024 / 1024 < 5;
     if (!isLt2M) {
-      message.error('图像必须小于2MB!');
+      message.error('图像必须小于2MB!').then(r => r);
     }
     return isJpgOrPng && isLt2M;
   };
@@ -106,7 +101,7 @@ const UploadImgModule: React.FC<UploadImgModuleProps> = (props) => {
    */
   const uploadPhoto = (file: any) => {
     if (ossConfig == null) {
-      message.error('OSS配置为空')
+      message.error('OSS配置为空').then(r => r)
       return
     }
     setLoading(true);
@@ -114,7 +109,7 @@ const UploadImgModule: React.FC<UploadImgModuleProps> = (props) => {
     const client = assemOSSClient(ossConfig)
 
     if (!fullPath || !client) {
-      message.error('OSS客户端无效');
+      message.error('OSS客户端无效').then(r => r);
       setLoading(false);
       return;
     }
@@ -128,11 +123,11 @@ const UploadImgModule: React.FC<UploadImgModuleProps> = (props) => {
         getBase64(file as RcFile, (url) => {
           setImageUrl(url);
         });
-        message.success('上传成功');
+        message.success('上传成功').then(r => r);
       })
       .catch((err) => {
         setLoading(false);
-        message.error(`上传失败: ${err}`);
+        message.error(`上传失败: ${err}`).then(r => r);
       });
   }
 

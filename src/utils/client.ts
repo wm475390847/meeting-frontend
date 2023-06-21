@@ -1,7 +1,7 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import { BASE_PATH, DOMAIN } from "@/constants";
+import axios, {AxiosInstance, AxiosRequestConfig, AxiosResponse} from "axios";
+import {BASE_PATH, DOMAIN} from "@/constants";
 import qs from 'qs';
-import { message } from "antd";
+import {message} from "antd";
 import Cookies from "js-cookie";
 
 export class Client {
@@ -79,9 +79,9 @@ export class Client {
         return this.request.get(this.addTimestamp(fullUrl), config);
     }
 
-    public async post(url: string, data?: any, otheBasePath?: boolean, contentType?: string, config?: AxiosRequestConfig<any>): Promise<AxiosResponse<any, any>> {
+    public async post(url: string, data?: any, otherBasePath?: boolean, contentType?: string, config?: AxiosRequestConfig<any>): Promise<AxiosResponse<any, any>> {
         const newConfig = contentType && this.getConfig(contentType)
-        const fullUrl = otheBasePath ? this.addTimestamp(`${url}`) : this.addTimestamp(`${BASE_PATH}${url}`)
+        const fullUrl = otherBasePath ? this.addTimestamp(`${url}`) : this.addTimestamp(`${BASE_PATH}${url}`)
         return this.request.post(fullUrl, data, newConfig ? newConfig : config);
     }
 

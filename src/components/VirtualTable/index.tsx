@@ -1,6 +1,6 @@
-import { Table } from 'antd';
+import {Table} from 'antd';
 import ResizeObserver from 'rc-resize-observer';
-import { useState } from 'react';
+import {useState} from 'react';
 
 const VirtualTableModule = (props: Parameters<typeof Table>[0]) => {
     const { columns } = props;

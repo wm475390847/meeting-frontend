@@ -1,6 +1,6 @@
-import { getFaceResult } from "@/services";
-import { Button, Modal, Form, message, Collapse } from "antd";
-import { useEffect, useState } from "react";
+import {getFaceResult} from "@/services";
+import {Button, Collapse, Form, message, Modal} from "antd";
+import React, {useEffect, useState} from "react";
 import styles from './index.module.less'
 
 type FaceReportModuleProps = {
@@ -9,17 +9,17 @@ type FaceReportModuleProps = {
 }
 
 const FaceReportModule: React.FC<FaceReportModuleProps> = (props) => {
-    const { onCancel, faceInfo } = props
-    const [visible, setVisible] = useState(true)
+    const {onCancel, faceInfo} = props
+    const [open, setOpen] = useState(true)
     const [faceResult, setFaceResult] = useState<FaceReport>()
-    const { Panel } = Collapse
+    const {Panel} = Collapse
 
     const onChange = (key: string | string[]) => {
-
+        console.log(key)
     };
 
     const handleCancel = () => {
-        setVisible(false)
+        setOpen(false)
         onCancel && onCancel()
     }
 
@@ -27,28 +27,27 @@ const FaceReportModule: React.FC<FaceReportModuleProps> = (props) => {
         getFaceResult(faceInfo?.id as number)
             .then(rep => {
                 setFaceResult(rep.data)
-            }).catch(err => {
-                message.error(err.message)
             })
+            .catch(err => message.error(err.message))
     }
 
-    const arrayParse = (array1: string[], array2: string[]) => {
+    const handleArrayParse = (array1: string[], array2: string[]) => {
         let a = array1?.join(', ')
         let b = array2?.join(', ')
         return a && b ? a + ", " + b : a ? a : b ? b : null
     }
 
     useEffect(() => {
-        faceInfo && setVisible(true)
+        faceInfo && setOpen(true)
     }, [faceInfo])
 
     useEffect(() => {
-        visible && handleGetResult()
-    }, [visible])
+        open && handleGetResult()
+    }, [open])
 
     return (
         <Modal
-            visible={visible}
+            open={open}
             className={styles.modal}
             title="识别结果"
             onCancel={handleCancel}
@@ -78,17 +77,16 @@ const FaceReportModule: React.FC<FaceReportModuleProps> = (props) => {
                 </Form.Item>
             </div>
             < Collapse className={styles.collapse} ghost destroyInactivePanel={true} defaultActiveKey={['1']} onChange={onChange} bordered={true} >
-
                 <Panel header='素材' key='1' >
                     <Form.Item label={'基础媒资id'}>
-                        {arrayParse(faceResult?.oldResult?.imageIdList as string[], faceResult?.oldResult?.videoIdList as string[])}
+                        {handleArrayParse(faceResult?.oldResult?.imageIdList as string[], faceResult?.oldResult?.videoIdList as string[])}
                     </Form.Item>
 
                     <Form.Item label={'实际媒资id'}>
-                        {arrayParse(faceResult?.newResult?.imageIdList as string[], faceResult?.newResult?.videoIdList as string[])}
+                        {handleArrayParse(faceResult?.newResult?.imageIdList as string[], faceResult?.newResult?.videoIdList as string[])}
                     </Form.Item>
                     <Form.Item label={'diff媒资id'}>
-                        {arrayParse(faceResult?.imageDiffList as string[], faceResult?.videoDiffList as string[])}
+                        {handleArrayParse(faceResult?.imageDiffList as string[], faceResult?.videoDiffList as string[])}
                     </Form.Item>
                 </Panel>
                 <Panel header='合成时长' key='2'>

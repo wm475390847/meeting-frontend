@@ -1,6 +1,6 @@
-import { useMemo } from "react";
+import React, {useMemo} from "react";
 import VirtualTable from "../VirtualTable";
-import { ColumnsType } from "antd/lib/table";
+import {ColumnsType} from "antd/lib/table";
 
 type FaceReportTableModalProps = {
     diffList?: DiffData[]

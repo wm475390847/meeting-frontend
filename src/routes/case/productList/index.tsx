@@ -1,9 +1,9 @@
-import { Breadcrumb, Button, Popconfirm, Table, message } from 'antd';
-import React, { useEffect, useMemo, useState, useCallback } from 'react';
-import { ColumnsType } from 'antd/lib/table';
-import { createProduct, deleteProduct, getProductList } from '@/services';
+import {Breadcrumb, Button, message, Popconfirm, Table} from 'antd';
+import React, {useEffect, useMemo, useState} from 'react';
+import {ColumnsType} from 'antd/lib/table';
+import {deleteProduct, getProductList} from '@/services';
 import styles from './index.module.less'
-import { Link, useNavigate } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import ProductModule from '@/components/Product';
 
 const ProductListPage: React.FC = () => {
@@ -15,7 +15,6 @@ const ProductListPage: React.FC = () => {
   const [buttonLoading, setButtonLoading] = useState(false)
   const [type, setType] = useState(0)
   const navigate = useNavigate();
-
   const columns = useMemo<ColumnsType<any>>(() => {
     return [
       {

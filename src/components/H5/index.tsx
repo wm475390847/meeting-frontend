@@ -1,7 +1,7 @@
-import { createH5, updateH5 } from "@/services";
-import { Button, Modal, Form, Space, DatePicker, Input, message } from "antd";
+import {createH5, updateH5} from "@/services";
+import {Button, DatePicker, Form, Input, message, Modal, Space} from "antd";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import styles from './index.module.less'
 
 type H5ModuleProps = {
@@ -27,7 +27,6 @@ const H5Module: React.FC<H5ModuleProps> = (props) => {
 
     const handleGetMeetingTime = (value: string) => {
         console.log(value);
-
         const [start, end] = value || [];
         setStartTime(start ? moment(start).valueOf() : undefined);
         setEndTime(end ? moment(end).valueOf() : undefined);
@@ -40,7 +39,7 @@ const H5Module: React.FC<H5ModuleProps> = (props) => {
                 createH5({ ...values, meetingStartTime: startTime, meetingEndTime: endTime })
                     .then(res => {
                         if (res.success) {
-                            message.success(res.message)
+                            message.success(res.message).then(r => r)
                             setLoading(true)
                             handleCancel()
                         }

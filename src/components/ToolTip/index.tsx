@@ -1,4 +1,4 @@
-import { Button, Tooltip } from 'antd';
+import {Button, Tooltip} from 'antd';
 import React from 'react';
 import styles from './index.module.less'
 
@@ -7,7 +7,6 @@ type ToolTipModuleProps = {
     linkText: string
     isWindowOpen?: boolean
 }
-
 const ToolTipModule: React.FC<ToolTipModuleProps> = (props) => {
     const { linkText: text, isWindowOpen, buttonText: buttonContent } = props
 
@@ -28,7 +27,7 @@ const ToolTipModule: React.FC<ToolTipModuleProps> = (props) => {
                         {buttonContent}
                     </Button>
                     :
-                    <span> {buttonContent}</span>
+                    <span>{buttonContent}</span>
             }
         </Tooltip >
     );

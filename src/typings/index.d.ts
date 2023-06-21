@@ -9,12 +9,6 @@ interface RequestOpt {
   success: boolean
   total?: number
 }
-
-
-interface IRouterProps {
-  path: string
-}
-
 interface PieData {
   type: string
   value: number
@@ -115,26 +109,6 @@ interface H5 {
   meetingName: string
   meetingStartTime: string
   meetingEndTime: string
-}
-
-interface ExecuteResult {
-  id: number
-  meetingName: string
-  meetingId: string
-  meetingStartTime: string
-  meetingEndTime: string
-  h5Name: string
-  h5Url: string
-  baseOssPath: string
-  resultOssPath: string
-  username: string
-  password: string
-  gmtCreate: string
-  executeTime: string
-  resultValue: number
-  status: number
-  reason: string
-  result: boolean
 }
 
 interface ResultPercent {
@@ -271,26 +245,6 @@ interface Task {
   executeTime?: string
   elapsedTime?: string
   status: number
-}
-
-interface ExecuteResult {
-  id: number
-  meetingName: string
-  meetingId: string
-  meetingStartTime: string
-  meetingEndTime: string
-  h5Name: string
-  h5Url: string
-  baseOssPath: string
-  resultOssPath: string
-  username: string
-  password: string
-  gmtCreate: string
-  executeTime: string
-  resultValue: number
-  status: number
-  reason: string
-  result: boolean
 }
 
 interface PerformanceInfo {

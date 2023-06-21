@@ -1,9 +1,9 @@
-import { ColumnsType } from "antd/lib/table"
-import { useEffect, useMemo, useState } from "react"
-import { Button, DatePicker, Input, message, Popconfirm, Space, Table } from 'antd'
+import {ColumnsType} from "antd/lib/table"
+import React, {useEffect, useMemo, useState} from "react"
+import {Button, DatePicker, Input, message, Popconfirm, Space, Table} from 'antd'
 import moment from "moment"
 import ToolTipModule from "@/components/ToolTip"
-import { batchUpdate, deleteH5, getH5List } from "@/services"
+import {batchUpdate, deleteH5, getH5List} from "@/services"
 import H5Module from "@/components/H5"
 import styles from './index.module.less'
 
@@ -24,11 +24,10 @@ const H5Page: React.FC = () => {
     const [pageSize, setPageSize] = useState(10)
     const [total, setTotal] = useState(0)
     const [h5List, setH5List] = useState<H5[]>()
-    const [buttonLoading, setButtongLoading] = useState(false)
+    const [buttonLoading, setButtonLoading] = useState(false)
     const [searchH5, setSearchH5] = useState<SearchH5>()
     const [h5, setH5] = useState<H5>()
     const [type, setType] = useState<number>(0)
-
     const columns = useMemo<ColumnsType<any>>(() => {
         return [
             {
@@ -41,7 +40,7 @@ const H5Page: React.FC = () => {
                 dataIndex: 'meetingName',
                 key: 'meetingName',
                 width: '15%',
-                render: (text) => <ToolTipModule linkText={text} buttonText={text} />
+                render: (text) => <ToolTipModule linkText={text} buttonText={text}/>
             },
             {
                 title: 'url',
@@ -83,11 +82,15 @@ const H5Page: React.FC = () => {
                 render: (_, record) => {
                     return (
                         <div className={styles.tableAction}>
-                            <Button disabled={record.caseResult} type="primary" onClick={() => { setH5(record), setType(2) }}>编辑</Button>
-                            <Popconfirm title="确定删除？" placement="top" okText="是" cancelText="否" onConfirm={() => handleDelectH5(record.id)}>
+                            <Button disabled={record.caseResult} type="primary" onClick={() => {
+                                setH5(record);
+                                setType(2)
+                            }}>编辑</Button>
+                            <Popconfirm title="确定删除？" placement="top" okText="是" cancelText="否"
+                                        onConfirm={() => handleDeleteH5(record.id)}>
                                 <Button loading={buttonLoading}>删除</Button>
                             </Popconfirm>
-                        </div >
+                        </div>
                     )
                 }
             }
@@ -95,21 +98,21 @@ const H5Page: React.FC = () => {
     }, [pageNo, pageSize])
 
     const onChangeTable = (value: any) => {
-        const { current, pageSize } = value
+        const {current, pageSize} = value
         setPageNo(current)
         setPageSize(pageSize)
         setLoading(true)
     }
 
-    const handleDelectH5 = (id: number) => {
-        setButtongLoading(true)
+    const handleDeleteH5 = (id: number) => {
+        setButtonLoading(true)
         deleteH5(id)
             .then(res => {
-                message.info(res.message)
+                message.info(res.message).then(r => r)
                 setLoading(true)
             })
             .catch(err => message.error(err.message))
-            .finally(() => setButtongLoading(false))
+            .finally(() => setButtonLoading(false))
     }
 
     const handleGetH5List = () => {
@@ -131,7 +134,7 @@ const H5Page: React.FC = () => {
         setSearchH5({ ...searchH5, h5Name: value })
     }
 
-    const handleSeatchH5 = (value: string) => {
+    const handleSearchH5 = (value: string) => {
         if (!Array.isArray(value)) {
             setSearchH5({
                 meetingStartTime: undefined,
@@ -167,7 +170,7 @@ const H5Page: React.FC = () => {
             <div className={styles.action}>
                 <div>
                     <Space className={styles.space} direction="vertical">
-                        <RangePicker onChange={handleSeatchH5} />
+                        <RangePicker onChange={handleSearchH5}/>
                     </Space>
                     <Search className={styles.search} placeholder="请输入H5名称" onSearch={setH5Name} enterButton />
                 </div>

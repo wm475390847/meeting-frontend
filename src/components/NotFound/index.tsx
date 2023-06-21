@@ -1,9 +1,5 @@
-/**
-* @author 门神
-*/
-import { Component } from 'react';
-import { Result } from 'antd';
-// import store from '@/store';
+import {Component} from 'react';
+import {Result} from 'antd';
 import styles from './index.module.less';
 
 interface ComProps {
@@ -21,13 +17,11 @@ class Com extends Component<ComProps, ComState> {
 
     };
   }
-
   componentDidMount(): void {
   }
 
   componentWillUnmount(): void {
   }
-
   render() {
     return (
       <div className={styles.pageWrapper}>
@@ -40,5 +34,4 @@ class Com extends Component<ComProps, ComState> {
     );
   }
 }
-
 export default Com;

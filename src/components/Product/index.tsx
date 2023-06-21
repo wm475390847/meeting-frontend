@@ -1,6 +1,6 @@
-import { createProduct, getProductGroup } from "@/services";
-import { Button, Modal, Form, Input, message, Select } from "antd";
-import { useEffect, useState } from "react";
+import {createProduct, getProductGroup} from "@/services";
+import {Button, Form, Input, message, Modal, Select} from "antd";
+import React, {useEffect, useState} from "react";
 import styles from './index.module.less'
 
 type ProductModuleProps = {
@@ -69,7 +69,6 @@ const ProductModule: React.FC<ProductModuleProps> = (props) => {
         if (open && type === 2 && productInfo) {
             setTimeout(() => {
                 form.setFieldsValue({
-
                 })
             }, 500);
         }

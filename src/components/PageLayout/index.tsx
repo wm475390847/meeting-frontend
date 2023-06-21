@@ -1,33 +1,32 @@
-import React, { ReactElement, useEffect, useState } from 'react';
-import { Layout, Menu, Popover, message, Button, theme, Breadcrumb } from 'antd';
+import React, {ReactElement, useEffect, useState} from 'react';
+import {Layout, Menu, message, Popover, theme} from 'antd';
 import classnames from 'classnames';
-import { Outlet, Link } from 'react-router-dom';
-import Cookies from 'js-cookie';
-import { RouteBase } from '../../routes';
-import { getUserInfo } from '@/services';
+import {Link, Outlet} from 'react-router-dom';
+import {RouteBase} from '@/routes';
+import {getUserInfo} from '@/services';
 import styles from './index.module.less';
 import logo from '@/assets/svg/logo.svg';
 import logoutIcon from '@/assets/svg/logout.svg';
 import personIcon from '@/assets/svg/person.svg';
-import { Footer } from 'antd/lib/layout/layout';
-import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
-import * as Icon from "@ant-design/icons";
-import { Client } from '@/utils';
+import {Footer} from 'antd/lib/layout/layout';
+import * as Icon from '@ant-design/icons';
+import {Client} from '@/utils';
+
 type LayoutPropModule = {
   children?: ReactElement | ReactElement[];
   routes: RouteBase[];
 };
 
-export const PageLayoutModule: React.FC<LayoutPropModule> = ({ routes }) => {
+export const PageLayoutModule: React.FC<LayoutPropModule> = ({routes}) => {
   const [collapsed, setCollapsed] = useState(false)
   const [selectKey, setSelectKey] = useState(null);
   const [openKeys, setOpenKeys] = useState<any[]>([]);
   const [nickName, setNickName] = useState('');
   const [avatar, setAvatar] = useState('');
   const [menuItems, setMenuItem] = useState<any[]>([]);
-  const { Sider, Content, Header } = Layout;
+  const {Sider, Content, Header} = Layout;
   const {
-    token: { colorBgContainer },
+    token: {colorBgContainer},
   } = theme.useToken();
 
   useEffect(() => {
@@ -49,7 +48,7 @@ export const PageLayoutModule: React.FC<LayoutPropModule> = ({ routes }) => {
       setAvatar(avatar);
     }).catch((errObj: any) => {
       message.destroy();
-      message.error(errObj.msg || '获取用户信息失败');
+      message.error(errObj.msg || '获取用户信息失败').then(r => r);
     })
   }
 
@@ -62,7 +61,7 @@ export const PageLayoutModule: React.FC<LayoutPropModule> = ({ routes }) => {
 
   /**
    * 创建icon图标元素
-   * @name 图标名称
+   * @param name 图标名称
    */
   const handleIconToElement = (name: string) =>
     React.createElement(Icon && (Icon as any)[name], {
@@ -135,53 +134,50 @@ export const PageLayoutModule: React.FC<LayoutPropModule> = ({ routes }) => {
   return (
     <>
       <Layout className={styles.layout}>
-
-        <Sider collapsed={collapsed}>
+        <Sider
+            collapsible
+            collapsed={collapsed}
+            onCollapse={(value) => setCollapsed(value)}
+        >
           <div className={styles.logo}>
-            <img src={logo} alt="" />
+            <img src={logo} alt=""/>
           </div>
           <Menu
-            theme="dark"
-            mode="inline"
-            selectedKeys={[selectKey] as unknown as string[]}
-            openKeys={openKeys}
-            items={menuItems}
-            onSelect={handleMenuChange}
-            onOpenChange={handleOpenChange} />
+              theme="dark"
+              mode="inline"
+              selectedKeys={[selectKey] as unknown as string[]}
+              openKeys={openKeys}
+              items={menuItems}
+              onSelect={handleMenuChange}
+              onOpenChange={handleOpenChange}
+          />
         </Sider>
-
         <Layout>
 
           <Header className={styles.header}>
-            <Button
-              className={styles.button}
-              type="text"
-              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-              onClick={() => setCollapsed(!collapsed)} />
             <Popover
-              placement="bottomRight"
-              content={popoverContent}
-              trigger="hover"
+                placement="bottomRight"
+                content={popoverContent}
+                trigger="hover"
             >
               <div className={styles.user}>
                 {avatar ? (
-                  <img src={avatar} alt="" />
+                    <img src={avatar} alt=""/>
                 ) : nickName.split('')[0] || 's'}
               </div>
             </Popover>
           </Header>
 
-          <Content style={{ margin: '20px 15px 0', height: '100%' }}>
-            <div style={{ padding: 24, minHeight: 360, background: colorBgContainer }}>
-              <Outlet />
+          <Content style={{margin: '20px 15px 0', height: '100%'}}>
+            <div style={{padding: 24, minHeight: 360, background: colorBgContainer}}>
+              <Outlet/>
             </div>
           </Content>
 
-          <Footer style={{ textAlign: 'center' }}>
+          <Footer style={{textAlign: 'center'}}>
             数字企业·质量保障平台 | ©2022 - {new Date().getFullYear()} Created by 质量保障组 |
             <a href='https://codeup.aliyun.com/xhzy/xhzy-qa/meeting-frontend/tree/dev' target='_blank'> CodeUp地址 </a>
           </Footer>
-
         </Layout>
       </Layout>
     </>

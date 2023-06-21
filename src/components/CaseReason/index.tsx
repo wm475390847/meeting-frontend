@@ -1,5 +1,5 @@
-import { Button, Modal } from 'antd';
-import React, { useEffect, useState } from 'react';
+import {Button, Modal} from 'antd';
+import React, {useEffect, useState} from 'react';
 import AceEditor from 'react-ace';
 import "ace-builds/src-noconflict/mode-sh";
 import "ace-builds/src-noconflict/mode-python"
@@ -12,8 +12,8 @@ type CaseReasonModuleProps = {
   onCancel?: () => void
 }
 
-const CasseReasonModule: React.FC<CaseReasonModuleProps> = (props) => {
-  const { reason, onCancel } = props
+const CaseReasonModule: React.FC<CaseReasonModuleProps> = (props) => {
+  const {reason, onCancel} = props
   const [open, setOpen] = useState(false)
 
   const handleCancel = () => {
@@ -68,4 +68,4 @@ const CasseReasonModule: React.FC<CaseReasonModuleProps> = (props) => {
   );
 };
 
-export default CasseReasonModule;
+export default CaseReasonModule;

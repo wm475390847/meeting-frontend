@@ -1,11 +1,11 @@
-import { ColumnsType } from "antd/lib/table"
-import { useEffect, useMemo, useRef, useState } from "react"
-import { Button, message, Popconfirm, Spin, Table } from 'antd'
+import {ColumnsType} from "antd/lib/table"
+import React, {useEffect, useMemo, useRef, useState} from "react"
+import {Button, message, Popconfirm, Spin, Table} from 'antd'
 import moment from "moment"
-import { deleteTask, executeTask, getTaskList } from "@/services"
+import {deleteTask, executeTask, getTaskList} from "@/services"
 import TaskReportModal from "@/components/TaskReport"
-import { TaskStatusEnum } from "@/constants"
-import { LoadingOutlined } from "@ant-design/icons"
+import {TaskStatusEnum} from "@/constants"
+import {LoadingOutlined} from "@ant-design/icons"
 import ToolTipModule from "@/components/ToolTip"
 import styles from './index.module.less'
 
@@ -15,13 +15,12 @@ const TaskPage: React.FC = () => {
     const [pageSize, setPageSize] = useState(10)
     const [total, setTotal] = useState(0)
     const [taskList, setTaskList] = useState<Task[]>()
-    const [buttonLoading, setButtongLoading] = useState(false)
+    const [buttonLoading, setButtonLoading] = useState(false)
     const [status, setStatus] = useState<number>(0)
     const [task, setTask] = useState<Task>()
-    const antIcon = <LoadingOutlined style={{ fontSize: 15 }} spin />;
+    const antIcon = <LoadingOutlined style={{fontSize: 15}} spin/>;
     const timerRef = useRef<any>(null)
     const taskListRef = useRef<Task[]>([])
-
     const columns = useMemo<ColumnsType<any>>(() => {
         return [
             {
@@ -71,15 +70,20 @@ const TaskPage: React.FC = () => {
                 render: (_, record) => {
                     return (
                         <div className={styles.tableAction}>
-                            <Popconfirm title='确定执行？' placement="top" okText="是" cancelText="否" onConfirm={() => fetchExecuteTask(record.id)}>
+                            <Popconfirm title='确定执行？' placement="top" okText="是" cancelText="否"
+                                        onConfirm={() => handleExecuteTask(record.id)}>
                                 <Button type="primary" loading={buttonLoading}>执行</Button>
                             </Popconfirm>
                             {/* <Button onClick={() => { setTaskInfo(record), setStatus(2) }}>编辑</Button> */}
-                            <Button onClick={() => { setTask(record), setStatus(3) }}>报告</Button>
-                            <Popconfirm title='确定删除？' placement="top" okText="是" cancelText="否" onConfirm={() => fetchDelectTask(record.id)}>
+                            <Button onClick={() => {
+                                setTask(record);
+                                setStatus(3)
+                            }}>报告</Button>
+                            <Popconfirm title='确定删除？' placement="top" okText="是" cancelText="否"
+                                        onConfirm={() => handleDeleteTask(record.id)}>
                                 <Button loading={buttonLoading}>删除</Button>
                             </Popconfirm>
-                        </div >
+                        </div>
                     )
                 }
             }
@@ -93,7 +97,7 @@ const TaskPage: React.FC = () => {
         setLoading(true)
     }
 
-    const fetchTaskList = () => {
+    const handleTaskList = () => {
         getTaskList({
             pageNo: pageNo,
             pageSize: pageSize,
@@ -104,31 +108,31 @@ const TaskPage: React.FC = () => {
         })
     }
 
-    const fetchExecuteTask = (taskId: number) => {
+    const handleExecuteTask = (taskId: number) => {
         executeTask(taskId)
             .then(res => {
-                message.info(res.message)
+                message.info(res.message).then(r => r)
                 setLoading(true)
-            }).catch(err => {
-                message.error(err.message)
-            }).finally(() => setButtongLoading(false))
+            })
+            .catch(err => message.error(err.message))
+            .finally(() => setButtonLoading(false))
     }
 
-    const fetchDelectTask = (taskId: number) => {
+    const handleDeleteTask = (taskId: number) => {
         deleteTask(taskId)
             .then(res => {
-                message.info(res.message)
+                message.info(res.message).then(r => r)
                 setLoading(true)
-            }).catch(err => {
-                message.error(err.message)
-            }).finally(() => setButtongLoading(false))
+            })
+            .catch(err => message.error(err.message))
+            .finally(() => setButtonLoading(false))
     }
 
     useEffect(() => {
         timerRef.current = setInterval(() => {
             if (taskListRef.current && taskListRef.current.map(item => item.status).includes(2)) {
                 console.log("存在运行中的任务");
-                fetchTaskList()
+                handleTaskList()
             }
         }, 10000)
         return () => { clearInterval(timerRef.current) }
@@ -141,7 +145,7 @@ const TaskPage: React.FC = () => {
     }, [taskList])
 
     useEffect(() => {
-        loading && fetchTaskList()
+        loading && handleTaskList()
     }, [pageNo, loading])
 
     return (

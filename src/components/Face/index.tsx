@@ -1,6 +1,6 @@
-import { createFace, updateFace } from "@/services";
-import { Button, Modal, Form, Input, message, Select, InputNumber } from "antd";
-import { useEffect, useState } from "react";
+import {createFace, updateFace} from "@/services";
+import {Button, Form, Input, InputNumber, message, Modal, Select} from "antd";
+import {useEffect, useState} from "react";
 import UploadImgModule from "../UploadImg";
 import styles from './index.module.less'
 
@@ -64,7 +64,7 @@ const FaceModule: React.FC<FaceModuleProps> = (props) => {
                 setFaceResult(temp)
                 // 判断id为空就报错
                 if (!face?.id) {
-                    message.error("id为空")
+                    message.error("id为空").then(r => r)
                     setButtonLoading(false)
                     return
                 }
@@ -81,7 +81,7 @@ const FaceModule: React.FC<FaceModuleProps> = (props) => {
                 })
                     .then(res => {
                         if (res.success) {
-                            message.success(res.message)
+                            message.success(res.message).then(r => r)
                             setLoading(true)
                             handleCancel()
                         }

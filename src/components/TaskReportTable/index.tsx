@@ -1,12 +1,12 @@
-import { useEffect, useMemo, useState } from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import VirtualTable from "../VirtualTable";
-import { ColumnsType } from "antd/lib/table";
+import {ColumnsType} from "antd/lib/table";
 import moment from "moment";
-import { Button, message, Image, Popover } from "antd";
-import { executeHistory, getTaskReport as getTaskReportList } from "@/services";
+import {Button, Image, message, Popover} from "antd";
+import {executeHistory, getTaskReport as getTaskReportList} from "@/services";
 import styles from './index.module.less'
-import { QuestionCircleOutlined } from "@ant-design/icons";
-import { defaultImage } from "@/constants";
+import {QuestionCircleOutlined} from "@ant-design/icons";
+import {defaultImage} from "@/constants";
 
 type TaskReportTableModuleProps = {
     result?: boolean
@@ -14,10 +14,9 @@ type TaskReportTableModuleProps = {
 }
 
 const TaskReportTableModule: React.FC<TaskReportTableModuleProps> = (prop) => {
-    const { result, taskId } = prop
+    const {result, taskId} = prop
     const [reportList, setReportList] = useState<TaskReport[]>()
-    const [buttonLoading, setButtongLoading] = useState<boolean>(false)
-
+    const [buttonLoading, setButtonLoading] = useState<boolean>(false)
     const columns = useMemo<ColumnsType<any>>(() => {
         return [
             {
@@ -109,22 +108,18 @@ const TaskReportTableModule: React.FC<TaskReportTableModuleProps> = (prop) => {
 
     const handleExecuteHistory = (id: number) => {
         executeHistory(id)
-            .then(rep => {
-                message.info(rep.message)
-            }).catch(err => {
-                message.info(err.message)
-            }).finally(() => setButtongLoading(false))
+            .then(rep => message.info(rep.message))
+            .catch(err => message.error(err.message))
+            .finally(() => setButtonLoading(false))
     }
 
     const handleTaskReportList = (result: boolean, taskId: number) => {
         getTaskReportList({
             result: result,
             taskId: taskId
-        }).then(rep => {
-            setReportList(rep.data)
-        }).catch(err => {
-            message.error(err.message)
         })
+            .then(rep => setReportList(rep.data))
+            .catch(err => message.error(err.message))
     }
 
     useEffect(() => {

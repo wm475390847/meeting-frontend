@@ -1,12 +1,12 @@
-import { Breadcrumb, Button, Input, message, Popconfirm, Progress, Select, Table } from 'antd';
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { ColumnsType } from 'antd/lib/table';
+import {Breadcrumb, Button, Input, message, Popconfirm, Progress, Select, Table} from 'antd';
+import React, {useEffect, useMemo, useState} from 'react';
+import {ColumnsType} from 'antd/lib/table';
 import moment from 'moment';
-import { deleteCase, executeCase, getCaseList, getProductGroup } from '@/services';
-import CasseReasonModule from '@/components/CaseReason'
+import {deleteCase, executeCase, getCaseList} from '@/services';
+import CaseReasonModule from '@/components/CaseReason'
 import ToolTipModule from '@/components/ToolTip';
 import styles from './index.module.less'
-import { Link, useLocation, useParams } from 'react-router-dom';
+import {Link, useLocation, useParams} from 'react-router-dom';
 
 interface SearchCase {
   caseResult?: boolean
@@ -14,10 +14,9 @@ interface SearchCase {
   caseOwner?: string
   caseName?: string
 }
-
 const ProductDetailPage: React.FC = () => {
-  const { Option } = Select;
-  const { Search } = Input
+  const {Option} = Select;
+  const {Search} = Input
   const [pageNo, setPageNo] = useState(1)
   const [pageSize, setPageSize] = useState(10)
   const [loading, setLoading] = useState(true)
@@ -25,8 +24,8 @@ const ProductDetailPage: React.FC = () => {
   const [caseList, setCaseList] = useState<CaseInfo[]>()
   const [reason, setReason] = useState()
   const [searchCase, setSearchCase] = useState<SearchCase>()
-  const [buttonLoading, setButtongLoading] = useState(false)
-  const { productName } = useParams<{ productName: string }>();
+  const [buttonLoading, setButtonLoading] = useState(false)
+  const {productName} = useParams<{ productName: string }>();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const productId = searchParams.get("id");
@@ -61,7 +60,8 @@ const ProductDetailPage: React.FC = () => {
         width: '6%',
         render: (text) => {
           return (
-            text ? < Progress type="circle" percent={100} width={30} /> : < Progress status="exception" type="circle" percent={100} width={30} />
+              text ? < Progress type="circle" percent={100} size={30}/> :
+                  < Progress status="exception" type="circle" percent={100} size={30}/>
           )
         }
       },
@@ -79,7 +79,7 @@ const ProductDetailPage: React.FC = () => {
       },
       {
         title: "执行时间",
-        key: "excuteTime",
+        key: "executeTime",
         dataIndex: "executeTime",
         width: '15%',
         render: (text) => <div>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</div>
@@ -113,22 +113,22 @@ const ProductDetailPage: React.FC = () => {
 
   const handleDeleteCase = (id: number) => {
     deleteCase(id)
-      .then(res => {
-        message.info(res.message)
-        setLoading(true)
-      }).catch(err => {
-        message.error(err.message)
-      }).finally(() => setButtongLoading(false))
+        .then(res => {
+          message.info(res.message).then(r => r)
+          setLoading(true)
+        })
+        .catch(err => message.error(err.message))
+        .finally(() => setButtonLoading(false))
   }
 
   const handleExecuteCase = (ciJobId: number, caseName: string) => {
     executeCase(ciJobId, caseName)
-      .then(data => {
-        message.info('执行成功')
-        setLoading(true)
-      }).catch(err => {
-        message.error('执行失败')
-      }).finally(() => setButtongLoading(false))
+        .then(() => {
+          message.info('执行成功').then(r => r)
+          setLoading(true)
+        })
+        .catch(() => message.error('执行失败'))
+        .finally(() => setButtonLoading(false))
   }
 
   const handleGetCaseList = () => {
@@ -193,7 +193,6 @@ const ProductDetailPage: React.FC = () => {
           </Select>
         </div>
 
-
         <div className={styles.container} >
           <span className={styles.span}>用例名称：</span>
           <Search
@@ -218,16 +217,16 @@ const ProductDetailPage: React.FC = () => {
       </div>
       <div>
         <Table
-          columns={columns}
-          dataSource={caseList}
-          rowKey='id'
-          onChange={onChangeTable}
-          pagination={{ total, current: pageNo, showSizeChanger: true }}
-          loading={loading}
-          className={styles.table}
+            columns={columns}
+            dataSource={caseList}
+            rowKey='id'
+            onChange={onChangeTable}
+            pagination={{total, current: pageNo, showSizeChanger: true}}
+            loading={loading}
+            className={styles.table}
         />
       </div>
-      <CasseReasonModule reason={reason} onCancel={() => setReason(undefined)} />
+      <CaseReasonModule reason={reason} onCancel={() => setReason(undefined)}/>
     </div >
   );
 };

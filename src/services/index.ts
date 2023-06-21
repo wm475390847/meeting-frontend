@@ -1,16 +1,24 @@
-import { ISearchCaseListReq, ISearchPerformanceReq, ISearchProductListReq } from "./interface"
-import { ICreateFaceReq, ISearchFaceListReq, IUpdateFaceReq } from "./interface"
-import { ICreateH5Req, ISearchH5Req, IUpdateH5Req } from "./interface"
-import { ISearchTaskListReq } from "./interface"
-import { Client } from "@/utils"
+import {
+    ICreateFaceReq,
+    ICreateH5Req,
+    ISearchCaseListReq,
+    ISearchFaceListReq,
+    ISearchH5Req,
+    ISearchPerformanceReq,
+    ISearchProductListReq,
+    ISearchTaskListReq,
+    IUpdateFaceReq,
+    IUpdateH5Req
+} from "./interface"
+import {Client} from "@/utils"
 
 
 const client = new Client({})
 
 /**
  * 获取用例列表
- * @param data 
- * @returns 
+ * @param data
+ * @returns
  */
 export const getCaseList: (data: ISearchCaseListReq) => Promise<IPageRequest<CaseInfo>> = (data) => {
     return new Promise(async (resolve, reject) => {
@@ -103,8 +111,8 @@ export const getProductGroup: () => Promise<ServiceInfo[]> = () => {
 
 /**
  * 删除产品
- * @param data 查询数据
- * @returns 
+ * @param id 查询数据
+ * @returns
  */
 export const deleteProduct: (id: number) => Promise<RequestOpt> = (id) => {
     return new Promise(async (resolve, reject) => {
@@ -175,8 +183,8 @@ export const getPerfReportList: (perfId: number) => Promise<RequestOpt> = (perfI
 
 /**
  * 执行性能测试
- * @param perfId 性能测试id
- * @returns 
+ * @param id 性能测试id
+ * @returns
  */
 export const startPerformance: (id: number) => Promise<RequestOpt> = (id) => {
     return new Promise(async (resolve, reject) => {
@@ -210,8 +218,8 @@ export const batchUpdatePerformance: () => Promise<RequestOpt> = () => {
 
 /**
  * 删除性能测试
- * @param perfId 性能测试id
- * @returns 
+ * @param id 性能测试id
+ * @returns
  */
 export const deletePerformance: (id: number) => Promise<RequestOpt> = (id) => {
     return new Promise(async (resolve, reject) => {
@@ -282,8 +290,8 @@ export const updateFace: (data: IUpdateFaceReq) => Promise<RequestOpt> = (data) 
 
 /**
  * 修改人脸识别任务
- * @param data 
- * @returns 
+ * @param id
+ * @returns
  */
 export const deleteFace: (id: number) => Promise<RequestOpt> = (id) => {
     return new Promise(async (resolve, reject) => {

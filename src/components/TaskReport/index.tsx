@@ -1,6 +1,6 @@
-import { getTaskResultPercent } from "@/services";
-import { Button, Collapse, Form, message, Modal } from "antd";
-import { useEffect, useState } from "react";
+import {getTaskResultPercent} from "@/services";
+import {Button, Collapse, Form, message, Modal} from "antd";
+import React, {useEffect, useState} from "react";
 import TaskReportTableModule from "../TaskReportTable";
 import styles from './index.module.less'
 
@@ -10,13 +10,13 @@ type TaskReportModalProps = {
 }
 
 const TaskReportModal: React.FC<TaskReportModalProps> = (props) => {
-    const { onCancel, taskInfo } = props
-    const { Panel } = Collapse
+    const {onCancel, taskInfo} = props
+    const {Panel} = Collapse
     const [open, setOpen] = useState(true)
     const [resultPercent, setResultPercent] = useState<ResultPercent>()
 
     const onChange = (key: string | string[]) => {
-
+        console.log(key)
     };
 
     const handleCancel = () => {
@@ -24,13 +24,10 @@ const TaskReportModal: React.FC<TaskReportModalProps> = (props) => {
         onCancel && onCancel()
     }
 
-    const getPercent = () => {
+    const handleGetPercent = () => {
         getTaskResultPercent(taskInfo?.id as number)
-            .then(rep => {
-                setResultPercent(rep.data)
-            }).catch(err => {
-                message.error(err.message)
-            })
+            .then(rep => setResultPercent(rep.data))
+            .catch(err => message.error(err.message))
     }
 
     useEffect(() => {
@@ -38,7 +35,7 @@ const TaskReportModal: React.FC<TaskReportModalProps> = (props) => {
     }, [taskInfo])
 
     useEffect(() => {
-        open && getPercent()
+        open && handleGetPercent()
     }, [open])
 
     return (

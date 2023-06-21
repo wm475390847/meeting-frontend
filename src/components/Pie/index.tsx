@@ -1,4 +1,5 @@
-import { Pie } from "@ant-design/charts";
+import {Pie} from "@ant-design/charts";
+import React from "react";
 
 type PieModuleProps = {
     data: PieData[]
@@ -6,7 +7,7 @@ type PieModuleProps = {
 }
 
 const PieModule: React.FC<PieModuleProps> = (props) => {
-    const { data, env } = props
+    const {data, env} = props
 
     const config = {
         appendPadding: 10,
