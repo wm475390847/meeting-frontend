@@ -37,7 +37,7 @@ interface CaseInfo {
 interface ServiceInfo {
   id: number
   serviceName: string
-  products: ProductInfo[]
+  deleted: boolean
 }
 
 interface ProductInfo {

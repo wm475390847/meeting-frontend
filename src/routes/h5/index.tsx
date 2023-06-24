@@ -108,7 +108,7 @@ const H5Page: React.FC = () => {
         setButtonLoading(true)
         deleteH5(id)
             .then(res => {
-                message.info(res.message).then(r => r)
+                message.success(res.message).then(r => r)
                 setLoading(true)
             })
             .catch(err => message.error(err.message))

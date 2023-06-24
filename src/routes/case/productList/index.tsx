@@ -37,18 +37,21 @@ const ProductListPage: React.FC = () => {
         ellipsis: true
       },
       {
-        title: '用例数量',
+        title: '用例数量(条)',
         key: 'caseCount',
         dataIndex: 'caseCount',
         width: '15%',
         ellipsis: true
       },
       {
-        title: '成功率',
+        title: '成功率(%)',
         key: 'casePercent',
         dataIndex: 'casePercent',
         width: '15%',
-        ellipsis: true
+        ellipsis: true,
+        render: (casePercent) => {
+          return (`${casePercent}%`)
+        }
       },
       {
         title: '操作',
@@ -104,7 +107,7 @@ const ProductListPage: React.FC = () => {
     setButtonLoading(true)
     deleteProduct(id)
       .then(res => {
-        message.info(res.message)
+        message.success(res.message).then(r => r)
         setLoading(true)
       })
       .catch(err => message.error(err.message))

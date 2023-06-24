@@ -115,7 +115,7 @@ const PerfPage: React.FC = () => {
     const handleStartPerformance = (id: number) => {
         startPerformance(id)
             .then(res => {
-                message.info(res.message).then(r => r)
+                message.success(res.message).then(r => r)
                 setLoading(true)
             })
             .catch(err => message.error(err.message))
@@ -125,7 +125,7 @@ const PerfPage: React.FC = () => {
     const handleBathUpdatePerformance = () => {
         batchUpdatePerformance()
             .then(req => {
-                message.info(req.message).then(r => r)
+                message.success(req.message).then(r => r)
                 setLoading(true)
             })
             .catch(err => message.error(err.message))
@@ -134,7 +134,7 @@ const PerfPage: React.FC = () => {
     const handleDeletePerformance = (id: number) => {
         deletePerformance(id)
             .then(res => {
-                message.info(res.message).then(r => r)
+                message.success(res.message).then(r => r)
                 setLoading(true)
             }).catch(err => message.error(err.message))
             .finally(() => setButtonLoading(false))

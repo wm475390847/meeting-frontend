@@ -111,7 +111,7 @@ const TaskPage: React.FC = () => {
     const handleExecuteTask = (taskId: number) => {
         executeTask(taskId)
             .then(res => {
-                message.info(res.message).then(r => r)
+                message.success(res.message).then(r => r)
                 setLoading(true)
             })
             .catch(err => message.error(err.message))
@@ -121,7 +121,7 @@ const TaskPage: React.FC = () => {
     const handleDeleteTask = (taskId: number) => {
         deleteTask(taskId)
             .then(res => {
-                message.info(res.message).then(r => r)
+                message.success(res.message).then(r => r)
                 setLoading(true)
             })
             .catch(err => message.error(err.message))

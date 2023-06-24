@@ -114,7 +114,7 @@ const FacePage: React.FC = () => {
     const handleExecuteFace = (id: number) => {
         executeFace(id)
             .then(res => {
-                message.info(res.message).then(r => r)
+                message.success(res.message).then(r => r)
                 setLoading(true)
             })
             .catch(err => message.error(err.message))
@@ -124,7 +124,7 @@ const FacePage: React.FC = () => {
     const handleDeleteFace = (id: number) => {
         deleteFace(id)
             .then(res => {
-                message.info(res.message).then(r => r)
+                message.success(res.message).then(r => r)
                 setLoading(true)
             })
             .catch(err => message.error(err.message))

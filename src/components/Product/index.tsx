@@ -23,7 +23,7 @@ const ProductModule: React.FC<ProductModuleProps> = (props) => {
     }
 
     const options = () => {
-        return serviceList.map((item, index) => ({
+        return serviceList.map((item) => ({
             value: item.id,
             label: item.serviceName
         }))
@@ -35,7 +35,7 @@ const ProductModule: React.FC<ProductModuleProps> = (props) => {
                 setButtonLoading(true)
                 createProduct({ ...values })
                     .then(res => {
-                        message.info(res.message)
+                        message.success(res.message).then(r => r)
                         setLoading(true)
                         handleCancel()
                     })
@@ -91,7 +91,7 @@ const ProductModule: React.FC<ProductModuleProps> = (props) => {
                 className={styles.form}
             >
                 <Form.Item name='productName' label="产品名称" rules={[{ required: true, message: '产品名称不能为空' }]} >
-                    <Input placeholder='请输入会议名称' />
+                    <Input placeholder='请输入产品名称'/>
                 </Form.Item>
                 {
                     serviceList && serviceList.length > 0 &&
