@@ -42,14 +42,16 @@ export const PageLayoutModule: React.FC<LayoutPropModule> = ({routes}) => {
   }, []);
 
   const handleGetUserInfo = () => {
-    getUserInfo().then((res: any) => {
-      const { name: name = '', avatar = '' } = res || {};
-      setNickName(name);
-      setAvatar(avatar);
-    }).catch((errObj: any) => {
-      message.destroy();
-      message.error(errObj.msg || '获取用户信息失败').then(r => r);
-    })
+    getUserInfo()
+        .then((res: any) => {
+          const {name: name = '', avatar = ''} = res || {};
+          setNickName(name);
+          setAvatar(avatar);
+        })
+        .catch((errObj: any) => {
+          message.destroy();
+          message.error(errObj.msg || '获取用户信息失败').then(r => r);
+        })
   }
 
   /**
