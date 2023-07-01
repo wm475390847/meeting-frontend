@@ -1,15 +1,18 @@
 import {ColumnsType} from "antd/lib/table"
 import React, {useEffect, useMemo, useRef, useState} from "react"
-import {Button, message, Popconfirm, Spin, Table} from 'antd'
-import moment from "moment"
-import {batchUpdatePerformance, deletePerformance, getPerfList, startPerformance} from "@/services"
-import {TaskStatusEnum} from "@/constants"
-import {LoadingOutlined} from "@ant-design/icons"
+import {Button, message, Popconfirm, Table} from 'antd'
+import {deletePerf, getPerfList} from "@/services"
+// import {LoadingOutlined} from "@ant-design/icons"
 import styles from './index.module.less'
-import PerfReportModule from "@/components/PerfReport"
+import uploadIcon from '@/assets/svg/upload.svg';
+import downloadIcon from '@/assets/svg/download.svg';
+import ToolTipModule from "@/components/ToolTip";
+import PerfModule from "@/components/Perf";
+import Search from "antd/es/input/Search";
+import {OssUtil} from "@/utils";
 
 interface SearchPerf {
-    performanceName: string
+    perfName?: string
 }
 
 const PerfPage: React.FC = () => {
@@ -17,13 +20,15 @@ const PerfPage: React.FC = () => {
     const [pageNo, setPageNo] = useState(1)
     const [pageSize, setPageSize] = useState(10)
     const [total, setTotal] = useState(0)
-    const [performanceList, setPerformanceList] = useState<PerformanceInfo[]>()
+    const [perfList, setPerfList] = useState<PerfInfo[]>()
     const [buttonLoading, setButtonLoading] = useState(false)
-    const [perfId, setPerfId] = useState<number>()
-    const antIcon = <LoadingOutlined style={{ fontSize: 15 }} spin />;
-    const timerRef = useRef<any>(null)
-    const performanceListRef = useRef<PerformanceInfo[]>([])
+    const [type, setType] = useState(0)
     const [searchPerf, setSearchPerf] = useState<SearchPerf>();
+    const [perfInfo, setPerfInfo] = useState<PerfInfo>()
+    // const antIcon = <LoadingOutlined style={{fontSize: 15}} spin/>;
+    // const timerRef = useRef<any>(null)
+    const perfListRef = useRef<PerfInfo[]>([])
+
     const columns = useMemo<ColumnsType<any>>(() => {
         return [
             {
@@ -32,38 +37,24 @@ const PerfPage: React.FC = () => {
                 render: (_text, _record, index) => (pageNo as number - 1) * (pageSize as number) + index + 1
             },
             {
-                title: '名称',
-                dataIndex: 'performanceName',
-                key: 'performanceName',
+                title: '压测名称',
+                dataIndex: 'perfName',
+                key: 'perfName',
+                width: '15%'
+            },
+            {
+                title: '所属产品',
+                dataIndex: 'productName',
+                key: 'productName',
                 width: '10%'
             },
             {
-                title: '请求参数',
-                dataIndex: 'requestData',
-                key: 'requestData',
-                width: '10%',
-                render: (requestData) => requestData as string
-            },
-            {
-                title: '状态',
-                dataIndex: 'status',
-                key: 'status',
-                width: '10%',
-                render: (status) => <div>{TaskStatusEnum[status]} {status === 2 && < Spin indicator={antIcon} />}</div>
-            },
-            {
-                title: '最新执行时间',
-                dataIndex: 'executeTime',
-                key: 'executeTime',
-                width: '15%',
-                render: (_, record) => record.executeTime && moment(record.executeTime).format('YYYY-MM-DD HH:mm:ss')
-            },
-            {
-                title: '最新执行耗时(s)',
-                dataIndex: 'elapsedTime',
-                key: 'elapsedTime',
-                width: '10%',
-                render: (_, record) => record.elapsedTime && record.elapsedTime / 1000 + 's'
+                title: '文件地址',
+                dataIndex: 'jmxPath',
+                key: 'jmxPath',
+                width: '25%',
+                ellipsis: true,
+                render: (text) => <ToolTipModule linkText={text} isWindowOpen={true} buttonText={text}/>
             },
             {
                 title: '操作',
@@ -73,17 +64,20 @@ const PerfPage: React.FC = () => {
                 render: (_, record) => {
                     return (
                         <div className={styles.tableAction}>
-                            <Popconfirm title='确定执行？' placement="top" okText="是" cancelText="否"
-                                        onConfirm={() => handleStartPerformance(record.id)}>
-                                <Button type="primary" loading={buttonLoading}>执行</Button>
-                            </Popconfirm>
+                            <Button type='primary' onClick={() => handleDownloadFile(record)}>
+                                <div className={styles.div}>
+                                    <img src={downloadIcon} alt={"加载失败"} className={styles.icon}/>
+                                    下载
+                                </div>
+                            </Button>
                             <Button onClick={() => {
-                                setPerfId(record.id)
-                            }}>报告</Button>
-                            <Button onClick={() => {
-                            }}>编辑</Button>
+                                setType(2)
+                                setPerfInfo(record)
+                            }}>
+                                编辑
+                            </Button>
                             <Popconfirm title='确定删除？' placement="top" okText="是" cancelText="否"
-                                        onConfirm={() => handleDeletePerformance(record.id)}>
+                                        onConfirm={() => handleDeletePerf(record.id)}>
                                 <Button loading={buttonLoading}>删除</Button>
                             </Popconfirm>
                         </div>
@@ -93,8 +87,19 @@ const PerfPage: React.FC = () => {
         ]
     }, [pageNo, pageSize])
 
+    const handleDownloadFile = (perfInfo: PerfInfo) => {
+        new OssUtil().download(perfInfo.jmxPath, perfInfo.perfName)
+    }
+
+    const handleProvinceChange = (key: string, value: any) => {
+        const sc: { [key: string]: any } = {...searchPerf};
+        sc[key] = value
+        setSearchPerf(sc)
+        setLoading(true)
+    }
+
     const onChangeTable = (value: any) => {
-        const { current, pageSize } = value
+        const {current, pageSize} = value
         setPageNo(current)
         setPageSize(pageSize)
         setLoading(true)
@@ -104,16 +109,16 @@ const PerfPage: React.FC = () => {
         getPerfList({
             pageNo: pageNo,
             pageSize: pageSize,
-            performanceName: searchPerf?.performanceName,
+            perfName: searchPerf?.perfName,
         }).then(data => {
-            setPerformanceList(data.records)
+            setPerfList(data.records)
             setTotal(data.total)
             setLoading(false)
         })
     }
 
-    const handleStartPerformance = (id: number) => {
-        startPerformance(id)
+    const handleDeletePerf = (id: number) => {
+        deletePerf(id)
             .then(res => {
                 message.success(res.message).then(r => r)
                 setLoading(true)
@@ -122,38 +127,25 @@ const PerfPage: React.FC = () => {
             .finally(() => setButtonLoading(false))
     }
 
-    const handleBathUpdatePerformance = () => {
-        batchUpdatePerformance()
-            .then(req => {
-                message.success(req.message).then(r => r)
-                setLoading(true)
-            })
-            .catch(err => message.error(err.message))
-    }
-
-    const handleDeletePerformance = (id: number) => {
-        deletePerformance(id)
-            .then(res => {
-                message.success(res.message).then(r => r)
-                setLoading(true)
-            }).catch(err => message.error(err.message))
-            .finally(() => setButtonLoading(false))
-    }
+    // /**
+    //  * 接口轮询，暂时不用
+    //  */
+    // useEffect(() => {
+    //     timerRef.current = setInterval(() => {
+    //         if (perfListRef.current && perfListRef.current.map(item => item.status).includes(2)) {
+    //             handleGetPerfList()
+    //         }
+    //     }, 5000)
+    //     return () => {
+    //         clearInterval(timerRef.current)
+    //     }
+    // }, [])
 
     useEffect(() => {
-        timerRef.current = setInterval(() => {
-            if (performanceListRef.current && performanceListRef.current.map(item => item.status).includes(2)) {
-                handleGetPerfList()
-            }
-        }, 5000)
-        return () => { clearInterval(timerRef.current) }
-    }, [])
-
-    useEffect(() => {
-        if (performanceList) {
-            performanceListRef.current = performanceList
+        if (perfList) {
+            perfListRef.current = perfList
         }
-    }, [performanceList])
+    }, [perfList])
 
     useEffect(() => {
         loading && handleGetPerfList()
@@ -163,31 +155,34 @@ const PerfPage: React.FC = () => {
         <div>
             <div className={styles.action}>
                 <div>
-
+                    <Search className={styles.search}
+                            placeholder="请输入性能测试名称"
+                            onSearch={(e: any) => handleProvinceChange('perfName', e)}
+                            enterButton
+                    />
                 </div>
                 <div className={styles.buttonGroup}>
-                    <Button type='primary' onClick={() => null} disabled={true}>新增项目</Button>
-                    <Popconfirm title="确定更新？" placement="top" okText="是" cancelText="否" onConfirm={() => handleBathUpdatePerformance()}>
-                        <Button type='primary' >批量更新</Button>
-                    </Popconfirm>
+                    <Button type='primary' onClick={() => setType(1)}>
+                        <div className={styles.div}>
+                            <img src={uploadIcon} alt={"加载失败"} className={styles.icon}/>
+                            上传JMX文件
+                        </div>
+                    </Button>
                 </div>
             </div>
 
             <div>
                 <Table
                     columns={columns}
-                    dataSource={performanceList}
+                    dataSource={perfList}
                     rowKey='id'
-                    pagination={{ total, current: pageNo, showSizeChanger: true }}
+                    pagination={{total, current: pageNo, showSizeChanger: true}}
                     loading={loading}
                     onChange={onChangeTable}
                     className={styles.table}
                 />
             </div>
-            {/* 报告组件 */}
-            {<PerfReportModule perfId={perfId} onCancel={() => setPerfId(undefined)} />}
-            {/* 编辑组件 */}
-            {/* {status == 2 && <UpdateTaskModal taskInfo={taskInfo} setLoading={setLoading} onCancel={() => setTaskInfo(undefined)} />} */}
+            <PerfModule perfInfo={perfInfo} type={type} onCancel={() => setType(0)} setLoading={setLoading}/>
         </div>
     )
 }

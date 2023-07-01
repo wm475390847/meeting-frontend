@@ -1,4 +1,4 @@
-import { PageTitle } from '@/config';
+import {PageTitle} from '@/config';
 import TaskPage from './routes/task';
 import H5Page from './routes/h5';
 import FacePage from './routes/face';

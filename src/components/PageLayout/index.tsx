@@ -10,7 +10,7 @@ import logoutIcon from '@/assets/svg/logout.svg';
 import personIcon from '@/assets/svg/person.svg';
 import {Footer} from 'antd/lib/layout/layout';
 import * as Icon from '@ant-design/icons';
-import {Client} from '@/utils';
+import {HttpClient} from '@/utils';
 
 type LayoutPropModule = {
   children?: ReactElement | ReactElement[];
@@ -58,7 +58,7 @@ export const PageLayoutModule: React.FC<LayoutPropModule> = ({routes}) => {
    * 退出登录
    */
   const handleLogout = () => {
-    new Client({}).logout()
+    new HttpClient({}).logout()
   }
 
   /**

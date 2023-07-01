@@ -86,8 +86,8 @@ export interface IUpdateH5Req {
 }
 
 export interface ISearchProductListReq {
-  pageNo: number
-  pageSize: number
+  pageNo?: number
+  pageSize?: number
 }
 
 /**
@@ -119,8 +119,25 @@ export interface IUpdateTaskReq {
 /**
  * 获取h5列表请求
  */
-export interface ISearchPerformanceReq {
+export interface ISearchPerfReq {
   pageNo: number
   pageSize: number
-  performanceName?: string
+  perfName?: string
+}
+
+export interface ICreatePerfReq {
+  /**
+   * 主键id
+   */
+  id: number;
+
+  /**
+   * jmx文件路径
+   */
+  jmxPath: string;
+
+  /**
+   * 产品id
+   */
+  productId: number;
 }

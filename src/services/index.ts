@@ -1,19 +1,20 @@
 import {
     ICreateFaceReq,
     ICreateH5Req,
+    ICreatePerfReq,
     ISearchCaseListReq,
     ISearchFaceListReq,
     ISearchH5Req,
-    ISearchPerformanceReq,
+    ISearchPerfReq,
     ISearchProductListReq,
     ISearchTaskListReq,
     IUpdateFaceReq,
     IUpdateH5Req
 } from "./interface"
-import {Client} from "@/utils"
+import {HttpClient} from "@/utils"
 
 
-const client = new Client({})
+const client = new HttpClient({})
 
 /**
  * 获取用例列表
@@ -146,11 +147,30 @@ export const createProduct: (data: { productName: string, serviceId: number }) =
 }
 
 /**
+ * 上传性能测试文件
+ * @param data 查询数据
+ * @returns
+ */
+export const createPerf: (data: ICreatePerfReq) => Promise<RequestOpt> = (data) => {
+    return new Promise(async (resolve, reject) => {
+        await client.post(`/ttp/perf`, data)
+            .then((res: any) => {
+                if (res.success) {
+                    resolve(res)
+                } else {
+                    reject(res)
+                }
+            })
+    })
+}
+
+
+/**
  * 查询性能测试
  * @param data 查询数据
- * @returns 
+ * @returns
  */
-export const getPerfList: (data: ISearchPerformanceReq) => Promise<IPageRequest<PerformanceInfo>> = (data) => {
+export const getPerfList: (data: ISearchPerfReq) => Promise<IPageRequest<PerfInfo>> = (data) => {
     return new Promise(async (resolve, reject) => {
         await client.get(`/ttp/perf`, data)
             .then((res: any) => {
@@ -199,29 +219,13 @@ export const startPerformance: (id: number) => Promise<RequestOpt> = (id) => {
     })
 }
 
-/**
- * 批量更新性能测试
- * @returns 
- */
-export const batchUpdatePerformance: () => Promise<RequestOpt> = () => {
-    return new Promise(async (resolve, reject) => {
-        await client.put(`/ttp/perf/batchUpdate`)
-            .then((res: any) => {
-                if (res.success) {
-                    resolve(res)
-                } else {
-                    reject(res)
-                }
-            })
-    })
-}
 
 /**
  * 删除性能测试
  * @param id 性能测试id
  * @returns
  */
-export const deletePerformance: (id: number) => Promise<RequestOpt> = (id) => {
+export const deletePerf: (id: number) => Promise<RequestOpt> = (id) => {
     return new Promise(async (resolve, reject) => {
         await client.delete(`/ttp/perf/${id}`)
             .then((res: any) => {

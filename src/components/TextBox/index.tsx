@@ -7,13 +7,13 @@ import "ace-builds/src-noconflict/theme-cloud9_night";
 import "ace-builds/src-noconflict/ext-language_tools";
 import styles from './index.module.less'
 
-type CaseReasonModuleProps = {
-  reason?: string
+type TextBoxModuleProps = {
+  text?: string
   onCancel?: () => void
 }
 
-const CaseReasonModule: React.FC<CaseReasonModuleProps> = (props) => {
-  const {reason, onCancel} = props
+const TextBoxModule: React.FC<TextBoxModuleProps> = (props) => {
+  const {text, onCancel} = props
   const [open, setOpen] = useState(false)
 
   const handleCancel = () => {
@@ -22,8 +22,8 @@ const CaseReasonModule: React.FC<CaseReasonModuleProps> = (props) => {
   }
 
   useEffect(() => {
-    reason && setOpen(true)
-  }, [reason])
+    text && setOpen(true)
+  }, [text])
 
   useEffect(() => {
     if (open) {
@@ -44,28 +44,28 @@ const CaseReasonModule: React.FC<CaseReasonModuleProps> = (props) => {
       width={1000}
     >
       <AceEditor
-        width={'900px'}
-        height='600px'
-        mode={'sh'}
-        theme='cloud9_night'
-        placeholder={''}
-        onChange={onChange}
-        name={'ace-editor'}
-        readOnly={true}
-        value={reason}
-        editorProps={{ $blockScrolling: true }}
-        fontSize='14px'
-        showGutter={true}
-        highlightActiveLine={true}
-        showPrintMargin={false}
-        setOptions={{
-          enableBasicAutocompletion: true,
-          enableLiveAutocompletion: true,
-          enableSnippets: false
-        }}
+          width={'900px'}
+          height='600px'
+          mode={'sh'}
+          theme='cloud9_night'
+          placeholder={''}
+          onChange={onChange}
+          name={'ace-editor'}
+          readOnly={true}
+          value={text}
+          editorProps={{$blockScrolling: true}}
+          fontSize='14px'
+          showGutter={true}
+          highlightActiveLine={true}
+          showPrintMargin={false}
+          setOptions={{
+            enableBasicAutocompletion: true,
+            enableLiveAutocompletion: true,
+            enableSnippets: false
+          }}
       />
     </Modal >
   );
 };
 
-export default CaseReasonModule;
+export default TextBoxModule;

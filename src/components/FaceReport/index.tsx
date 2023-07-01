@@ -25,9 +25,7 @@ const FaceReportModule: React.FC<FaceReportModuleProps> = (props) => {
 
     const handleGetResult = () => {
         getFaceResult(faceInfo?.id as number)
-            .then(rep => {
-                setFaceResult(rep.data)
-            })
+            .then(rep => setFaceResult(rep.data))
             .catch(err => message.error(err.message))
     }
 

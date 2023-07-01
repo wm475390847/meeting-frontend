@@ -3,7 +3,7 @@ import React, {useEffect, useMemo, useState} from 'react';
 import {ColumnsType} from 'antd/lib/table';
 import moment from 'moment';
 import {deleteCase, executeCase, getCaseList} from '@/services';
-import CaseReasonModule from '@/components/CaseReason'
+import TextBoxModule from '../TextBox'
 import ToolTipModule from '@/components/ToolTip';
 import styles from './index.module.less'
 import {Link, useLocation, useParams} from 'react-router-dom';
@@ -226,7 +226,7 @@ const ProductDetailPage: React.FC = () => {
             className={styles.table}
         />
       </div>
-      <CaseReasonModule reason={reason} onCancel={() => setReason(undefined)}/>
+      <TextBoxModule text={reason} onCancel={() => setReason(undefined)}/>
     </div >
   );
 };

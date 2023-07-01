@@ -7,7 +7,7 @@ export const PageTitle = {
   caseData: '用例数据',
   caseList: '用例列表',
   interface: '接口测试',
-  perf: '性能测试',
+  perf: '性能测试管理',
 };
 
 export const Doc = ['doc', 'docs', 'docx', 'pdf', 'ppt', 'pptx', 'txt', 'xls', 'xlsx'];

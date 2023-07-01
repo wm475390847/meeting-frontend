@@ -1,16 +1,15 @@
-import OSS from 'ali-oss';
 import {v4 as uuidv4} from 'uuid';
 import React, {useEffect, useState} from 'react';
 import {LoadingOutlined, PlusOutlined} from '@ant-design/icons';
 import {message, Upload} from 'antd';
 import type {RcFile, UploadFile} from 'antd/es/upload/interface';
 import {getOssConfig} from '@/services';
+import {OssUtil} from "@/utils";
 
 type UploadImgModuleProps = {
   currentImgUrl?: string
   onUploadSuccess: (url: string) => void;
 }
-
 const UploadImgModule: React.FC<UploadImgModuleProps> = (props) => {
   const {currentImgUrl, onUploadSuccess} = props
   const [loading, setLoading] = useState(false);
@@ -28,24 +27,6 @@ const UploadImgModule: React.FC<UploadImgModuleProps> = (props) => {
   }
 
   /**
-   * 初始化oss
-   * @returns 
-   */
-  const assemOSSClient = (ossConfig: OssConfig) => {
-    if (ossConfig == null) {
-      return null
-    }
-    const client = new OSS({
-      accessKeyId: ossConfig.accessKeyId,
-      accessKeySecret: ossConfig.accessKeySecret,
-      stsToken: ossConfig.securityToken,
-      endpoint: ossConfig.endPoint,
-      bucket: ossConfig.bucketName,
-    });
-    return { client };
-  };
-
-  /**
    * 获取完整的上传路径
    * @returns 
    */
@@ -59,23 +40,11 @@ const UploadImgModule: React.FC<UploadImgModuleProps> = (props) => {
       message.error('文件为空').then(r => r)
     }
   }
-
   const getBase64 = (img: RcFile, callback: (url: string) => void) => {
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result as string));
     reader.readAsDataURL(img);
   };
-
-  /**
-   * 获取图片oss地址
-   * @param ossConfig  oss配置
-   * @param fullPath  全路径
-   * @returns 
-   */
-  const transformCdnUrl = (ossConfig: OssConfig, fullPath: string) => {
-    const prefix = /^https:/.test(ossConfig.endPoint) ? 'https://' : 'http://';
-    return prefix + ossConfig.bucketName + '.newscdn.cn' + "/" + fullPath;
-  }
 
   /**
    * 上传之前的逻辑
@@ -100,35 +69,22 @@ const UploadImgModule: React.FC<UploadImgModuleProps> = (props) => {
    * @returns 
    */
   const uploadPhoto = (file: any) => {
-    if (ossConfig == null) {
-      message.error('OSS配置为空').then(r => r)
-      return
+    if (ossConfig != null) {
+      const fullPath = getFullPath(file as UploadFile, ossConfig);
+      const uploadOss = new OssUtil();
+      uploadOss.upload(ossConfig, fullPath, file, null, null)
+          .then(result => {
+            if (result) {
+              message.success("上传成功").then(r => r)
+              getBase64(file as RcFile, (url) => setImageUrl(url));
+              const ossPath = uploadOss.transformCdnUrl(ossConfig, fullPath);
+              onUploadSuccess(ossPath);
+            } else {
+              message.error("上传失败").then(r => r)
+            }
+            setLoading(false)
+          })
     }
-    setLoading(true);
-    const fullPath = getFullPath(file as UploadFile, ossConfig);
-    const client = assemOSSClient(ossConfig)
-
-    if (!fullPath || !client) {
-      message.error('OSS客户端无效').then(r => r);
-      setLoading(false);
-      return;
-    }
-
-    client.client
-      .put(fullPath, file)
-      .then(() => {
-        setLoading(false);
-        const ossPath = transformCdnUrl(ossConfig, fullPath);
-        onUploadSuccess(ossPath);
-        getBase64(file as RcFile, (url) => {
-          setImageUrl(url);
-        });
-        message.success('上传成功').then(r => r);
-      })
-      .catch((err) => {
-        setLoading(false);
-        message.error(`上传失败: ${err}`).then(r => r);
-      });
   }
 
   return (
@@ -141,7 +97,6 @@ const UploadImgModule: React.FC<UploadImgModuleProps> = (props) => {
         customRequest={({ file }) => uploadPhoto(file)}
       >
         {/* 如果存在图片就将图片显示在上传框上 */}
-
         {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%', height: '100%', borderRadius: '8px' }} />
           : currentImgUrl ?
             <img src={currentImgUrl} alt="avatar" style={{ width: '100%', height: '100%', borderRadius: '8px' }} />

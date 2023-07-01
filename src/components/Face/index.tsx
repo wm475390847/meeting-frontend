@@ -1,6 +1,6 @@
 import {createFace, updateFace} from "@/services";
 import {Button, Form, Input, InputNumber, message, Modal, Select} from "antd";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import UploadImgModule from "../UploadImg";
 import styles from './index.module.less'
 
@@ -10,7 +10,6 @@ type FaceModuleProps = {
     onCancel?: () => void
     setLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
-
 const FaceModule: React.FC<FaceModuleProps> = (props) => {
     const { Option } = Select;
     const [form] = Form.useForm()
@@ -30,7 +29,7 @@ const FaceModule: React.FC<FaceModuleProps> = (props) => {
             if (type === 1) {
                 setButtonLoading(true)
                 if (faceUrl == null) {
-                    message.error('人像不能为空')
+                    message.error('人像不能为空').then(r => r)
                     setButtonLoading(false)
                     return
                 }
@@ -93,14 +92,16 @@ const FaceModule: React.FC<FaceModuleProps> = (props) => {
         })
     }
 
-    const handkleGetValue = () => {
+    const handleGetValue = () => {
         const metaData = face?.metaData
         setFaceResult(metaData && JSON.parse(metaData))
     }
 
     useEffect(() => {
-        type && setOpen(true)
-        handkleGetValue()
+        if (type) {
+            setOpen(true)
+            handleGetValue()
+        }
     }, [type])
 
     useEffect(() => {
@@ -116,7 +117,6 @@ const FaceModule: React.FC<FaceModuleProps> = (props) => {
                     total: faceResult ? faceResult.total : 0,
                     videoNum: faceResult ? faceResult.videoNum : 0,
                     imageNum: faceResult ? faceResult.imageNum : 0,
-
                 })
             }, 500);
         }

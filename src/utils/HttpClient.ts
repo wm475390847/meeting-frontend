@@ -4,7 +4,7 @@ import qs from 'qs';
 import {message} from "antd";
 import Cookies from "js-cookie";
 
-export class Client {
+export class HttpClient {
     /**
      * 请求工具
      */
@@ -66,7 +66,7 @@ export class Client {
                 } else {
                     err.message = '连接服务器失败!'
                 }
-                message.error(err.message)
+                message.error(err.message).then(r => r)
                 return Promise.reject(err);
             },
         );

@@ -117,12 +117,6 @@ interface ResultPercent {
   percent: number
 }
 
-interface ProductInfo {
-  id: number
-  productName: string
-  serviceName: string
-}
-
 /**
  * 任务报告
  */
@@ -247,17 +241,13 @@ interface Task {
   status: number
 }
 
-interface PerformanceInfo {
-  id: number
-  performanceName: string
-  requestData: JSON
-  threadData: JSON
-  jmxPath: string
-  executeTime: string
-  elapsedTime: number
-  status: number
+interface PerfInfo {
   gmtCreate: string
   gmtModified: string
+  id: number
+  jmxPath: string
+  perfName: string
+  productId: number
 }
 
 interface PerfReportHistory {
