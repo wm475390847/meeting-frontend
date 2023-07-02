@@ -1,4 +1,4 @@
-import {createPerf, getProductList} from "@/services";
+import {createPerf, getProductList, updatePerf} from "@/services";
 import {Button, Form, Input, message, Modal, Select} from "antd";
 import React, {useEffect, useState} from "react";
 import styles from './index.module.less'
@@ -17,45 +17,53 @@ const PerfModule: React.FC<PerfModuleProps> = (props) => {
     const [open, setOpen] = useState<boolean>(false)
     const [productList, setProductList] = useState<ProductInfo[]>([])
     const [ossPath, setOssPath] = useState<string>()
-
     const handleCancel = () => {
         setOpen(false)
         onCancel && onCancel()
     }
-
     const handleGetProductList = () => {
         getProductList({})
             .then(data => {
                 setProductList(data.records)
             })
     }
-
     const options = () => {
         return productList.map((item) => ({
             value: item.id,
             label: item.productName
         }))
     }
-
     const onSubmit = () => {
         form.validateFields().then(values => {
             setButtonLoading(true)
             const requestData = {
                 ...values,
-                jmxPath: ossPath
+                jmxPath: type === 1 ? ossPath : perfInfo?.jmxPath,
             };
+            // 创建
+            if (type === 1) {
+                createPerf(requestData)
+                    .then(res => {
+                        message.success(res.message).then(r => r)
+                        setLoading(true)
+                        handleCancel()
+                    })
+                    .catch(err => message.error(err.message).then(r => r))
+                    .finally(() => setButtonLoading(false))
+            }
 
+            // 编辑
             if (type === 2) {
                 requestData.id = perfInfo?.id;
+                updatePerf(requestData)
+                    .then(res => {
+                        message.success(res.message).then(r => r)
+                        setLoading(true)
+                        handleCancel()
+                    })
+                    .catch(err => message.error(err.message).then(r => r))
+                    .finally(() => setButtonLoading(false))
             }
-            createPerf(requestData)
-                .then(res => {
-                    message.success(res.message).then(r => r)
-                    setLoading(true)
-                    handleCancel()
-                })
-                .catch(err => message.error(err.message).then(r => r))
-                .finally(() => setButtonLoading(false))
         })
     }
 
@@ -71,7 +79,7 @@ const PerfModule: React.FC<PerfModuleProps> = (props) => {
     }, [open])
 
     useEffect(() => {
-        if (type) {
+        if (type != 0) {
             setOpen(true)
             handleGetProductList()
         }

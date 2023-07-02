@@ -3,7 +3,7 @@ import VirtualTable from "../VirtualTable";
 import {ColumnsType} from "antd/lib/table";
 import moment from "moment";
 import {Button, Image, message, Popover} from "antd";
-import {executeHistory, getTaskReport as getTaskReportList} from "@/services";
+import {getExecuteHistory, getTaskReport as getTaskReportList} from "@/services";
 import styles from './index.module.less'
 import {QuestionCircleOutlined} from "@ant-design/icons";
 import {defaultImage} from "@/constants";
@@ -107,7 +107,7 @@ const TaskReportTableModule: React.FC<TaskReportTableModuleProps> = (prop) => {
     }, [result])
 
     const handleExecuteHistory = (id: number) => {
-        executeHistory(id)
+        getExecuteHistory(id)
             .then(rep => message.info(rep.message))
             .catch(err => message.error(err.message))
             .finally(() => setButtonLoading(false))

@@ -1,15 +1,13 @@
-import {ColumnsType} from "antd/lib/table"
-import React, {useEffect, useMemo, useRef, useState} from "react"
-import {Button, message, Popconfirm, Table} from 'antd'
+import React, {useEffect, useState} from "react"
+import {Button, message, Pagination, Select} from 'antd'
 import {deletePerf, getPerfList} from "@/services"
 // import {LoadingOutlined} from "@ant-design/icons"
 import styles from './index.module.less'
 import uploadIcon from '@/assets/svg/upload.svg';
-import downloadIcon from '@/assets/svg/download.svg';
-import ToolTipModule from "@/components/ToolTip";
-import PerfModule from "@/components/Perf";
 import Search from "antd/es/input/Search";
 import {OssUtil} from "@/utils";
+import CardModule from "@/components/Card";
+import PerfModule from "@/components/Perf";
 
 interface SearchPerf {
     perfName?: string
@@ -17,75 +15,30 @@ interface SearchPerf {
 
 const PerfPage: React.FC = () => {
     const [loading, setLoading] = useState(true)
-    const [pageNo, setPageNo] = useState(1)
-    const [pageSize, setPageSize] = useState(10)
-    const [total, setTotal] = useState(0)
-    const [perfList, setPerfList] = useState<PerfInfo[]>()
-    const [buttonLoading, setButtonLoading] = useState(false)
     const [type, setType] = useState(0)
     const [searchPerf, setSearchPerf] = useState<SearchPerf>();
+    const [perfList, setPerfList] = useState<PerfInfo[]>()
     const [perfInfo, setPerfInfo] = useState<PerfInfo>()
-    // const antIcon = <LoadingOutlined style={{fontSize: 15}} spin/>;
-    // const timerRef = useRef<any>(null)
-    const perfListRef = useRef<PerfInfo[]>([])
+    const [clickIcon, setClickIcon] = useState<number>(0)
+    const [pageNo, setPageNo] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+    const [total, setTotal] = useState(0)
 
-    const columns = useMemo<ColumnsType<any>>(() => {
-        return [
-            {
-                title: '序号',
-                width: '5%',
-                render: (_text, _record, index) => (pageNo as number - 1) * (pageSize as number) + index + 1
-            },
-            {
-                title: '压测名称',
-                dataIndex: 'perfName',
-                key: 'perfName',
-                width: '15%'
-            },
-            {
-                title: '所属产品',
-                dataIndex: 'productName',
-                key: 'productName',
-                width: '10%'
-            },
-            {
-                title: '文件地址',
-                dataIndex: 'jmxPath',
-                key: 'jmxPath',
-                width: '25%',
-                ellipsis: true,
-                render: (text) => <ToolTipModule linkText={text} isWindowOpen={true} buttonText={text}/>
-            },
-            {
-                title: '操作',
-                dataIndex: 'action',
-                key: 'action',
-                width: '15%',
-                render: (_, record) => {
-                    return (
-                        <div className={styles.tableAction}>
-                            <Button type='primary' onClick={() => handleDownloadFile(record)}>
-                                <div className={styles.div}>
-                                    <img src={downloadIcon} alt={"加载失败"} className={styles.icon}/>
-                                    下载
-                                </div>
-                            </Button>
-                            <Button onClick={() => {
-                                setType(2)
-                                setPerfInfo(record)
-                            }}>
-                                编辑
-                            </Button>
-                            <Popconfirm title='确定删除？' placement="top" okText="是" cancelText="否"
-                                        onConfirm={() => handleDeletePerf(record.id)}>
-                                <Button loading={buttonLoading}>删除</Button>
-                            </Popconfirm>
-                        </div>
-                    )
-                }
-            }
-        ]
-    }, [pageNo, pageSize])
+    // const perfListRef = useRef<PerfInfo[]>([])
+    const handlePageChange = (page: number) => {
+        setPageNo(page);
+        setLoading(true)
+    };
+
+    const handlePageSizeChange = (value: string) => {
+        setPageSize(parseInt(value));
+        setPageNo(1); // 回到第一页
+        setLoading(true)
+    };
+
+    const options = [
+        {value: "10条/页"}, {value: "20条/页"}, {value: "50条/页"}, {value: "100条/页"}
+    ]
 
     const handleDownloadFile = (perfInfo: PerfInfo) => {
         new OssUtil().download(perfInfo.jmxPath, perfInfo.perfName)
@@ -95,13 +48,6 @@ const PerfPage: React.FC = () => {
         const sc: { [key: string]: any } = {...searchPerf};
         sc[key] = value
         setSearchPerf(sc)
-        setLoading(true)
-    }
-
-    const onChangeTable = (value: any) => {
-        const {current, pageSize} = value
-        setPageNo(current)
-        setPageSize(pageSize)
         setLoading(true)
     }
 
@@ -124,8 +70,25 @@ const PerfPage: React.FC = () => {
                 setLoading(true)
             })
             .catch(err => message.error(err.message))
-            .finally(() => setButtonLoading(false))
     }
+
+    useEffect(() => {
+        loading && handleGetPerfList()
+    }, [pageNo, loading])
+
+    useEffect(() => {
+        if (clickIcon === 1) {
+            setType(2)
+        }
+        if (clickIcon === 2 && perfInfo) {
+            handleDownloadFile(perfInfo)
+            setClickIcon(0)
+        }
+        if (clickIcon === 3 && perfInfo) {
+            handleDeletePerf(perfInfo.id)
+            setClickIcon(0)
+        }
+    }, [clickIcon])
 
     // /**
     //  * 接口轮询，暂时不用
@@ -141,15 +104,11 @@ const PerfPage: React.FC = () => {
     //     }
     // }, [])
 
-    useEffect(() => {
-        if (perfList) {
-            perfListRef.current = perfList
-        }
-    }, [perfList])
-
-    useEffect(() => {
-        loading && handleGetPerfList()
-    }, [pageNo, loading])
+    // useEffect(() => {
+    //     if (perfList) {
+    //         perfListRef.current = perfList
+    //     }
+    // }, [perfList])
 
     return (
         <div>
@@ -171,18 +130,35 @@ const PerfPage: React.FC = () => {
                 </div>
             </div>
 
-            <div>
-                <Table
-                    columns={columns}
-                    dataSource={perfList}
-                    rowKey='id'
-                    pagination={{total, current: pageNo, showSizeChanger: true}}
-                    loading={loading}
-                    onChange={onChangeTable}
-                    className={styles.table}
+            <div style={{display: 'flex', flexWrap: 'wrap', gap: '20px'}}>
+                {perfList?.map((e) => (
+                    <CardModule title={e?.perfName}
+                                description={e?.jmxPath}
+                                onClickIcon={(value) => {
+                                    setClickIcon(value)
+                                    setPerfInfo(e)
+                                }}/>
+                ))}
+            </div>
+
+            <div style={{marginTop: '15px', display: 'flex', justifyContent: 'flex-end'}}>
+                <Pagination total={total}
+                            current={pageNo}
+                            pageSize={pageSize}
+                            onChange={handlePageChange}
+                />
+                <Select defaultValue={`${pageSize}`}
+                        onChange={handlePageSizeChange}
+                        options={options}
                 />
             </div>
-            <PerfModule perfInfo={perfInfo} type={type} onCancel={() => setType(0)} setLoading={setLoading}/>
+            <PerfModule perfInfo={perfInfo}
+                        type={type}
+                        onCancel={() => {
+                            setType(0); // 关闭弹窗
+                            setClickIcon(0) // 复位
+                        }}
+                        setLoading={setLoading}/>
         </div>
     )
 }

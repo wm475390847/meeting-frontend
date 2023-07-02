@@ -1,4 +1,4 @@
-import {createProduct, getProductGroup} from "@/services";
+import {createProduct, getServiceList} from "@/services";
 import {Button, Form, Input, message, Modal, Select} from "antd";
 import React, {useEffect, useState} from "react";
 import styles from './index.module.less'
@@ -52,7 +52,7 @@ const ProductModule: React.FC<ProductModuleProps> = (props) => {
      *获取业务列表
      */
     const handleGetProductGroup = () => {
-        getProductGroup()
+        getServiceList()
             .then(res => {
                 setServiceList(res)
             })

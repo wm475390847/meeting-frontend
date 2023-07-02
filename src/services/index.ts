@@ -62,6 +62,11 @@ export const deleteCase: (id: number) => Promise<RequestOpt> = (id) => {
     })
 }
 
+/**
+ * 执行用例
+ * @param jobId ci的jobId
+ * @param caseName 用例名称
+ */
 export const executeCase: (jobId: number, caseName: string) => Promise<RequestOpt> = (jobId, caseName) => {
     const data = {
         "jobId": `${jobId}`,
@@ -81,25 +86,13 @@ export const executeCase: (jobId: number, caseName: string) => Promise<RequestOp
     })
 }
 
+/**
+ * 获取产品列表
+ * @param data 搜索数据
+ */
 export const getProductList: (data: ISearchProductListReq) => Promise<IPageRequest<ProductInfo>> = (data) => {
     return new Promise(async (resolve, reject) => {
         await client.get(`/ttp/products`, data)
-            .then((res: any) => {
-                if (res.success) {
-                    resolve(res.data)
-                } else {
-                    reject(res)
-                }
-            })
-    })
-}
-/**
- * 获取产品分组
- * @returns 
- */
-export const getProductGroup: () => Promise<ServiceInfo[]> = () => {
-    return new Promise(async (resolve, reject) => {
-        await client.get(`/ttp/products/group`)
             .then((res: any) => {
                 if (res.success) {
                     resolve(res.data)
@@ -129,9 +122,9 @@ export const deleteProduct: (id: number) => Promise<RequestOpt> = (id) => {
 }
 
 /**
- * 删除产品
+ * 创建产品
  * @param data 查询数据
- * @returns 
+ * @returns
  */
 export const createProduct: (data: { productName: string, serviceId: number }) => Promise<RequestOpt> = (data) => {
     return new Promise(async (resolve, reject) => {
@@ -147,7 +140,24 @@ export const createProduct: (data: { productName: string, serviceId: number }) =
 }
 
 /**
- * 上传性能测试文件
+ * 获取业务列表
+ * @returns
+ */
+export const getServiceList: () => Promise<ServiceInfo[]> = () => {
+    return new Promise(async (resolve, reject) => {
+        await client.get(`/ttp/services`)
+            .then((res: any) => {
+                if (res.success) {
+                    resolve(res.data)
+                } else {
+                    reject(res)
+                }
+            })
+    })
+}
+
+/**
+ * 创建性能测试
  * @param data 查询数据
  * @returns
  */
@@ -164,6 +174,23 @@ export const createPerf: (data: ICreatePerfReq) => Promise<RequestOpt> = (data) 
     })
 }
 
+/**
+ * 修改性能测试
+ * @param data 查询数据
+ * @returns
+ */
+export const updatePerf: (data: ICreatePerfReq) => Promise<RequestOpt> = (data) => {
+    return new Promise(async (resolve, reject) => {
+        await client.put(`/ttp/perf`, data)
+            .then((res: any) => {
+                if (res.success) {
+                    resolve(res)
+                } else {
+                    reject(res)
+                }
+            })
+    })
+}
 
 /**
  * 查询性能测试
@@ -200,25 +227,6 @@ export const getPerfReportList: (perfId: number) => Promise<RequestOpt> = (perfI
             })
     })
 }
-
-/**
- * 执行性能测试
- * @param id 性能测试id
- * @returns
- */
-export const startPerformance: (id: number) => Promise<RequestOpt> = (id) => {
-    return new Promise(async (resolve, reject) => {
-        await client.post(`/ttp/perf/start/${id}`)
-            .then((res: any) => {
-                if (res.success) {
-                    resolve(res)
-                } else {
-                    reject(res)
-                }
-            })
-    })
-}
-
 
 /**
  * 删除性能测试
@@ -359,7 +367,7 @@ export const executeTask: (taskId: number) => Promise<RequestOpt> = (taskId) => 
     })
 }
 
-export const executeHistory: (historyId: number) => Promise<RequestOpt> = (historyId) => {
+export const getExecuteHistory: (historyId: number) => Promise<RequestOpt> = (historyId) => {
     return new Promise(async (resolve, reject) => {
         await client.post(`/conference/task/executeHistory/${historyId}`)
             .then((res: any) => {
