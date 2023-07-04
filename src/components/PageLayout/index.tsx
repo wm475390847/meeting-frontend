@@ -1,5 +1,5 @@
 import React, {ReactElement, useEffect, useState} from 'react';
-import {Breadcrumb, Layout, Menu, message, Popover, theme} from 'antd';
+import {Affix, Breadcrumb, Layout, Menu, message, Popover, theme} from 'antd';
 import classnames from 'classnames';
 import {Link, Outlet, useParams} from 'react-router-dom';
 import {RouteBase} from '@/routes';
@@ -176,58 +176,66 @@ export const PageLayoutModule: React.FC<LayoutPropModule> = ({routes}) => {
   return (
     <>
       <Layout className={styles.layout}>
-        <Sider
-            collapsible
-            collapsed={collapsed}
-            onCollapse={(value) => setCollapsed(value)}
-            theme={"light"}
-            style={{backgroundColor: '#1b1f27'}}
-        >
-          <div className={styles.logo}>
-            <img src={logo}
-                 alt="加载失败"
-                 onClick={() => window.location.href = '/app/page'}
-            />
-          </div>
-          <Menu
-              style={{backgroundColor: '#1b1f27', color: 'white'}}
-              mode="inline"
-              selectedKeys={[selectKey] as unknown as string[]}
-              openKeys={openKeys}
-              onSelect={handleMenuChange}
-              onOpenChange={handleOpenChange}
-              items={menuItems}
-          />
-        </Sider>
-        <Layout>
-          <Header className={styles.header}>
-            <Popover
-                placement="bottomRight"
-                content={popoverContent}
-                trigger="hover"
-            >
-              <div className={styles.user}>
-                {avatar ? (
-                    <img src={avatar} alt=""/>
-                ) : nickName.split('')[0] || 's'}
-              </div>
-            </Popover>
-          </Header>
-
-          <Breadcrumb style={{margin: '20px 15px 0'}}
-                      items={breadcrumbItems}
-          />
-
-          <Content style={{margin: '20px 15px 0', height: '100%'}}>
-            <div style={{padding: 24, minHeight: 360, background: colorBgContainer}}>
-              <Outlet/>
+        <Affix style={{backgroundColor: '#1b1f27'}}>
+          <Sider
+              collapsible
+              collapsed={collapsed}
+              onCollapse={(value) => setCollapsed(value)}
+              theme={"light"}
+              style={{backgroundColor: '#1b1f27'}}
+          >
+            <div className={styles.logo}>
+              <img src={logo}
+                   alt="加载失败"
+                   onClick={() => window.location.href = '/app/page'}
+              />
             </div>
+            <Menu
+                style={{backgroundColor: '#1b1f27', color: 'white'}}
+                mode="inline"
+                selectedKeys={[selectKey] as unknown as string[]}
+                openKeys={openKeys}
+                onSelect={handleMenuChange}
+                onOpenChange={handleOpenChange}
+                items={menuItems}
+            />
+          </Sider>
+        </Affix>
+
+        <Layout>
+          <Affix>
+            <Header className={styles.header}>
+              <Popover placement="bottomRight" content={popoverContent} trigger="hover">
+                <div className={styles.user}>
+                  {avatar ? (
+                      <img src={avatar} alt=""/>
+                  ) : nickName.split('')[0] || 's'}
+                </div>
+              </Popover>
+            </Header>
+          </Affix>
+
+          <Breadcrumb style={{margin: '20px 15px 0'}} items={breadcrumbItems}/>
+
+          <Content style={{
+            margin: '20px 15px 0',
+            padding: 24,
+            background: colorBgContainer,
+            borderRadius: '15px',
+            overflowY: 'auto',
+          }}>
+            <Outlet/>
           </Content>
 
-          <Footer style={{textAlign: 'center'}}>
-            数字企业·质量保障平台 | ©2022 - {new Date().getFullYear()} Created by 质量保障组 |
-            <a href='https://codeup.aliyun.com/xhzy/xhzy-qa/meeting-frontend/tree/dev' target='_blank'> CodeUp地址 </a>
+          <Footer className={styles.footer}>
+            <a target="_blank" className={`${styles.a} ${styles.separator}`}>数字企业·质量保障平台</a>
+            <a target="_blank" className={`${styles.a} ${styles.separator}`}>
+              ©2022 - {new Date().getFullYear()} Created by 质量保障组
+            </a>
+            <a href='https://codeup.aliyun.com/xhzy/xhzy-qa/meeting-frontend/tree/dev' target='_blank'
+               className={styles.a}> CodeUp地址 </a>
           </Footer>
+
         </Layout>
       </Layout>
     </>

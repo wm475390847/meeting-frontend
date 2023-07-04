@@ -162,7 +162,6 @@ const H5Page: React.FC = () => {
         setLoading(true)
     }, [searchH5])
 
-    // @ts-ignore
     return (
         <>
             <div className={styles.action}>
@@ -170,20 +169,21 @@ const H5Page: React.FC = () => {
                     <Space className={styles.space} direction="vertical">
                         <RangePicker onChange={handleSearchH5}/>
                     </Space>
-                    <Search className={styles.search} placeholder="请输入H5名称" onSearch={setH5Name} enterButton />
+                    <Search className={styles.search} placeholder="请输入H5名称" onSearch={setH5Name} enterButton/>
                 </div>
                 <div className={styles.buttonGroup}>
                     <Button type='primary' onClick={() => setType(1)}>新增H5</Button>
-                    <Popconfirm title="确定批量更新？" placement="top" okText="是" cancelText="否" onConfirm={() => handleBatchUpdate()}>
+                    <Popconfirm title="确定批量更新？" placement="top" okText="是" cancelText="否"
+                                onConfirm={() => handleBatchUpdate()}>
                         <Button>更新H5</Button>
                     </Popconfirm>
                 </div>
             </div>
 
             <Table
+                rowKey='id'
                 columns={columns}
                 dataSource={h5List}
-                rowKey='id'
                 pagination={{total, current: pageNo, showSizeChanger: true}}
                 loading={loading}
                 onChange={onChangeTable}
@@ -191,7 +191,7 @@ const H5Page: React.FC = () => {
             />
 
             {/*H5组件 */}
-            <H5Module type={type} h5Info={h5} setLoading={setLoading} onCancel={() => setType(0)} />
+            <H5Module type={type} h5Info={h5} setLoading={setLoading} onCancel={() => setType(0)}/>
         </>
     )
 }
