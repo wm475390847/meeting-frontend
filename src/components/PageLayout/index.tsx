@@ -205,20 +205,18 @@ export const PageLayoutModule: React.FC<LayoutPropModule> = ({routes}) => {
         <Layout>
           <Affix>
             <Header className={styles.header}>
-              <Popover placement="bottomRight" content={popoverContent} trigger="hover">
-                <div className={styles.user}>
-                  {avatar ? (
-                      <img src={avatar} alt=""/>
-                  ) : nickName.split('')[0] || 's'}
-                </div>
+              <Popover placement="bottomRight" content={popoverContent} className={styles.user} trigger="hover">
+                {avatar ? (
+                    <img src={avatar} alt=""/>
+                ) : nickName.split('')[0] || 's'}
               </Popover>
             </Header>
           </Affix>
 
-          <Breadcrumb style={{margin: '20px 15px 0'}} items={breadcrumbItems}/>
+          <Breadcrumb style={{margin: '20px 15px 20px'}} items={breadcrumbItems}/>
 
           <Content style={{
-            margin: '20px 15px 0',
+            margin: '0 15px 0',
             padding: 24,
             background: colorBgContainer,
             borderRadius: '15px',
