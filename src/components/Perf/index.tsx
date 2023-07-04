@@ -1,32 +1,28 @@
-import {createPerf, getProductList, updatePerf} from "@/services";
+import {createPerf, updatePerf} from "@/services";
 import {Button, Form, Input, message, Modal, Select} from "antd";
 import React, {useEffect, useState} from "react";
 import styles from './index.module.less'
 import UploadFileModule from "@/components/UploadFile";
 
 type PerfModuleProps = {
+    productList: ProductInfo[]
     perfInfo?: PerfInfo
     type: number
     onCancel?: () => void
     setLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 const PerfModule: React.FC<PerfModuleProps> = (props) => {
-    const {perfInfo, type, onCancel, setLoading} = (props)
+    const {productList, perfInfo, type, onCancel, setLoading} = (props)
     const [form] = Form.useForm()
     const [buttonLoading, setButtonLoading] = useState(false)
     const [open, setOpen] = useState<boolean>(false)
-    const [productList, setProductList] = useState<ProductInfo[]>([])
+
     const [ossPath, setOssPath] = useState<string>()
     const handleCancel = () => {
         setOpen(false)
         onCancel && onCancel()
     }
-    const handleGetProductList = () => {
-        getProductList({})
-            .then(data => {
-                setProductList(data.records)
-            })
-    }
+
     const options = () => {
         return productList.map((item) => ({
             value: item.id,
@@ -81,7 +77,6 @@ const PerfModule: React.FC<PerfModuleProps> = (props) => {
     useEffect(() => {
         if (type != 0) {
             setOpen(true)
-            handleGetProductList()
         }
     }, [type])
 

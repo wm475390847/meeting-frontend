@@ -162,6 +162,7 @@ const H5Page: React.FC = () => {
         setLoading(true)
     }, [searchH5])
 
+    // @ts-ignore
     return (
         <>
             <div className={styles.action}>
@@ -183,7 +184,7 @@ const H5Page: React.FC = () => {
                 columns={columns}
                 dataSource={h5List}
                 rowKey='id'
-                pagination={{ total, current: pageNo, showSizeChanger: true }}
+                pagination={{total, current: pageNo, showSizeChanger: true}}
                 loading={loading}
                 onChange={onChangeTable}
                 className={styles.table}

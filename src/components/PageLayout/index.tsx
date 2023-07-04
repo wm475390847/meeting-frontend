@@ -196,10 +196,7 @@ export const PageLayoutModule: React.FC<LayoutPropModule> = ({routes}) => {
               openKeys={openKeys}
               onSelect={handleMenuChange}
               onOpenChange={handleOpenChange}
-              items={menuItems.map((item) => ({
-                ...item,
-                className: selectKey === item.key ? styles.selectedItem : '',
-              }))}
+              items={menuItems}
           />
         </Sider>
         <Layout>

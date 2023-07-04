@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react"
 import {Button, message, Pagination, Select} from 'antd'
-import {deletePerf, getPerfList} from "@/services"
+import {deletePerf, getPerfList, getProductList} from "@/services"
 // import {LoadingOutlined} from "@ant-design/icons"
 import styles from './index.module.less'
 import uploadIcon from '@/assets/svg/upload.svg';
@@ -23,6 +23,7 @@ const PerfPage: React.FC = () => {
     const [pageNo, setPageNo] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [total, setTotal] = useState(0)
+    const [productList, setProductList] = useState<ProductInfo[]>([])
 
     // const perfListRef = useRef<PerfInfo[]>([])
     const handlePageChange = (page: number) => {
@@ -72,8 +73,18 @@ const PerfPage: React.FC = () => {
             .catch(err => message.error(err.message))
     }
 
+    const handleGetProductList = () => {
+        getProductList({})
+            .then(data => {
+                setProductList(data.records)
+            })
+    }
+
     useEffect(() => {
-        loading && handleGetPerfList()
+        if (loading) {
+            handleGetPerfList()
+            handleGetProductList()
+        }
     }, [pageNo, loading])
 
     useEffect(() => {
@@ -154,7 +165,8 @@ const PerfPage: React.FC = () => {
                         options={options}
                 />
             </div>
-            <PerfModule perfInfo={perfInfo}
+            <PerfModule productList={productList}
+                        perfInfo={perfInfo}
                         type={type}
                         onCancel={() => {
                             setType(0); // 关闭弹窗
