@@ -18,7 +18,7 @@ interface SearchH5 {
 
 const H5Page: React.FC = () => {
     const RangePicker: any = DatePicker.RangePicker;
-    const { Search } = Input
+    const {Search} = Input
     const [loading, setLoading] = useState(true)
     const [pageNo, setPageNo] = useState(1)
     const [pageSize, setPageSize] = useState(10)
@@ -48,14 +48,14 @@ const H5Page: React.FC = () => {
                 key: 'h5Url',
                 width: '20%',
                 ellipsis: true,
-                render: (text) => <ToolTipModule linkText={text} isWindowOpen={true} buttonText={text} />
+                render: (text) => <ToolTipModule linkText={text} isWindowOpen={true} buttonText={text}/>
             },
             {
                 title: 'H5名称',
                 dataIndex: 'h5Name',
                 key: 'h5Name',
                 width: '20%',
-                render: (text) => <ToolTipModule linkText={text} buttonText={text} />
+                render: (text) => <ToolTipModule linkText={text} buttonText={text}/>
             },
             {
                 title: '会议时间',
@@ -66,7 +66,7 @@ const H5Page: React.FC = () => {
                 render: (_, record) =>
                     moment(record.meetingStartTime).format('YYYY-MM-DD') === moment(record.meetingEndTime).format('YYYY-MM-DD')
                         ?
-                        <div >
+                        <div>
                             {moment(record.meetingStartTime).format('YYYY-MM-DD')}
                         </div>
                         :
@@ -131,7 +131,7 @@ const H5Page: React.FC = () => {
     }
 
     const setH5Name = (value: string) => {
-        setSearchH5({ ...searchH5, h5Name: value })
+        setSearchH5({...searchH5, h5Name: value})
     }
 
     const handleSearchH5 = (value: string) => {

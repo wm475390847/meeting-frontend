@@ -124,7 +124,7 @@ const FaceModule: React.FC<FaceModuleProps> = (props) => {
 
     return (
         <Modal
-            title={`${type === 1 ? '创建人脸信息' : type === 2 ? '修改人俩信息' : ''}`}
+            title={`${type === 1 ? '创建人脸信息' : type === 2 ? '修改人脸信息' : ''}`}
             open={open}
             onCancel={handleCancel}
             footer={<Button loading={buttonLoading} type='primary' onClick={onSubmit}>确定</Button>}

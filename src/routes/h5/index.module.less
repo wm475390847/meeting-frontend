@@ -1,42 +1,43 @@
 .action {
-    flex: 1;
-    overflow: auto;
-    display: flex;
-    justify-content: space-between;
+  flex: 1;
+  overflow: auto;
+  display: flex;
+  justify-content: space-between;
 
-    .search {
-        width: 200px;
+  .search {
+    width: 200px;
+    margin-left: 20px;
+  }
+
+  .space {
+    width: 300px;
+  }
+
+  .buttonGroup {
+
+    button {
+      margin-right: 8px;
+
+      &:last-child {
+        margin-right: 0;
+      }
     }
-
-    .space {
-        width: 300px;
-    }
-
-    .buttonGroup {
-
-        button {
-            margin-right: 8px;
-
-            &:last-child {
-                margin-right: 0;
-            }
-        }
-    }
+  }
 }
 
 .tableAction {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 
-    button {
-        margin-right: 8px;
+  button {
+    margin-right: 8px;
 
-        &:last-child {
-            margin-right: 0;
-        }
+    &:last-child {
+      margin-right: 0;
     }
+  }
 }
 
 .table {
-    margin-top: 20px;
+  margin-top: 20px;
 }
