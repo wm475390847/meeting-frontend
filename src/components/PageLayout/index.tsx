@@ -130,7 +130,7 @@ export const PageLayoutModule: React.FC<LayoutPropModule> = ({routes}) => {
   const handleMenuItems = () => {
     // 处理普通菜单项
     const getMenuItem = (item: RouteBase) => ({
-      label: (<Link to={item.path}>{item.name}</Link>),
+      label: <Link to={item.path}>{item.name}</Link>,
       key: item.path.split('/')[2],
       icon: <img style={{width: '20px', height: '20px'}} src={item.icon} alt="加载失败"/>,
       className: styles.menuItem,
@@ -138,12 +138,12 @@ export const PageLayoutModule: React.FC<LayoutPropModule> = ({routes}) => {
 
     // 处理子菜单项
     const getMenuChildren = (item: RouteBase) =>
-      item.children
-        ?.filter((i: RouteBase) => !i.hideInMenu)
-        .map((inItem) => ({
-          ...getMenuItem(inItem),
-          key: String(inItem.path), // 使用子菜单项的 id 属性作为 key，并转换为字符串类型
-        }));
+        item.children
+            ?.filter((i: RouteBase) => !i.hideInMenu)
+            .map((inItem) => ({
+              ...getMenuItem(inItem),
+              key: String(inItem.path), // 使用子菜单项的 id 属性作为 key，并转换为字符串类型
+            }));
 
     // 处理一级菜单项
     const getFirstMenuItem = (item: RouteBase) => ({
@@ -180,25 +180,30 @@ export const PageLayoutModule: React.FC<LayoutPropModule> = ({routes}) => {
             collapsible
             collapsed={collapsed}
             onCollapse={(value) => setCollapsed(value)}
+            theme={"light"}
+            style={{backgroundColor: '#1b1f27'}}
         >
           <div className={styles.logo}>
             <img src={logo}
-                 alt=""
+                 alt="加载失败"
                  onClick={() => window.location.href = '/app/page'}
             />
           </div>
           <Menu
-              theme="dark"
+              style={{backgroundColor: '#1b1f27', color: 'white'}}
               mode="inline"
               selectedKeys={[selectKey] as unknown as string[]}
               openKeys={openKeys}
-              items={menuItems}
               onSelect={handleMenuChange}
               onOpenChange={handleOpenChange}
+              items={menuItems.map((item) => ({
+                ...item,
+                className: selectKey === item.key ? styles.selectedItem : '',
+                itemStyle: {pointerEvents: 'none'}
+              }))}
           />
         </Sider>
         <Layout>
-
           <Header className={styles.header}>
             <Popover
                 placement="bottomRight"

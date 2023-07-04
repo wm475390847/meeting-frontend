@@ -6,7 +6,7 @@ import {deleteCase, executeCase, getCaseList} from '@/services';
 import TextBoxModule from '../../../components/TextBox'
 import ToolTipModule from '@/components/ToolTip';
 import styles from './index.module.less'
-import {useLocation, useParams} from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 
 interface SearchCase {
   caseResult?: boolean
@@ -25,7 +25,6 @@ const ProductDetailPage: React.FC = () => {
   const [reason, setReason] = useState()
   const [searchCase, setSearchCase] = useState<SearchCase>()
   const [buttonLoading, setButtonLoading] = useState(false)
-  const {productName} = useParams<{ productName: string }>();
 
   const searchParams = new URLSearchParams(useLocation().search);
   const productId = searchParams.get("id");
