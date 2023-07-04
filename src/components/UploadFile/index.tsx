@@ -79,8 +79,7 @@ const UploadFileModule: React.FC<UploadFileModuleProps> = (props) => {
             </p>
             <p className="ant-upload-text">单击或拖动文件到此区域进行上传</p>
             <p className="ant-upload-hint">
-                一次只能上传一个jmx文件
-                严禁上传非法文件
+                一次只能上传一个jmx文件 上传后请选择对应的产品保存
             </p>
         </Dragger>
     )

@@ -1,12 +1,12 @@
-import {Breadcrumb, Button, Input, message, Popconfirm, Progress, Select, Table} from 'antd';
+import {Button, Input, message, Popconfirm, Progress, Select, Table} from 'antd';
 import React, {useEffect, useMemo, useState} from 'react';
 import {ColumnsType} from 'antd/lib/table';
 import moment from 'moment';
 import {deleteCase, executeCase, getCaseList} from '@/services';
-import TextBoxModule from '../TextBox'
+import TextBoxModule from '../../../components/TextBox'
 import ToolTipModule from '@/components/ToolTip';
 import styles from './index.module.less'
-import {Link, useLocation, useParams} from 'react-router-dom';
+import {useLocation, useParams} from 'react-router-dom';
 
 interface SearchCase {
   caseResult?: boolean
@@ -26,8 +26,8 @@ const ProductDetailPage: React.FC = () => {
   const [searchCase, setSearchCase] = useState<SearchCase>()
   const [buttonLoading, setButtonLoading] = useState(false)
   const {productName} = useParams<{ productName: string }>();
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
+
+  const searchParams = new URLSearchParams(useLocation().search);
   const productId = searchParams.get("id");
 
   const columns = useMemo<ColumnsType<any>>(() => {
@@ -159,75 +159,76 @@ const ProductDetailPage: React.FC = () => {
   }, [pageNo, loading])
 
   return (
-    <div >
-      <Breadcrumb>
-        <Breadcrumb.Item>
-          <Link to="/app/case/productList">产品列表</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item>{productName}</Breadcrumb.Item>
-      </Breadcrumb>
-
-      <div className={styles.action}>
-        <div className={styles.container}>
-          <span className={styles.span}>结果：</span>
-          <Select
-            className={styles.select}
-            placeholder='请选择执行结果'
-            defaultValue="全部"
-            onSelect={(e: any) => { handleProvinceChange('caseResult', e) }} >
-            <Option value="">全部</Option>
-            <Option value="true">成功</Option>
-            <Option value="false">失败</Option>
-          </Select>
-        </div>
-
-        <div className={styles.container}>
-          <span className={styles.span}>环境：</span>
-          <Select
-            className={styles.select}
-            defaultValue="全部"
-            onSelect={(e: any) => { handleProvinceChange('env', e) }} >
-            <Option value="">全部</Option>
-            <Option value="test">测试环境</Option>
-            <Option value="prod">生产环境</Option>
-          </Select>
-        </div>
-
-        <div className={styles.container} >
-          <span className={styles.span}>用例名称：</span>
-          <Search
-            className={styles.search}
-            placeholder="请输入用例名称"
-            onSearch={(e: any) => { handleProvinceChange('caseName', e) }}
-            enterButton
-            allowClear
-          />
-        </div>
-
-        <div className={styles.container}>
-          <span className={styles.span}>用例作者：</span>
-          <Search
-            className={styles.search}
-            placeholder="请输入作者"
-            onSearch={(e: any) => { handleProvinceChange('owner', e) }}
-            enterButton
-            allowClear
-          />
-        </div>
-      </div>
       <div>
-        <Table
-            columns={columns}
-            dataSource={caseList}
-            rowKey='id'
-            onChange={onChangeTable}
-            pagination={{total, current: pageNo, showSizeChanger: true}}
-            loading={loading}
-            className={styles.table}
-        />
+        <div className={styles.action}>
+          <div className={styles.container}>
+            <span className={styles.span}>结果：</span>
+            <Select
+                className={styles.select}
+                placeholder='请选择执行结果'
+                defaultValue="全部"
+                onSelect={(e: any) => {
+                  handleProvinceChange('caseResult', e)
+                }}>
+              <Option value="">全部</Option>
+              <Option value="true">成功</Option>
+              <Option value="false">失败</Option>
+            </Select>
+          </div>
+
+          <div className={styles.container}>
+            <span className={styles.span}>环境：</span>
+            <Select
+                className={styles.select}
+                defaultValue="全部"
+                onSelect={(e: any) => {
+                  handleProvinceChange('env', e)
+                }}>
+              <Option value="">全部</Option>
+              <Option value="test">测试环境</Option>
+              <Option value="prod">生产环境</Option>
+            </Select>
+          </div>
+
+          <div className={styles.container}>
+            <span className={styles.span}>用例名称：</span>
+            <Search
+                className={styles.search}
+                placeholder="请输入用例名称"
+                onSearch={(e: any) => {
+                  handleProvinceChange('caseName', e)
+                }}
+                enterButton
+                allowClear
+            />
+          </div>
+
+          <div className={styles.container}>
+            <span className={styles.span}>用例作者：</span>
+            <Search
+                className={styles.search}
+                placeholder="请输入作者"
+                onSearch={(e: any) => {
+                  handleProvinceChange('owner', e)
+                }}
+                enterButton
+                allowClear
+            />
+          </div>
+        </div>
+        <div>
+          <Table
+              columns={columns}
+              dataSource={caseList}
+              rowKey='id'
+              onChange={onChangeTable}
+              pagination={{total, current: pageNo, showSizeChanger: true}}
+              loading={loading}
+              className={styles.table}
+          />
+        </div>
+        <TextBoxModule text={reason} onCancel={() => setReason(undefined)}/>
       </div>
-      <TextBoxModule text={reason} onCancel={() => setReason(undefined)}/>
-    </div >
   );
 };
 

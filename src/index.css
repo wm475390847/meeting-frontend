@@ -20,6 +20,9 @@ code {
 
 * {
   box-sizing: border-box;
+  background-size: cover; /* 背景图片等比例缩放，覆盖整个容器 */
+  background-position: center; /* 背景图片在容器中居中 */
+  background-repeat: no-repeat; /* 不重复背景图片 */
 }
 
 *::after,

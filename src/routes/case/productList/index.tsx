@@ -1,9 +1,9 @@
-import {Breadcrumb, Button, message, Popconfirm, Table} from 'antd';
+import {Button, message, Popconfirm, Table} from 'antd';
 import React, {useEffect, useMemo, useState} from 'react';
 import {ColumnsType} from 'antd/lib/table';
-import {deleteProduct, getProductList} from '@/services';
+import {deleteProduct, getProductList, getServiceList} from '@/services';
 import styles from './index.module.less'
-import {Link, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import ProductModule from '@/components/Product';
 
 const ProductListPage: React.FC = () => {
@@ -11,7 +11,9 @@ const ProductListPage: React.FC = () => {
   const [pageSize, setPageSize] = useState(10)
   const [loading, setLoading] = useState(true)
   const [total, setTotal] = useState(0)
+  const [serviceList, setServiceList] = useState<ServiceInfo[]>([])
   const [productList, setProductList] = useState<ProductInfo[]>()
+  const [productInfo, setProductInfo] = useState<ProductInfo>()
   const [buttonLoading, setButtonLoading] = useState(false)
   const [type, setType] = useState(0)
   const navigate = useNavigate();
@@ -28,6 +30,12 @@ const ProductListPage: React.FC = () => {
         dataIndex: 'productName',
         width: '15%',
         ellipsis: true
+      },
+      {
+        title: '产品Id',
+        key: 'id',
+        dataIndex: 'id',
+        width: '15%'
       },
       {
         title: '所属业务',
@@ -60,25 +68,26 @@ const ProductListPage: React.FC = () => {
         width: '20%',
         render: (_, record) => {
           return (
-            <Popconfirm
-              title="确定删除？"
-              placement="top"
-              okText="是"
-              cancelText="否"
-              onConfirm={e => {
-                e?.stopPropagation()
-                handleDeleteProduct(record.id)
-              }}
-              onCancel={e => e?.stopPropagation()}
-            >
-              <Button
-                loading={buttonLoading}
-                type='primary'
-                onClick={e => e.stopPropagation()}
-              >
-                删除
-              </Button>
-            </Popconfirm>
+              <div className={styles.tableAction}>
+                <Button loading={buttonLoading} type='primary' onClick={e => {
+                  e.stopPropagation()
+                  setType(2)
+                  setProductInfo(record)
+                }}>编辑</Button>
+                <Popconfirm
+                    title="确定删除？"
+                    placement="top"
+                    okText="是"
+                    cancelText="否"
+                    onConfirm={e => {
+                      e?.stopPropagation()
+                      handleDeleteProduct(record.id)
+                    }}
+                    onCancel={e => e?.stopPropagation()}
+                >
+                  <Button loading={buttonLoading} onClick={e => e.stopPropagation()}>删除</Button>
+                </Popconfirm>
+              </div>
           )
         }
       }
@@ -106,52 +115,64 @@ const ProductListPage: React.FC = () => {
   const handleDeleteProduct = (id: number) => {
     setButtonLoading(true)
     deleteProduct(id)
-      .then(res => {
-        message.success(res.message).then(r => r)
-        setLoading(true)
-      })
-      .catch(err => message.error(err.message))
-      .finally(() => setButtonLoading(false))
+        .then(res => {
+          message.success(res.message).then(r => r)
+          setLoading(true)
+        })
+        .catch(err => message.error(err.message))
+        .finally(() => setButtonLoading(false))
+  }
+
+  /**
+   *获取业务列表
+   */
+  const handleGetProductGroup = () => {
+    getServiceList()
+        .then(res => {
+          setServiceList(res)
+        })
   }
 
   useEffect(() => {
-    loading && handleGetProductList()
+    if (loading) {
+      handleGetProductList()
+      handleGetProductGroup()
+    }
   }, [pageNo, loading])
 
   return (
-    <>
-      <div className={styles.action}>
-        <Breadcrumb>
-          <Breadcrumb.Item>
-            <Link to="/app/case/productList">产品列表</Link>
-          </Breadcrumb.Item>
-        </Breadcrumb>
-        <Button type='primary' onClick={() => setType(1)}>创建产品</Button>
-      </div >
+      <>
+        <div className={styles.action}>
+          <Button type='primary' onClick={() => setType(1)}>创建产品</Button>
+        </div>
 
-      <Table
-        columns={columns}
-        dataSource={productList}
-        rowKey='id'
-        onChange={onChangeTable}
-        pagination={{ total, current: pageNo, showSizeChanger: true }}
-        loading={loading}
-        className={styles.table}
-        onRow={record => {
-          return {
-            onClick: () => {
-              navigate({
-                pathname: `/app/case/productList/productDetail/${record.productName}`,
-                search: `?id=${record.id}`
-              })
-            },
-            style: { cursor: 'pointer' }
-          }
-        }
-        }
-      />
-      <ProductModule type={type} onCancel={() => setType(0)} setLoading={setLoading} />
-    </>
+        <Table
+            columns={columns}
+            dataSource={productList}
+            rowKey='id'
+            onChange={onChangeTable}
+            pagination={{total, current: pageNo, showSizeChanger: true}}
+            loading={loading}
+            className={styles.table}
+            onRow={record => {
+              return {
+                onClick: () => {
+                  navigate({
+                    pathname: `/app/case/productList/productDetail/${record.productName}`,
+                    search: `?id=${record.id}`
+                  })
+                },
+                style: {cursor: 'pointer'}
+              }
+            }
+            }
+        />
+        <ProductModule type={type}
+                       serviceList={serviceList}
+                       productInfo={productInfo}
+                       onCancel={() => setType(0)}
+                       setLoading={setLoading}/>
+      </>
   );
 };
 

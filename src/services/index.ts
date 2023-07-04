@@ -140,6 +140,28 @@ export const createProduct: (data: { productName: string, serviceId: number }) =
 }
 
 /**
+ * 编辑产品
+ * @param data 查询数据
+ * @returns
+ */
+export const updateProduct: (data: {
+    id: number,
+    productName: string,
+    serviceId: number
+}) => Promise<RequestOpt> = (data) => {
+    return new Promise(async (resolve, reject) => {
+        await client.put(`/ttp/products`, data)
+            .then((res: any) => {
+                if (res.success) {
+                    resolve(res)
+                } else {
+                    reject(res)
+                }
+            })
+    })
+}
+
+/**
  * 获取业务列表
  * @returns
  */

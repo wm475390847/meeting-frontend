@@ -1,14 +1,15 @@
 import './styles/index.less';
 import './index.css';
-import { Suspense } from 'react';
-import { createRoot } from 'react-dom/client';
-import { ConfigProvider, Watermark } from 'antd';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import {Suspense} from 'react';
+import {createRoot} from 'react-dom/client';
+import {ConfigProvider} from 'antd';
+import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import routes from './routes';
-import { PageLayoutModule } from './components/PageLayout';
+import {PageLayoutModule} from './components/PageLayout';
 import moment from 'moment';
 import NotFound from './components/NotFound';
 import zhCN from 'antd/lib/locale/zh_CN';
+
 moment.locale('zh-cn')
 
 const routeList: any[] = [];
@@ -36,18 +37,18 @@ routes.map((item, index) => {
 
 const App = () => {
   return (
-    <Suspense fallback={<div />}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={(
-            <PageLayoutModule routes={routes} />
-          )}>
-            {routeList}
-          </Route>
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </Suspense>
+      <Suspense fallback={<div/>}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={(
+                <PageLayoutModule routes={routes}/>
+            )}>
+              {routeList}
+            </Route>
+            <Route path="*" element={<NotFound/>}/>
+          </Routes>
+        </BrowserRouter>
+      </Suspense>
   );
 }
 

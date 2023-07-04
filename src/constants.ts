@@ -28,25 +28,27 @@ export const ACCOUNT_HOST = [
   `dev.${DOMAIN}`,
   `test.${DOMAIN}`,
 ].includes(location.hostname)
-  ? location.protocol + `//test.${DOMAIN_ACCOUNT}`
-  : `https://${DOMAIN_ACCOUNT}`; // 注意线上的账号中心地址强制https
+    ? location.protocol + `//test.${DOMAIN_ACCOUNT}`
+    : `https://${DOMAIN_ACCOUNT}`; // 注意线上的账号中心地址强制https
 
 // API网关 host
 export const API_HOST = [
   `dev.${DOMAIN}`,
   `test.${DOMAIN}`,
 ].includes(location.hostname)
-  ? location.protocol + `//test.${DOMAIN_API}`
-  : (IS_PRE ? location.protocol + `//pre.${DOMAIN_API}` : `https://${DOMAIN_API}`); // 注意线上的账号中心地址强制https
+    ? location.protocol + `//test.${DOMAIN_API}`
+    : (IS_PRE ? location.protocol + `//pre.${DOMAIN_API}` : `https://${DOMAIN_API}`); // 注意线上的账号中心地址强制https
 
 // 项目 hosts
 export const PROJECT_HOST = [
   `dev.${DOMAIN}`,
   `test.${DOMAIN}`,
 ].includes(location.hostname)
-  ? location.protocol + `//${IS_DEV ? `dev.${DOMAIN}:8005`
+    ? location.protocol + `//${IS_DEV ? `dev.${DOMAIN}:8005`
     : `test.${DOMAIN}`}`
-  : location.protocol + `//${IS_PRE ? `pre.${DOMAIN}` : `${DOMAIN}`}`;
+    : location.protocol + `//${IS_PRE ? `pre.${DOMAIN}` : `${DOMAIN}`}`;
+
+export const breadcrumb = "aaa";
 
 export const File = ['ai', 'psd', 'rar', 'zip', 'war'];
 export const Video = ['mp4', 'MP4'];

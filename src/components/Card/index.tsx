@@ -14,22 +14,23 @@ const CardModule: React.FC<CardModuleProps> = (props) => {
     const {Meta} = Card;
 
     return (
-        <>
-            <Card
-                style={{width: 300, marginTop: 16}}
-                actions={[
-                    <EditOutlined key="edit" onClick={() => onClickIcon(1)}/>,
-                    <DownloadOutlined key="download" onClick={() => onClickIcon(2)}/>,
-                    <DeleteOutlined key="delete" onClick={() => onClickIcon(3)}/>,
-                ]}
-            >
-                <Meta
-                    avatar={<Avatar src={fileIcon}/>}
-                    title={title}
-                    description={description}
-                />
-            </Card>
-        </>
+        <Card
+            style={{
+                width: 300,
+                marginTop: 15
+            }}
+            actions={[
+                <EditOutlined key="edit" onClick={() => onClickIcon(1)}/>,
+                <DownloadOutlined key="download" onClick={() => onClickIcon(2)}/>,
+                <DeleteOutlined key="delete" onClick={() => onClickIcon(3)}/>,
+            ]}
+        >
+            <Meta
+                avatar={<Avatar src={fileIcon}/>}
+                title={title}
+                description={description}
+            />
+        </Card>
     );
 };
 

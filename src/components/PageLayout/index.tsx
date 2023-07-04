@@ -1,7 +1,7 @@
 import React, {ReactElement, useEffect, useState} from 'react';
-import {Layout, Menu, message, Popover, theme} from 'antd';
+import {Breadcrumb, Layout, Menu, message, Popover, theme} from 'antd';
 import classnames from 'classnames';
-import {Link, Outlet} from 'react-router-dom';
+import {Link, Outlet, useParams} from 'react-router-dom';
 import {RouteBase} from '@/routes';
 import {getUserInfo} from '@/services';
 import styles from './index.module.less';
@@ -9,8 +9,8 @@ import logo from '@/assets/svg/logo.svg';
 import logoutIcon from '@/assets/svg/logout.svg';
 import personIcon from '@/assets/svg/person.svg';
 import {Footer} from 'antd/lib/layout/layout';
-import * as Icon from '@ant-design/icons';
 import {HttpClient} from '@/utils';
+import {PageTitle} from "@/config";
 
 type LayoutPropModule = {
   children?: ReactElement | ReactElement[];
@@ -28,6 +28,8 @@ export const PageLayoutModule: React.FC<LayoutPropModule> = ({routes}) => {
   const {
     token: {colorBgContainer},
   } = theme.useToken();
+
+  const {productName} = useParams<{ productName: string }>();
 
   useEffect(() => {
     handleGetUserInfo();
@@ -54,21 +56,59 @@ export const PageLayoutModule: React.FC<LayoutPropModule> = ({routes}) => {
         })
   }
 
+  const handleGetTitleBySelectKey = (selectKey: string) => {
+    if (selectKey) {
+      const pathArr: string[] = selectKey.split("/");
+      const lastItem = pathArr.pop()
+      return lastItem ? (PageTitle as { [key: string]: string })[lastItem] : null;
+    }
+    return null;
+  }
+
+  const handleFindPathByName = (name: string, routes: RouteBase[]): string | null => {
+    for (const route of routes) {
+      if (route.name === name) {
+        return route.path;
+      } else if (route.children && route.children.length > 0) {
+        const childPath = handleFindPathByName(name, route.children);
+        if (childPath) {
+          return childPath;
+        }
+      }
+    }
+    return null;
+  };
+
+  const getTitleAndHref = (selectKey: string) => {
+    const title = handleGetTitleBySelectKey(selectKey as unknown as string);
+    const path = handleFindPathByName(title as string, routes);
+    const arr = [];
+    if (path) {
+      arr.push({
+        title: title,
+        href: path,
+      });
+      if (productName) {
+        arr.push({
+          title: productName
+        });
+      }
+    } else {
+      arr.push({
+        title: title,
+      });
+    }
+    return arr;
+  };
+
+  const breadcrumbItems = getTitleAndHref(selectKey as unknown as string);
+
   /**
    * 退出登录
    */
   const handleLogout = () => {
     new HttpClient({}).logout()
   }
-
-  /**
-   * 创建icon图标元素
-   * @param name 图标名称
-   */
-  const handleIconToElement = (name: string) =>
-    React.createElement(Icon && (Icon as any)[name], {
-      style: { fontSize: '15px' }
-    })
 
   /**
    * 人物头像弹窗
@@ -92,7 +132,7 @@ export const PageLayoutModule: React.FC<LayoutPropModule> = ({routes}) => {
     const getMenuItem = (item: RouteBase) => ({
       label: (<Link to={item.path}>{item.name}</Link>),
       key: item.path.split('/')[2],
-      icon: handleIconToElement(item.icon),
+      icon: <img style={{width: '20px', height: '20px'}} src={item.icon} alt="加载失败"/>,
       className: styles.menuItem,
     });
 
@@ -109,7 +149,7 @@ export const PageLayoutModule: React.FC<LayoutPropModule> = ({routes}) => {
     const getFirstMenuItem = (item: RouteBase) => ({
       label: item.name,
       key: item.path.split('/')[2],
-      icon: handleIconToElement(item.icon),
+      icon: <img style={{width: '20px', height: '20px'}} src={item.icon} alt="加载失败"/>,
       className: styles.menuFirstItem,
       children: getMenuChildren(item),
     });
@@ -142,7 +182,10 @@ export const PageLayoutModule: React.FC<LayoutPropModule> = ({routes}) => {
             onCollapse={(value) => setCollapsed(value)}
         >
           <div className={styles.logo}>
-            <img src={logo} alt=""/>
+            <img src={logo}
+                 alt=""
+                 onClick={() => window.location.href = '/app/page'}
+            />
           </div>
           <Menu
               theme="dark"
@@ -169,6 +212,10 @@ export const PageLayoutModule: React.FC<LayoutPropModule> = ({routes}) => {
               </div>
             </Popover>
           </Header>
+
+          <Breadcrumb style={{margin: '20px 15px 0'}}
+                      items={breadcrumbItems}
+          />
 
           <Content style={{margin: '20px 15px 0', height: '100%'}}>
             <div style={{padding: 24, minHeight: 360, background: colorBgContainer}}>

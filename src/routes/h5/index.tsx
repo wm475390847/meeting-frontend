@@ -150,11 +150,8 @@ const H5Page: React.FC = () => {
 
     const handleBatchUpdate = () => {
         batchUpdate()
-            .then(res => {
-                message.success(res.message)
-            }).catch(err => {
-                message.error(err.message)
-            })
+            .then(res => message.success(res.message).then(r => r))
+            .catch(err => message.error(err.message).then(r => r))
     }
 
     useEffect(() => {
@@ -177,7 +174,7 @@ const H5Page: React.FC = () => {
                 <div className={styles.buttonGroup}>
                     <Button type='primary' onClick={() => setType(1)}>新增H5</Button>
                     <Popconfirm title="确定批量更新？" placement="top" okText="是" cancelText="否" onConfirm={() => handleBatchUpdate()}>
-                        <Button >更新H5</Button>
+                        <Button>更新H5</Button>
                     </Popconfirm>
                 </div>
             </div>

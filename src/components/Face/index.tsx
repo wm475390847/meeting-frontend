@@ -74,7 +74,7 @@ const FaceModule: React.FC<FaceModuleProps> = (props) => {
                     faceUrl: faceUrl,
                     faceDesc: values.faceDesc,
                     miceId: values.miceId,
-                    env: values.env == null ? 0 : 1,
+                    env: values.env,
                     account: values.account,
                     password: values.password
                 })
@@ -139,26 +139,30 @@ const FaceModule: React.FC<FaceModuleProps> = (props) => {
                 className={styles.form}
             >
                 <div>
-                    <Form.Item name='miceId' key={'miceId'} label="miceId" rules={[{ required: true, message: 'miceId不能为空' }]}>
-                        <Input placeholder='请输入miceId' />
+                    <Form.Item name='miceId' key='miceId' label="miceId"
+                               rules={[{required: true, message: 'miceId不能为空'}]}>
+                        <Input placeholder='请输入miceId'/>
                     </Form.Item>
-                    <Form.Item name='faceUrl' key={'faceUrl'} label="人像">
-                        <UploadImgModule currentImgUrl={face?.faceUrl} onUploadSuccess={faceUrl => setFaceUrl(faceUrl)} />
+                    <Form.Item name='faceUrl' key='faceUrl' label="人像">
+                        <UploadImgModule currentImgUrl={face?.faceUrl}
+                                         onUploadSuccess={faceUrl => setFaceUrl(faceUrl)}/>
                     </Form.Item>
-                    <Form.Item name='faceDesc' key={'faceDesc'} label='备注信息'>
-                        <Input placeholder='请输入备注信息' />
+                    <Form.Item name='faceDesc' key='faceDesc' label='备注信息'>
+                        <Input placeholder='请输入备注信息'/>
                     </Form.Item>
-                    <Form.Item name={'env'} key={'env'} label='环境' initialValue={0}>
+                    <Form.Item name='env' key='env' label='环境' initialValue={0}>
                         <Select className={styles.select}>
                             <Option value={0}>测试</Option>
                             <Option value={1}>生产</Option>
                         </Select>
                     </Form.Item>
-                    <Form.Item name='account' key={'account'} label="metaos账号" rules={[{ required: true, message: '账号不能为空' }]}>
-                        <Input placeholder='请输入账号' />
+                    <Form.Item name='account' key='account' label="metaos账号"
+                               rules={[{required: true, message: '账号不能为空'}]}>
+                        <Input placeholder='请输入账号'/>
                     </Form.Item>
-                    <Form.Item name='password' key={'password'} label="metaos密码" rules={[{ required: true, message: '密码不能为空' }]}>
-                        <Input.Password placeholder="请输入密码" />
+                    <Form.Item name='password' key='password' label="metaos密码"
+                               rules={[{required: true, message: '密码不能为空'}]}>
+                        <Input.Password placeholder="请输入密码"/>
                     </Form.Item>
                 </div>
 

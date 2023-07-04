@@ -44,6 +44,7 @@ interface ProductInfo {
   id: number
   productName: string
   serviceName: string
+  serviceId: number
   caseCount: string
   casePercent: string
 }

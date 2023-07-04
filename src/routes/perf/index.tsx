@@ -83,6 +83,7 @@ const PerfPage: React.FC = () => {
         if (clickIcon === 2 && perfInfo) {
             handleDownloadFile(perfInfo)
             setClickIcon(0)
+            message.success("下载成功").then(r => r)
         }
         if (clickIcon === 3 && perfInfo) {
             handleDeletePerf(perfInfo.id)
@@ -131,8 +132,9 @@ const PerfPage: React.FC = () => {
             </div>
 
             <div style={{display: 'flex', flexWrap: 'wrap', gap: '20px'}}>
-                {perfList?.map((e) => (
-                    <CardModule title={e?.perfName}
+                {perfList?.map((e, index) => (
+                    <CardModule key={index}
+                                title={e?.perfName}
                                 description={e?.jmxPath}
                                 onClickIcon={(value) => {
                                     setClickIcon(value)

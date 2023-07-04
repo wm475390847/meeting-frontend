@@ -92,7 +92,7 @@ const PerfModule: React.FC<PerfModuleProps> = (props) => {
             onCancel={handleCancel}
             width={500}
             destroyOnClose
-            footer={<Button loading={buttonLoading} type='primary' onClick={onSubmit}>确定</Button>}
+            footer={<Button loading={buttonLoading} type='primary' onClick={onSubmit}>保存</Button>}
         >
             <Form
                 labelCol={{span: 5}}
