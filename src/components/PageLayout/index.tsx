@@ -199,7 +199,6 @@ export const PageLayoutModule: React.FC<LayoutPropModule> = ({routes}) => {
               items={menuItems.map((item) => ({
                 ...item,
                 className: selectKey === item.key ? styles.selectedItem : '',
-                itemStyle: {pointerEvents: 'none'}
               }))}
           />
         </Sider>
