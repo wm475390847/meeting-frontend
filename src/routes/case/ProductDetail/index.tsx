@@ -1,12 +1,12 @@
 import {Button, Input, message, Popconfirm, Progress, Select, Table} from 'antd';
 import React, {useEffect, useMemo, useState} from 'react';
+import {useLocation} from 'react-router-dom';
 import {ColumnsType} from 'antd/lib/table';
 import moment from 'moment';
 import {deleteCase, executeCase, getCaseList} from '@/services';
-import TextBoxModule from '../../../components/TextBox'
+import TextBoxModule from '@/components/TextBox'
 import ToolTipModule from '@/components/ToolTip';
 import styles from './index.module.less'
-import {useLocation} from 'react-router-dom';
 
 interface SearchCase {
   caseResult?: boolean
@@ -90,13 +90,17 @@ const ProductDetailPage: React.FC = () => {
         width: '20%',
         render: (_, record) => {
           return (
-            <div className={styles.tableAction}>
-              <Button disabled={record.caseResult} type="primary" onClick={() => setReason(record.caseReason)}>查看</Button>
-              <Popconfirm title="确定删除？" placement="top" okText="是" cancelText="否" onConfirm={() => handleDeleteCase(record.id)}>
-                <Button loading={buttonLoading}>删除</Button>
-              </Popconfirm>
-              <Button disabled={!record.ciJobId} onClick={() => { handleExecuteCase(record.ciJobId, record.caseName) }}>执行</Button>
-            </div >
+              <div className={styles.buttonGroup}>
+                <Button disabled={record.caseResult} type="primary"
+                        onClick={() => setReason(record.caseReason)}>查看</Button>
+                <Popconfirm title="确定删除？" placement="top" okText="是" cancelText="否"
+                            onConfirm={() => handleDeleteCase(record.id)}>
+                  <Button loading={buttonLoading}>删除</Button>
+                </Popconfirm>
+                <Button disabled={!record.ciJobId} onClick={() => {
+                  handleExecuteCase(record.ciJobId, record.caseName)
+                }}>执行</Button>
+              </div>
           )
         }
       }

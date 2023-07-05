@@ -37,7 +37,7 @@ const FacePage: React.FC = () => {
                         width={100}
                         height={120}
                         fallback={defaultImage}
-                        className={styles.image}
+                        className={styles.img}
                     />
             },
             {
@@ -69,7 +69,7 @@ const FacePage: React.FC = () => {
                 width: '20%',
                 render: (_, record) => {
                     return (
-                        <div className={styles.tableAction}>
+                        <div className={styles.buttonGroup}>
                             <Button type="primary" onClick={() => {
                                 setFace(record);
                                 setType(2)
@@ -138,20 +138,20 @@ const FacePage: React.FC = () => {
     return (
         <div>
             <div className={styles.action}>
-                <Button type='primary' onClick={() => setType(1)}>新增人脸</Button>
-                <Button type='primary' disabled={true}>批量执行</Button>
+                <div className={styles.buttonGroup}>
+                    <Button type='primary' onClick={() => setType(1)}>新增人脸</Button>
+                    <Button type='primary' disabled={true}>批量执行</Button>
+                </div>
             </div>
-            <div>
-                <Table
-                    columns={columns}
-                    dataSource={faceList}
-                    rowKey='id'
-                    pagination={{total, current: pageNo, showSizeChanger: true}}
-                    loading={loading}
-                    onChange={onChangeTable}
-                    className={styles.table}
-                />
-            </div>
+            <Table
+                columns={columns}
+                dataSource={faceList}
+                rowKey='id'
+                pagination={{total, current: pageNo, showSizeChanger: true}}
+                loading={loading}
+                onChange={onChangeTable}
+                className={styles.table}
+            />
             {/* Face组件 */}
             <FaceModule type={type} face={face} setLoading={setLoading} onCancel={() => {
                 setType(0);

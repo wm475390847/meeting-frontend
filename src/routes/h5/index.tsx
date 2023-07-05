@@ -81,7 +81,7 @@ const H5Page: React.FC = () => {
                 width: '15%',
                 render: (_, record) => {
                     return (
-                        <div className={styles.tableAction}>
+                        <div className={styles.buttonGroup}>
                             <Button disabled={record.caseResult} type="primary" onClick={() => {
                                 setH5(record);
                                 setType(2)

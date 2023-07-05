@@ -68,7 +68,7 @@ const ProductListPage: React.FC = () => {
         width: '20%',
         render: (_, record) => {
           return (
-              <div className={styles.tableAction}>
+              <div className={styles.buttonGroup}>
                 <Button loading={buttonLoading} type='primary' onClick={e => {
                   e.stopPropagation()
                   setType(2)
@@ -143,7 +143,9 @@ const ProductListPage: React.FC = () => {
   return (
       <>
         <div className={styles.action}>
-          <Button type='primary' onClick={() => setType(1)}>创建产品</Button>
+          <div className={styles.buttonGroup}>
+            <Button type='primary' onClick={() => setType(1)}>创建产品</Button>
+          </div>
         </div>
 
         <Table

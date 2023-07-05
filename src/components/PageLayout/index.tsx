@@ -1,23 +1,24 @@
 import React, {ReactElement, useEffect, useState} from 'react';
-import {Affix, Breadcrumb, Layout, Menu, message, Popover, theme} from 'antd';
+import {Affix, Breadcrumb, Layout, Menu, message, Popover} from 'antd';
 import classnames from 'classnames';
 import {Link, Outlet, useParams} from 'react-router-dom';
 import {RouteBase} from '@/routes';
 import {getUserInfo} from '@/services';
-import styles from './index.module.less';
 import logo from '@/assets/svg/logo.svg';
 import logoutIcon from '@/assets/svg/logout.svg';
 import personIcon from '@/assets/svg/person.svg';
 import {Footer} from 'antd/lib/layout/layout';
 import {HttpClient} from '@/utils';
 import {PageTitle} from "@/config";
+import {codeUpPath} from '@/config/constants'
+import styles from './index.module.less';
 
-type LayoutPropModule = {
+type LayoutPropModuleProps = {
   children?: ReactElement | ReactElement[];
   routes: RouteBase[];
 };
 
-export const PageLayoutModule: React.FC<LayoutPropModule> = ({routes}) => {
+export const PageLayoutModule: React.FC<LayoutPropModuleProps> = ({routes}) => {
   const [collapsed, setCollapsed] = useState(false)
   const [selectKey, setSelectKey] = useState(null);
   const [openKeys, setOpenKeys] = useState<any[]>([]);
@@ -25,9 +26,6 @@ export const PageLayoutModule: React.FC<LayoutPropModule> = ({routes}) => {
   const [avatar, setAvatar] = useState('');
   const [menuItems, setMenuItem] = useState<any[]>([]);
   const {Sider, Content, Header} = Layout;
-  const {
-    token: {colorBgContainer},
-  } = theme.useToken();
 
   const {productName} = useParams<{ productName: string }>();
 
@@ -110,21 +108,29 @@ export const PageLayoutModule: React.FC<LayoutPropModule> = ({routes}) => {
     new HttpClient({}).logout()
   }
 
+  const handleMenuChange = (_menuItem: any) => {
+    setSelectKey(_menuItem.key);
+  }
+
+  const handleOpenChange = (_keys: string[]) => {
+    setOpenKeys(_keys);
+  }
+
   /**
    * 人物头像弹窗
    */
   const popoverContent = (
-    <div className={styles.popoverWrapper} >
-      <div className={classnames(styles.popLine)}>
-        <img src={personIcon} className={styles.icon} alt="" />
-        <div className={styles.menuText} >个人信息</div>
-      </div>
+      <div className={styles.popover}>
+        <div className={classnames(styles.popLine)}>
+          <img src={personIcon} className={styles.icon} alt=""/>
+          <div className={styles.menuText}>个人信息</div>
+        </div>
 
-      <div className={styles.popLine} >
-        <img src={logoutIcon} className={styles.icon} alt="" />
-        <div className={styles.menuText} onClick={handleLogout}>退出登录</div>
+        <div className={styles.popLine}>
+          <img src={logoutIcon} className={styles.icon} alt=""/>
+          <div className={styles.menuText} onClick={handleLogout}>退出登录</div>
+        </div>
       </div>
-    </div>
   )
 
   const handleMenuItems = () => {
@@ -165,33 +171,21 @@ export const PageLayoutModule: React.FC<LayoutPropModule> = ({routes}) => {
     setMenuItem(menuList);
   };
 
-  const handleMenuChange = (_menuItem: any) => {
-    setSelectKey(_menuItem.key);
-  }
-
-  const handleOpenChange = (_keys: string[]) => {
-    setOpenKeys(_keys);
-  }
-
   return (
     <>
       <Layout className={styles.layout}>
-        <Affix style={{backgroundColor: '#1b1f27'}}>
+        <Affix>
           <Sider
               collapsible
               collapsed={collapsed}
               onCollapse={(value) => setCollapsed(value)}
-              theme={"light"}
               style={{backgroundColor: '#1b1f27'}}
           >
             <div className={styles.logo}>
-              <img src={logo}
-                   alt="加载失败"
-                   onClick={() => window.location.href = '/app/page'}
-              />
+              <img src={logo} alt="" onClick={() => window.location.href = '/app/page'}/>
             </div>
             <Menu
-                style={{backgroundColor: '#1b1f27', color: 'white'}}
+                className={styles.menu}
                 mode="inline"
                 selectedKeys={[selectKey] as unknown as string[]}
                 openKeys={openKeys}
@@ -205,23 +199,16 @@ export const PageLayoutModule: React.FC<LayoutPropModule> = ({routes}) => {
         <Layout>
           <Affix>
             <Header className={styles.header}>
-              <Popover placement="bottomRight" content={popoverContent} className={styles.user} trigger="hover">
+              <Popover placement="bottomRight" content={popoverContent} trigger="hover" className={styles.popover}>
                 {avatar ? (
-                    <img src={avatar} alt=""/>
-                ) : nickName.split('')[0] || 's'}
+                    <img src={avatar} alt=""/>) : nickName.split('')[0] || 's'}
               </Popover>
             </Header>
           </Affix>
 
-          <Breadcrumb style={{margin: '20px 15px 20px'}} items={breadcrumbItems}/>
+          <Breadcrumb className={styles.breadcrumb} items={breadcrumbItems}/>
 
-          <Content style={{
-            margin: '0 15px 0',
-            padding: 24,
-            background: colorBgContainer,
-            borderRadius: '15px',
-            overflowY: 'auto',
-          }}>
+          <Content className={styles.content}>
             <Outlet/>
           </Content>
 
@@ -230,7 +217,7 @@ export const PageLayoutModule: React.FC<LayoutPropModule> = ({routes}) => {
             <a target="_blank" className={`${styles.a} ${styles.separator}`}>
               ©2022 - {new Date().getFullYear()} Created by 质量保障组
             </a>
-            <a href='https://codeup.aliyun.com/xhzy/xhzy-qa/meeting-frontend/tree/dev' target='_blank'
+            <a href={codeUpPath} target='_blank'
                className={styles.a}> CodeUp地址 </a>
           </Footer>
 

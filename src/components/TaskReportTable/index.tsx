@@ -56,11 +56,9 @@ const TaskReportTableModule: React.FC<TaskReportTableModuleProps> = (prop) => {
             {
                 title: (
                     <div>结果图片
-                        <Popover className={styles.popover}
-                            content='左侧为最新图片，中间为基础图，右侧为对比结果图'
-                            title='图片解释'
-                        >
-                            <QuestionCircleOutlined className={styles.iconHover} />
+                        <Popover className={styles.popover} content='左侧为最新图片，中间为基础图，右侧为对比结果图'
+                                 title='图片解释'>
+                            <QuestionCircleOutlined className={styles.iconHover}/>
                         </Popover>
                     </div>
                 ),
@@ -97,8 +95,11 @@ const TaskReportTableModule: React.FC<TaskReportTableModuleProps> = (prop) => {
                 width: 100,
                 render: (_, record) => {
                     return (
-                        <div className={styles.tableAction}>
-                            <Button disabled={record.result != false} type="primary" loading={buttonLoading} onClick={() => { handleExecuteHistory(record.id) }}>执行</Button>
+                        <div className={styles.buttonGroup}>
+                            <Button disabled={record.result != false} type="primary" loading={buttonLoading}
+                                    onClick={() => {
+                                        handleExecuteHistory(record.id)
+                                    }}>执行</Button>
                         </div>
                     )
                 }
@@ -123,7 +124,7 @@ const TaskReportTableModule: React.FC<TaskReportTableModuleProps> = (prop) => {
     }
 
     useEffect(() => {
-        result != null && handleTaskReportList(result, taskId)
+        result && handleTaskReportList(result, taskId)
     }, [result])
 
     return (

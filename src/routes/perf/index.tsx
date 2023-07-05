@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react"
 import {Button, message, Pagination, Select} from 'antd'
 import {deletePerf, getPerfList, getProductList} from "@/services"
-// import {LoadingOutlined} from "@ant-design/icons"
 import styles from './index.module.less'
 import uploadIcon from '@/assets/svg/upload.svg';
 import Search from "antd/es/input/Search";
@@ -38,7 +37,10 @@ const PerfPage: React.FC = () => {
     };
 
     const options = [
-        {value: "10条/页"}, {value: "20条/页"}, {value: "50条/页"}, {value: "100条/页"}
+        {value: "10 条/页"},
+        {value: "20 条/页"},
+        {value: "50 条/页"},
+        {value: "100 条/页"}
     ]
 
     const handleDownloadFile = (perfInfo: PerfInfo) => {
@@ -102,47 +104,22 @@ const PerfPage: React.FC = () => {
         }
     }, [clickIcon])
 
-    // /**
-    //  * 接口轮询，暂时不用
-    //  */
-    // useEffect(() => {
-    //     timerRef.current = setInterval(() => {
-    //         if (perfListRef.current && perfListRef.current.map(item => item.status).includes(2)) {
-    //             handleGetPerfList()
-    //         }
-    //     }, 5000)
-    //     return () => {
-    //         clearInterval(timerRef.current)
-    //     }
-    // }, [])
-
-    // useEffect(() => {
-    //     if (perfList) {
-    //         perfListRef.current = perfList
-    //     }
-    // }, [perfList])
-
     return (
         <div>
             <div className={styles.action}>
-                <div>
-                    <Search className={styles.search}
-                            placeholder="请输入性能测试名称"
-                            onSearch={(e: any) => handleProvinceChange('perfName', e)}
-                            enterButton
-                    />
-                </div>
+                <Search className={styles.search}
+                        placeholder="请输入性能测试名称"
+                        onSearch={(e: any) => handleProvinceChange('perfName', e)}
+                        enterButton
+                />
                 <div className={styles.buttonGroup}>
                     <Button type='primary' onClick={() => setType(1)}>
-                        <div className={styles.div}>
-                            <img src={uploadIcon} alt={"加载失败"} className={styles.icon}/>
-                            上传JMX文件
-                        </div>
+                        <div className={styles.div}><img src={uploadIcon} alt={"加载失败"}/>上传JMX文件</div>
                     </Button>
                 </div>
             </div>
 
-            <div style={{display: 'flex', flexWrap: 'wrap', gap: '20px'}}>
+            <div className={styles.cardList}>
                 {perfList?.map((e, index) => (
                     <CardModule key={index}
                                 title={e?.perfName}
@@ -154,17 +131,13 @@ const PerfPage: React.FC = () => {
                 ))}
             </div>
 
-            <div style={{marginTop: '15px', display: 'flex', justifyContent: 'flex-end'}}>
-                <Pagination total={total}
-                            current={pageNo}
-                            pageSize={pageSize}
-                            onChange={handlePageChange}
-                />
-                <Select defaultValue={`${pageSize}`}
-                        onChange={handlePageSizeChange}
-                        options={options}
-                />
-            </div>
+            {perfList &&
+                <div className={styles.pagination}>
+                    <Pagination total={total} current={pageNo} pageSize={pageSize} onChange={handlePageChange}/>
+                    <Select defaultValue={`${pageSize} 条/页`} onChange={handlePageSizeChange} options={options}/>
+                </div>
+            }
+
             <PerfModule productList={productList}
                         perfInfo={perfInfo}
                         type={type}

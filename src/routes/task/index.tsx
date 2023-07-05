@@ -69,12 +69,11 @@ const TaskPage: React.FC = () => {
                 width: '15%',
                 render: (_, record) => {
                     return (
-                        <div className={styles.tableAction}>
+                        <div className={`${styles.buttonGroup}`}>
                             <Popconfirm title='确定执行？' placement="top" okText="是" cancelText="否"
                                         onConfirm={() => handleExecuteTask(record.id)}>
                                 <Button type="primary" loading={buttonLoading}>执行</Button>
                             </Popconfirm>
-                            {/* <Button onClick={() => { setTaskInfo(record), setStatus(2) }}>编辑</Button> */}
                             <Button onClick={() => {
                                 setTask(record);
                                 setStatus(3)
@@ -149,24 +148,25 @@ const TaskPage: React.FC = () => {
     }, [pageNo, loading])
 
     return (
-        <div className={styles.content}>
+        <>
             <div className={styles.action}>
-                <Button type='primary' disabled={true}>新增任务</Button>
+                <div className={styles.buttonGroup}>
+                    <Button type='primary' disabled={true}>新增任务</Button>
+                </div>
             </div>
-            <div>
-                <Table
-                    columns={columns}
-                    dataSource={taskList}
-                    rowKey='id'
-                    pagination={{ total, current: pageNo, showSizeChanger: true }}
-                    loading={loading}
-                    onChange={onChangeTable}
-                    className={styles.table}
-                />
-            </div>
+
+            <Table
+                columns={columns}
+                dataSource={taskList}
+                rowKey='id'
+                pagination={{total, current: pageNo, showSizeChanger: true}}
+                loading={loading}
+                onChange={onChangeTable}
+                className={styles.table}
+            />
             {/* 报告组件 */}
-            {status == 3 && <TaskReportModal taskInfo={task} onCancel={() => setTask(undefined)} />}
-        </div>
+            {status == 3 && <TaskReportModal taskInfo={task} onCancel={() => setTask(undefined)}/>}
+        </>
     )
 }
 

@@ -2,31 +2,12 @@
     display: flex;
     justify-content: space-between;
 
-    .buttonGroup {
-        display: flex;
-        align-items: center;
-
-        .div {
-            display: flex;
-            align-items: center;
-
-            .icon {
-                width: 20px;
-                height: 20px;
-            }
-        }
-
-        button {
-            margin-right: 8px;
-
-            &:last-child {
-                margin-right: 0;
-            }
-        }
+    .search {
+        width: 300px;
     }
 }
 
-.tableAction {
+.buttonGroup {
     display: flex;
     align-items: center;
 
@@ -34,7 +15,7 @@
         display: flex;
         align-items: center;
 
-        .icon {
+        img {
             width: 20px;
             height: 20px;
         }
@@ -47,6 +28,18 @@
             margin-right: 0;
         }
     }
+}
+
+.cardList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.pagination {
+    margin-top: 15px;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .table {

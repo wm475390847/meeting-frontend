@@ -10,6 +10,7 @@ export const PageTitle = {
   perf: '性能测试管理',
 };
 
+export const codeUpPath = 'https://codeup.aliyun.com/xhzy/xhzy-qa/meeting-frontend/tree/dev'
 export const Doc = ['doc', 'docs', 'docx', 'pdf', 'ppt', 'pptx', 'txt', 'xls', 'xlsx'];
 export const File = ['ai', 'psd', 'rar', 'zip', 'war'];
 export const Video = ['mp4', 'MP4'];
