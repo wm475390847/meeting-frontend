@@ -1,5 +1,5 @@
 import {getTaskResultPercent} from "@/services";
-import {Button, Collapse, Form, message, Modal} from "antd";
+import {Collapse, Divider, Form, message, Modal} from "antd";
 import React, {useEffect, useState} from "react";
 import TaskReportTableModule from "../TaskReportTable";
 import styles from './index.module.less'
@@ -16,7 +16,7 @@ const TaskReportModal: React.FC<TaskReportModalProps> = (props) => {
     const [resultPercent, setResultPercent] = useState<ResultPercent>()
 
     const onChange = (key: string | string[]) => {
-        console.log(key)
+
     };
 
     const handleCancel = () => {
@@ -43,27 +43,27 @@ const TaskReportModal: React.FC<TaskReportModalProps> = (props) => {
             title="执行结果"
             open={open}
             className={styles.modal}
+            width={1200}
             onCancel={handleCancel}
-            footer={<Button type='primary' onClick={() => handleCancel()}>确定</Button>}
+            footer={null}
             destroyOnClose
         >
-            <div className={styles.formItem}>
-                <Form.Item className={styles.inlineFormItem} label="总数">
+            <div className={styles.form}>
+                <Form.Item className={`${styles.formItem} ${styles.total}`} label="总数">
                     {resultPercent?.total}
                 </Form.Item>
-                <Form.Item className={styles.inlineFormItem} label="成功">
+                <Form.Item className={`${styles.formItem} ${styles.success}`} label="成功">
                     {resultPercent?.success}
                 </Form.Item>
-                <Form.Item className={styles.inlineFormItem} label="失败">
+                <Form.Item className={`${styles.formItem} ${styles.fail}`} label="失败">
                     {resultPercent ? resultPercent.total - resultPercent.success : 0}
                 </Form.Item>
-                <Form.Item className={styles.inlineFormItem} label="成功率">
+                <Form.Item className={`${styles.formItem} ${styles.total}`} label="成功率">
                     {resultPercent?.percent as number * 100}%
                 </Form.Item>
             </div>
-
-
-            < Collapse className={styles.collapse} ghost destroyInactivePanel={true} onChange={onChange}
+            <Divider/>
+            < Collapse ghost destroyInactivePanel={true} onChange={onChange}
                        bordered={true}>
                 {
                     resultPercent && resultPercent.total - resultPercent.success != 0 &&

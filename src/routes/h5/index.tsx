@@ -7,7 +7,27 @@ import {batchUpdate, deleteH5, getH5List} from "@/services"
 import H5Module from "@/components/H5"
 import styles from './index.module.less'
 
-console.log("大丈夫生于天地之间，岂能郁郁久居人下！")
+console.log(" ...................大丈夫生于天地之间...................\n" +
+    "                       _oo0oo_                      \n" +
+    "                      o8888888o                     \n" +
+    "                      88\" . \"88                     \n" +
+    "                      (| -_- |)                     \n" +
+    "                      0\\  =  /0                     \n" +
+    "                   ___/‘---’\\___                   \n" +
+    "                  .' \\|       |/ '.                 \n" +
+    "                 / \\\\|||  :  |||// \\                \n" +
+    "                / _||||| -卍-|||||_ \\               \n" +
+    "               |   | \\\\\\  -  /// |   |              \n" +
+    "               | \\_|  ''\\---/''  |_/ |              \n" +
+    "               \\  .-\\__  '-'  ___/-. /              \n" +
+    "             ___'. .'  /--.--\\  '. .'___            \n" +
+    "         .\"\" ‘<  ‘.___\\_<|>_/___.’>’ \"\".          \n" +
+    "       | | :  ‘- \\‘.;‘\\ _ /’;.’/ - ’ : | |        \n" +
+    "         \\  \\ ‘_.   \\_ __\\ /__ _/   .-’ /  /        \n" +
+    "    =====‘-.____‘.___ \\_____/___.-’___.-’=====     \n" +
+    "                       ‘=---=’                      \n" +
+    "                                                    \n" +
+    "....................岂能郁郁久居人下！...................");
 
 interface SearchH5 {
     meetingName?: string
@@ -189,7 +209,6 @@ const H5Page: React.FC = () => {
                 onChange={onChangeTable}
                 className={styles.table}
             />
-
             {/*H5组件 */}
             <H5Module type={type} h5Info={h5} setLoading={setLoading} onCancel={() => setType(0)}/>
         </>

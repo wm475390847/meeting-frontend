@@ -1,5 +1,5 @@
 import React, {ReactElement, useEffect, useState} from 'react';
-import {Affix, Breadcrumb, Layout, Menu, message, Popover} from 'antd';
+import {Affix, Breadcrumb, Layout, Menu, message, Popover, Watermark} from 'antd';
 import classnames from 'classnames';
 import {Link, Outlet, useParams} from 'react-router-dom';
 import {RouteBase} from '@/routes';
@@ -209,7 +209,14 @@ export const PageLayoutModule: React.FC<LayoutPropModuleProps> = ({routes}) => {
           <Breadcrumb className={styles.breadcrumb} items={breadcrumbItems}/>
 
           <Content className={styles.content}>
-            <Outlet/>
+            <Watermark
+                content={[`新华智云 · ${nickName}`]}
+                font={{fontSize: 14, color: 'rgba(0,0,0,.1)'}}
+                gap={[120, 120]}
+                className={styles.watermark}
+            >
+              <Outlet/>
+            </Watermark>
           </Content>
 
           <Footer className={styles.footer}>

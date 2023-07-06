@@ -1,46 +1,26 @@
 .modal {
-  top: 50%;
+  top: 10%;
 
-  :global .ant-modal-body {
-    max-height: 600px;
-    overflow-y: auto;
-  }
+  .form {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
 
-  .collapse {
-    width: 100%;
-    margin-top: 10px;
-
-    .table {
-      margin-top: 10px;
+    .formItem {
+      margin-bottom: 0;
+      font-weight: bold;
     }
-  }
 
-  :global {
-    .ant-modal-content {
-      width: 1200px;
-      top: 50%;
-      left: 50%;
-      transform: translateX(-50%) translateY(-50%)
+    .success {
+      color: #00FF00;
     }
-  }
-}
 
-.formItem {
-  display: flex;
-  align-items: center;
-  margin-left: 15px;
+    .fail {
+      color: #FF0000
+    }
 
-  .inlineFormItem {
-    margin-bottom: 0;
-    flex: 1;
-    height: 30px;
-  }
-
-  :global {
-    .ant-form-item-with-help .ant-form-item-explain {
-      position: absolute;
-      bottom: 0;
-      transform: translateY(100%);
+    .total {
+      color: #0000FF;
     }
   }
 }
