@@ -212,7 +212,7 @@ const ProductDetailPage: React.FC = () => {
                 className={styles.search}
                 placeholder="请输入作者"
                 onSearch={(e: any) => {
-                  handleProvinceChange('owner', e)
+                  handleProvinceChange('caseOwner', e)
                 }}
                 enterButton
                 allowClear
