@@ -67,7 +67,7 @@ const routes: RouteBase[] = [
       },
       {
         name: PageTitle.caseList,
-        path: '/app/case/productList/productDetail/:productName',
+        path: '/app/case/productList/productDetail/:productName/:id',
         element: CaseListPage,
         children: [],
         icon: "UnorderedListOutlined",

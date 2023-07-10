@@ -1,6 +1,6 @@
 import {Button, Input, message, Popconfirm, Progress, Select, Table} from 'antd';
 import React, {useEffect, useMemo, useState} from 'react';
-import {useLocation} from 'react-router-dom';
+import {useLocation, useNavigate, useParams} from 'react-router-dom';
 import {ColumnsType} from 'antd/lib/table';
 import moment from 'moment';
 import {deleteCase, executeCase, getCaseList} from '@/services';
@@ -8,7 +8,9 @@ import TextBoxModule from '@/components/TextBox'
 import ToolTipModule from '@/components/ToolTip';
 import styles from './index.module.less'
 
-interface SearchCase {
+interface SearchParams {
+  pageNo?: number
+  pageSize?: number
   caseResult?: boolean
   env?: string
   caseOwner?: string
@@ -23,11 +25,12 @@ const CaseListPage: React.FC = () => {
   const [total, setTotal] = useState(0)
   const [caseList, setCaseList] = useState<CaseInfo[]>()
   const [reason, setReason] = useState()
-  const [searchCase, setSearchCase] = useState<SearchCase>()
+  const [searchParams, setSearchParams] = useState<SearchParams>()
+  const [urlParams, setUrlParams] = useState<SearchParams>()
   const [buttonLoading, setButtonLoading] = useState(false)
-
-  const searchParams = new URLSearchParams(useLocation().search);
-  const productId = searchParams.get("id");
+  const location = useLocation();
+  const navigate = useNavigate();
+  const {id} = useParams<{ id: string }>();
 
   const columns = useMemo<ColumnsType<any>>(() => {
     return [
@@ -108,7 +111,7 @@ const CaseListPage: React.FC = () => {
   }, [pageNo, pageSize])
 
   const onChangeTable = (value: any) => {
-    const { current, pageSize } = value
+    const {current, pageSize} = value
     setPageNo(current)
     setPageSize(pageSize)
     setLoading(true)
@@ -134,15 +137,12 @@ const CaseListPage: React.FC = () => {
         .finally(() => setButtonLoading(false))
   }
 
-  const handleGetCaseList = () => {
+  const handleGetCaseList = (searchParams: SearchParams) => {
     getCaseList({
       pageNo: pageNo,
       pageSize: pageSize,
-      productId: productId as unknown as number,
-      caseResult: searchCase?.caseResult,
-      env: searchCase?.env,
-      caseOwner: searchCase?.caseOwner,
-      caseName: searchCase?.caseName
+      productId: id as unknown as number,
+      ...searchParams
     }).then(data => {
       setCaseList(data.records)
       setTotal(data.total)
@@ -151,14 +151,38 @@ const CaseListPage: React.FC = () => {
   }
 
   const handleProvinceChange = (key: string, value: any) => {
-    const sc: { [key: string]: any } = { ...searchCase };
+    const sc: { [key: string]: any } = {...searchParams};
     sc[key] = value
-    setSearchCase(sc)
+    setSearchParams(sc)
     setLoading(true)
   }
 
   useEffect(() => {
-    loading && handleGetCaseList()
+    handleGetCaseList(urlParams as SearchParams)
+  }, [urlParams])
+
+  useEffect(() => {
+    // 在这里处理URL变化的逻辑，例如，提取搜索参数（search）
+    const search = new URLSearchParams(location.search);
+    setUrlParams({
+      env: search.get('env') as string,
+      caseName: search.get('caseName') as string,
+      caseOwner: search.get('caseOwner') as string,
+      caseResult: search.get('caseResult') as unknown as boolean
+    })
+  }, [location]);
+
+  useEffect(() => {
+    if (loading && searchParams) {
+      const params = Object.entries(searchParams as any)
+          .filter(([, value]) => value !== '') // Exclude properties with empty values
+          .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value as any)}`)
+          .join('&');
+      navigate({
+        pathname: location.pathname,
+        search: params
+      })
+    }
   }, [pageNo, loading])
 
   return (
@@ -169,10 +193,8 @@ const CaseListPage: React.FC = () => {
             <Select
                 className={styles.select}
                 placeholder='请选择执行结果'
-                defaultValue="全部"
-                onSelect={(e: any) => {
-                  handleProvinceChange('caseResult', e)
-                }}>
+                defaultValue={'全部'}
+                onSelect={(e: any) => handleProvinceChange('caseResult', e)}>
               <Option value="">全部</Option>
               <Option value="true">成功</Option>
               <Option value="false">失败</Option>
@@ -184,9 +206,7 @@ const CaseListPage: React.FC = () => {
             <Select
                 className={styles.select}
                 defaultValue="全部"
-                onSelect={(e: any) => {
-                  handleProvinceChange('env', e)
-                }}>
+                onSelect={(e: any) => handleProvinceChange('env', e)}>
               <Option value="">全部</Option>
               <Option value="test">测试环境</Option>
               <Option value="prod">生产环境</Option>
@@ -198,9 +218,7 @@ const CaseListPage: React.FC = () => {
             <Search
                 className={styles.search}
                 placeholder="请输入用例名称"
-                onSearch={(e: any) => {
-                  handleProvinceChange('caseName', e)
-                }}
+                onSearch={(e: any) => handleProvinceChange('caseName', e)}
                 enterButton
                 allowClear
             />
@@ -211,9 +229,7 @@ const CaseListPage: React.FC = () => {
             <Search
                 className={styles.search}
                 placeholder="请输入作者"
-                onSearch={(e: any) => {
-                  handleProvinceChange('caseOwner', e)
-                }}
+                onSearch={(e: any) => handleProvinceChange('caseOwner', e)}
                 enterButton
                 allowClear
             />

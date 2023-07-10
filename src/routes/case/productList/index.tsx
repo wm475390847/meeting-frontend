@@ -160,8 +160,7 @@ const ProductListPage: React.FC = () => {
               return {
                 onClick: () => {
                   navigate({
-                    pathname: `/app/case/productList/productDetail/${record.productName}`,
-                    search: `?id=${record.id}`
+                    pathname: `/app/case/productList/productDetail/${record.productName}/${record.id}`,
                   })
                 },
                 style: {cursor: 'pointer'}
