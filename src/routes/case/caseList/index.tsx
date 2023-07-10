@@ -14,7 +14,7 @@ interface SearchCase {
   caseOwner?: string
   caseName?: string
 }
-const ProductDetailPage: React.FC = () => {
+const CaseListPage: React.FC = () => {
   const {Option} = Select;
   const {Search} = Input
   const [pageNo, setPageNo] = useState(1)
@@ -235,4 +235,4 @@ const ProductDetailPage: React.FC = () => {
   );
 };
 
-export default ProductDetailPage;
+export default CaseListPage;

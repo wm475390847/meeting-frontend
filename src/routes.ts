@@ -5,7 +5,7 @@ import FacePage from './routes/face';
 import CaseDataPage from './routes/case/caseData';
 import PerfPage from './routes/perf';
 import ProductListPage from './routes/case/productList';
-import ProductDetailPage from './routes/case/ProductDetail';
+import CaseListPage from './routes/case/caseList';
 import perfIcon from '@/assets/svg/perf.svg';
 import productIcon from '@/assets/svg/product.svg';
 import faceIcon from '@/assets/svg/face.svg';
@@ -68,7 +68,7 @@ const routes: RouteBase[] = [
       {
         name: PageTitle.caseList,
         path: '/app/case/productList/productDetail/:productName',
-        element: ProductDetailPage,
+        element: CaseListPage,
         children: [],
         icon: "UnorderedListOutlined",
         hideInMenu: true
