@@ -149,7 +149,6 @@ const CaseListPage: React.FC = () => {
       setLoading(false)
     })
   }
-
   const handleProvinceChange = (key: string, value: any) => {
     const sc: { [key: string]: any } = {...searchParams};
     sc[key] = value
@@ -163,7 +162,7 @@ const CaseListPage: React.FC = () => {
 
   useEffect(() => {
     // 在这里处理URL变化的逻辑，例如，提取搜索参数（search）
-    console.log("向urlParams放入参数")
+
     const search = new URLSearchParams(location.search);
     const urlParams: SearchParams = {};
     const env = search.get('env');
@@ -182,16 +181,17 @@ const CaseListPage: React.FC = () => {
     if (caseResult !== null) {
       urlParams.caseResult = caseResult as unknown as boolean;
     }
+    console.log("向urlParams放入参数:", urlParams)
     setUrlParams(urlParams);
   }, [location]);
 
   useEffect(() => {
     if (loading && searchParams) {
-      console.log("向路由中放如搜索参数")
       const params = Object.entries(searchParams as any)
           .filter(([, value]) => value !== '') // Exclude properties with empty values
           .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value as any)}`)
           .join('&');
+      console.log("向路由中放如搜索参数:", params)
       navigate({
         pathname: location.pathname,
         search: params
@@ -230,6 +230,7 @@ const CaseListPage: React.FC = () => {
           <div className={styles.container}>
             <span className={styles.span}>用例名称：</span>
             <Search
+                defaultValue={urlParams?.caseName}
                 className={styles.search}
                 placeholder="请输入用例名称"
                 onSearch={(e: any) => handleProvinceChange('caseName', e)}
