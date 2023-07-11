@@ -158,22 +158,36 @@ const CaseListPage: React.FC = () => {
   }
 
   useEffect(() => {
-    handleGetCaseList(urlParams as SearchParams)
+    urlParams && handleGetCaseList(urlParams as SearchParams)
   }, [urlParams])
 
   useEffect(() => {
     // 在这里处理URL变化的逻辑，例如，提取搜索参数（search）
+    console.log("向urlParams放入参数")
     const search = new URLSearchParams(location.search);
-    setUrlParams({
-      env: search.get('env') as string,
-      caseName: search.get('caseName') as string,
-      caseOwner: search.get('caseOwner') as string,
-      caseResult: search.get('caseResult') as unknown as boolean
-    })
+    const urlParams: SearchParams = {};
+    const env = search.get('env');
+    if (env !== null) {
+      urlParams.env = env;
+    }
+    const caseName = search.get('caseName');
+    if (caseName !== null) {
+      urlParams.caseName = caseName;
+    }
+    const caseOwner = search.get('caseOwner');
+    if (caseOwner !== null) {
+      urlParams.caseOwner = caseOwner;
+    }
+    const caseResult = search.get('caseResult');
+    if (caseResult !== null) {
+      urlParams.caseResult = caseResult as unknown as boolean;
+    }
+    setUrlParams(urlParams);
   }, [location]);
 
   useEffect(() => {
     if (loading && searchParams) {
+      console.log("向路由中放如搜索参数")
       const params = Object.entries(searchParams as any)
           .filter(([, value]) => value !== '') // Exclude properties with empty values
           .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value as any)}`)
