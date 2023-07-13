@@ -26,7 +26,6 @@ const CaseListPage: React.FC = () => {
   const [caseList, setCaseList] = useState<CaseInfo[]>()
   const [reason, setReason] = useState()
   const [searchParams, setSearchParams] = useState<SearchParams>()
-  const [urlParams, setUrlParams] = useState<SearchParams>()
   const [buttonLoading, setButtonLoading] = useState(false)
   const location = useLocation();
   const navigate = useNavigate();
@@ -153,51 +152,35 @@ const CaseListPage: React.FC = () => {
     const sc: { [key: string]: any } = {...searchParams};
     sc[key] = value
     setSearchParams(sc)
-    setLoading(true)
+    const params = Object.entries(sc as any)
+        .filter(([, value]) => value !== '') // Exclude properties with empty values
+        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value as any)}`)
+        .join('&');
+    console.log("向路由中放如搜索参数:", params)
+    navigate({
+      pathname: location.pathname,
+      search: params
+    })
   }
 
   useEffect(() => {
-    urlParams && handleGetCaseList(urlParams as SearchParams)
-  }, [urlParams])
-
-  useEffect(() => {
-    // 在这里处理URL变化的逻辑，例如，提取搜索参数（search）
-
-    const search = new URLSearchParams(location.search);
-    const urlParams: SearchParams = {};
-    const env = search.get('env');
-    if (env !== null) {
-      urlParams.env = env;
+    if (loading || searchParams) {
+      const params: SearchParams = {}
+      if (searchParams?.env != null) {
+        params.env = searchParams.env
+      }
+      if (searchParams?.caseName !== null) {
+        params.caseName = searchParams?.caseName;
+      }
+      if (searchParams?.caseOwner !== null) {
+        params.caseOwner = searchParams?.caseOwner;
+      }
+      if (searchParams?.caseResult !== null) {
+        params.caseResult = searchParams?.caseResult;
+      }
+      handleGetCaseList(params)
     }
-    const caseName = search.get('caseName');
-    if (caseName !== null) {
-      urlParams.caseName = caseName;
-    }
-    const caseOwner = search.get('caseOwner');
-    if (caseOwner !== null) {
-      urlParams.caseOwner = caseOwner;
-    }
-    const caseResult = search.get('caseResult');
-    if (caseResult !== null) {
-      urlParams.caseResult = caseResult as unknown as boolean;
-    }
-    console.log("向urlParams放入参数:", urlParams)
-    setUrlParams(urlParams);
-  }, [location]);
-
-  useEffect(() => {
-    if (loading && searchParams) {
-      const params = Object.entries(searchParams as any)
-          .filter(([, value]) => value !== '') // Exclude properties with empty values
-          .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value as any)}`)
-          .join('&');
-      console.log("向路由中放如搜索参数:", params)
-      navigate({
-        pathname: location.pathname,
-        search: params
-      })
-    }
-  }, [pageNo, loading])
+  }, [pageNo, loading, searchParams])
 
   return (
       <div>
@@ -230,7 +213,6 @@ const CaseListPage: React.FC = () => {
           <div className={styles.container}>
             <span className={styles.span}>用例名称：</span>
             <Search
-                defaultValue={urlParams?.caseName}
                 className={styles.search}
                 placeholder="请输入用例名称"
                 onSearch={(e: any) => handleProvinceChange('caseName', e)}
