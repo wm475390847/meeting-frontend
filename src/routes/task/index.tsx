@@ -149,12 +149,6 @@ const TaskPage: React.FC = () => {
 
     return (
         <>
-            <div className={styles.action}>
-                <div className={styles.buttonGroup}>
-                    <Button type='primary' disabled={true}>新增任务</Button>
-                </div>
-            </div>
-
             <Table
                 columns={columns}
                 dataSource={taskList}
@@ -162,7 +156,6 @@ const TaskPage: React.FC = () => {
                 pagination={{total, current: pageNo, showSizeChanger: true}}
                 loading={loading}
                 onChange={onChangeTable}
-                className={styles.table}
             />
             {/* 报告组件 */}
             {status == 3 && <TaskReportModal taskInfo={task} onCancel={() => setTask(undefined)}/>}

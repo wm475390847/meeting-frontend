@@ -7,7 +7,7 @@ import {batchUpdate, deleteH5, getH5List} from "@/services"
 import H5Module from "@/components/H5"
 import styles from './index.module.less'
 
-console.log("大丈夫生于天地之间，岂能郁郁久居人下！")
+console.log("大丈夫生于天地之间，岂能郁郁久居人下！快逃");
 
 interface SearchH5 {
     meetingName?: string
@@ -189,7 +189,6 @@ const H5Page: React.FC = () => {
                 onChange={onChangeTable}
                 className={styles.table}
             />
-
             {/*H5组件 */}
             <H5Module type={type} h5Info={h5} setLoading={setLoading} onCancel={() => setType(0)}/>
         </>
