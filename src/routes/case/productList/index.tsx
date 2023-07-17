@@ -49,7 +49,14 @@ const ProductListPage: React.FC = () => {
         key: 'caseCount',
         dataIndex: 'caseCount',
         width: '15%',
-        ellipsis: true
+        ellipsis: true,
+        render: (caseCount) => {
+          return (
+              <a className={`${styles.formItem} ${styles.count}`}>
+                {caseCount}
+              </a>
+          )
+        }
       },
       {
         title: '成功率(%)',
@@ -58,7 +65,15 @@ const ProductListPage: React.FC = () => {
         width: '15%',
         ellipsis: true,
         render: (casePercent) => {
-          return (`${casePercent}%`)
+          return (
+              casePercent == 100.00 || 0 ?
+                  <a className={`${styles.formItem} ${styles.success}`}>
+                    {casePercent}%
+                  </a> :
+                  <a className={`${styles.formItem} ${styles.fail}`}>
+                    {casePercent}%
+                  </a>
+          )
         }
       },
       {

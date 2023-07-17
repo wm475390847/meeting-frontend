@@ -162,7 +162,6 @@ const CaseListPage: React.FC = () => {
   const handleProvinceChange = (key: string, value: any) => {
     const sc: { [key: string]: any } = {...searchParams};
     sc[key] = value
-    // setSearchParams(sc)
     const params = Object.entries(sc as any)
         .filter(([, value]) => value !== '') // Exclude properties with empty values
         .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value as any)}`)
@@ -172,6 +171,19 @@ const CaseListPage: React.FC = () => {
       pathname: location.pathname,
       search: params
     })
+  }
+
+  const handleGetResult = () => {
+    const result = resultOptions.find(option => option.value === searchParams?.caseResult as unknown as string)?.label
+    return result === undefined ? '全部' : result
+  }
+
+  const handleGetEnv = () => {
+    if (!searchParams) {
+      return '全部'
+    } else {
+      return searchParams.env === undefined ? '全部' : searchParams.env
+    }
   }
 
   /**
@@ -220,7 +232,7 @@ const CaseListPage: React.FC = () => {
             <Select
                 className={styles.select}
                 placeholder="请选择执行结果"
-                value={resultOptions.find(option => option.value === searchParams?.caseResult as unknown as string)?.label}
+                value={handleGetResult()}
                 defaultValue={resultOptions[0].label}
                 onSelect={(e: any) => handleProvinceChange("caseResult", e)}
                 options={resultOptions}
@@ -232,7 +244,7 @@ const CaseListPage: React.FC = () => {
             <span className={styles.span}>环境：</span>
             <Select
                 className={styles.select}
-                value={searchParams?.env}
+                value={handleGetEnv()}
                 defaultValue={envOptions[0].label}
                 onSelect={(e: any) => handleProvinceChange("env", e)}
                 options={envOptions}
