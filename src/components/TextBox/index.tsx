@@ -26,7 +26,7 @@ const TextBoxModule: React.FC<TextBoxModuleProps> = (props) => {
     }, [text])
 
     useEffect(() => {
-        open && console.log(document.querySelector('.ant-modal-body'))
+        open && document.querySelector('.ant-modal-body')
     }, [open])
 
     return (
@@ -55,7 +55,7 @@ const TextBoxModule: React.FC<TextBoxModuleProps> = (props) => {
                     enableBasicAutocompletion: true,
                     enableLiveAutocompletion: true,
                     enableSnippets: false,
-                    overflowX: 'scroll'
+                    // overflowX: 'scroll'
                 }}
             />
         </Modal>
