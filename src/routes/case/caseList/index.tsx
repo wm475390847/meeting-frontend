@@ -4,7 +4,7 @@ import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {ColumnsType} from "antd/lib/table";
 import moment from "moment";
 import {deleteCase, executeCase, getCaseList} from "@/services";
-import TextBoxModule from "@/components/TextBox"
+import CodeViewModule from "@/components/TextBox"
 import ToolTipModule from "@/components/ToolTip";
 import styles from "./index.module.less"
 
@@ -179,11 +179,7 @@ const CaseListPage: React.FC = () => {
   }
 
   const handleGetEnv = () => {
-    if (!searchParams) {
-      return '全部'
-    } else {
-      return searchParams.env === undefined ? '全部' : searchParams.env
-    }
+    return !searchParams ? "全部" : searchParams.env === undefined ? '全部' : searchParams.env
   }
 
   /**
@@ -276,6 +272,7 @@ const CaseListPage: React.FC = () => {
             />
           </div>
         </div>
+
         <div>
           <Table
               columns={columns}
@@ -287,7 +284,7 @@ const CaseListPage: React.FC = () => {
               className={styles.table}
           />
         </div>
-        <TextBoxModule text={reason} onCancel={() => setReason(undefined)}/>
+        <CodeViewModule text={reason} onCancel={() => setReason(undefined)}/>
       </div>
   );
 };

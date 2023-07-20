@@ -22,10 +22,10 @@ export class HttpClient {
 
     /**
      * 创建一个请求
-     * @param baseURL 基础url
      * @returns 请求工具
+     * @param _baseURL
      */
-    protected createAxios(baseURL: string) {
+    protected createAxios(_baseURL: string) {
         // 创建一个 Axios 实例
         const request = axios.create({
             headers: {

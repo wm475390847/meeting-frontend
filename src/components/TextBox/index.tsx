@@ -7,12 +7,12 @@ import "ace-builds/src-noconflict/theme-cloud9_night";
 import "ace-builds/src-noconflict/ext-language_tools";
 import styles from './index.module.less'
 
-type TextBoxModuleProps = {
+type CodeViewModuleProps = {
   text?: string
   onCancel?: () => void
 }
 
-const TextBoxModule: React.FC<TextBoxModuleProps> = (props) => {
+const CodeViewModule: React.FC<CodeViewModuleProps> = (props) => {
     const {text, onCancel} = props
     const [open, setOpen] = useState(false)
 
@@ -62,4 +62,4 @@ const TextBoxModule: React.FC<TextBoxModuleProps> = (props) => {
     );
 };
 
-export default TextBoxModule;
+export default CodeViewModule;
