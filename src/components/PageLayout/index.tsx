@@ -1,7 +1,7 @@
 import React, {ReactElement, useEffect, useState} from 'react';
 import {Affix, Breadcrumb, Layout, Menu, message, Popover, Watermark} from 'antd';
 import classnames from 'classnames';
-import {Link, Outlet, useParams} from 'react-router-dom';
+import {Link, Outlet, useNavigate, useParams} from 'react-router-dom';
 import {RouteBase} from '@/routes';
 import {getUserInfo} from '@/services';
 import logo from '@/assets/svg/logo.svg';
@@ -26,7 +26,7 @@ export const PageLayoutModule: React.FC<LayoutPropModuleProps> = ({routes}) => {
   const [avatar, setAvatar] = useState('');
   const [menuItems, setMenuItem] = useState<any[]>([]);
   const {Sider, Content, Header} = Layout;
-
+  const navigate = useNavigate();
   const {productName} = useParams<{ productName: string }>();
 
   useEffect(() => {
@@ -42,19 +42,28 @@ export const PageLayoutModule: React.FC<LayoutPropModuleProps> = ({routes}) => {
   }, []);
 
   const handleGetUserInfo = () => {
-    getUserInfo()
-        .then((res: any) => {
-          const {name: name = '', avatar = ''} = res || {};
-          setNickName(name);
-          setAvatar(avatar);
-        })
-        .catch((errObj: any) => {
-          message.destroy();
-          message.error(errObj.msg || '获取用户信息失败').then(r => r);
-        })
+    // 看看缓存里面有没有用户信息，有的话就不重复调用了
+    const userInfo = localStorage.getItem("userInfo");
+    if (!userInfo) {
+      getUserInfo()
+          .then((res: any) => {
+            const {name: name = '', avatar = ''} = res || {};
+            setNickName(name);
+            setAvatar(avatar);
+            localStorage.setItem("userInfo", JSON.stringify({"nickName": name, "avatar": avatar}))
+          })
+          .catch((errObj: any) => {
+            message.destroy();
+            message.error(errObj.msg || '获取用户信息失败').then(r => r);
+          })
+    } else {
+      const item = JSON.parse(userInfo)
+      setNickName(item.nickName)
+      setAvatar(item.avatar)
+    }
   }
 
-  const handleGetTitleBySelectKey = (selectKey: string) => {
+  const handleGetTitle = (selectKey: string) => {
     if (selectKey) {
       const pathArr: string[] = selectKey.split("/");
       const lastItem = pathArr.pop()
@@ -63,12 +72,12 @@ export const PageLayoutModule: React.FC<LayoutPropModuleProps> = ({routes}) => {
     return null;
   }
 
-  const handleFindPathByName = (name: string, routes: RouteBase[]): string | null => {
+  const handleGetPath = (name: string, routes: RouteBase[]): string | null => {
     for (const route of routes) {
       if (route.name === name) {
         return route.path;
       } else if (route.children && route.children.length > 0) {
-        const childPath = handleFindPathByName(name, route.children);
+        const childPath = handleGetPath(name, route.children);
         if (childPath) {
           return childPath;
         }
@@ -77,14 +86,15 @@ export const PageLayoutModule: React.FC<LayoutPropModuleProps> = ({routes}) => {
     return null;
   };
 
-  const getTitleAndHref = (selectKey: string) => {
-    const title = handleGetTitleBySelectKey(selectKey as unknown as string);
-    const path = handleFindPathByName(title as string, routes);
+  const handleGetItems = (selectKey: string) => {
+    const title = handleGetTitle(selectKey as any);
+    const path = handleGetPath(title as string, routes);
     const arr = [];
     if (path) {
       arr.push({
         title: title,
-        href: path,
+        onClick: () => navigate(path),
+        isClickable: true
       });
       if (productName) {
         arr.push({
@@ -99,11 +109,15 @@ export const PageLayoutModule: React.FC<LayoutPropModuleProps> = ({routes}) => {
     return arr;
   };
 
-  const breadcrumbItems = getTitleAndHref(selectKey as unknown as string);
+  const handleItemRender = (item: any) => {
+    // 判断是否为上一级面包屑项且可点击
+    if (item.isClickable) {
+      return <a onClick={() => item.onClick()}>{item.title}</a>; // 给上一级面包屑项添加鼠标小手样式，并添加点击事件
+    } else {
+      return <span>{item.title}</span>;
+    }
+  };
 
-  /**
-   * 退出登录
-   */
   const handleLogout = () => {
     new HttpClient({}).logout()
   }
@@ -115,23 +129,6 @@ export const PageLayoutModule: React.FC<LayoutPropModuleProps> = ({routes}) => {
   const handleOpenChange = (_keys: string[]) => {
     setOpenKeys(_keys);
   }
-
-  /**
-   * 人物头像弹窗
-   */
-  const popoverContent = (
-      <div className={styles.popover}>
-        <div className={classnames(styles.popLine)}>
-          <img src={personIcon} className={styles.icon} alt=""/>
-          <div className={styles.menuText}>个人信息</div>
-        </div>
-
-        <div className={styles.popLine}>
-          <img src={logoutIcon} className={styles.icon} alt=""/>
-          <div className={styles.menuText} onClick={handleLogout}>退出登录</div>
-        </div>
-      </div>
-  )
 
   const handleMenuItems = () => {
     // 处理普通菜单项
@@ -199,14 +196,33 @@ export const PageLayoutModule: React.FC<LayoutPropModuleProps> = ({routes}) => {
         <Layout>
           <Affix>
             <Header className={styles.header}>
-              <Popover placement="bottomRight" content={popoverContent} trigger="hover" className={styles.popover}>
+              <Popover
+                  placement="bottomRight"
+                  content={
+                    <div className={styles.popover}>
+                      <div className={classnames(styles.popLine)}>
+                        <img src={personIcon} className={styles.icon} alt=""/>
+                        <div className={styles.menuText}>个人信息</div>
+                      </div>
+                      <div className={styles.popLine}>
+                        <img src={logoutIcon} className={styles.icon} alt=""/>
+                        <div className={styles.menuText} onClick={handleLogout}>退出登录</div>
+                      </div>
+                    </div>
+                  }
+                  trigger="hover"
+                  className={styles.popover}
+              >
                 {avatar ? (
                     <img src={avatar} alt=""/>) : nickName.split('')[0] || 's'}
               </Popover>
             </Header>
           </Affix>
 
-          <Breadcrumb className={styles.breadcrumb} items={breadcrumbItems}/>
+          <Breadcrumb className={styles.breadcrumb}
+                      itemRender={handleItemRender}
+                      items={handleGetItems(selectKey as any)}
+          />
 
           <Content className={styles.content}>
             <Watermark
