@@ -4,7 +4,7 @@ import {Button, message, Popconfirm, Spin, Table} from 'antd'
 import moment from "moment"
 import {deleteTask, executeTask, getTaskList} from "@/services"
 import TaskReportModal from "@/components/TaskReport"
-import {TaskStatusEnum} from "@/constants"
+import {TaskStatusEnum} from "@/config/constants"
 import {LoadingOutlined} from "@ant-design/icons"
 import ToolTipModule from "@/components/ToolTip"
 import styles from './index.module.less'

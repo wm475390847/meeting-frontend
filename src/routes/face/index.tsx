@@ -5,7 +5,7 @@ import {deleteFace, executeFace, getFaceList} from "@/services"
 import FaceReportModal from "@/components/FaceReport"
 import ToolTipModule from "@/components/ToolTip"
 import styles from './index.module.less'
-import {defaultImage} from "@/constants"
+import {defaultImage} from "@/config/constants"
 import FaceModule from "@/components/Face"
 
 const FacePage: React.FC = () => {

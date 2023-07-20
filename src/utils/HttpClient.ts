@@ -1,5 +1,5 @@
 import axios, {AxiosInstance, AxiosRequestConfig, AxiosResponse} from "axios";
-import {BASE_PATH, DOMAIN} from "@/constants";
+import {BASE_PATH, DOMAIN} from "@/config/constants";
 import qs from 'qs';
 import {message} from "antd";
 import Cookies from "js-cookie";
