@@ -162,27 +162,29 @@ const ProductListPage: React.FC = () => {
             <Button type='primary' onClick={() => setType(1)}>创建产品</Button>
           </div>
         </div>
-
-        <Table
-            columns={columns}
-            dataSource={productList}
-            rowKey='id'
-            onChange={onChangeTable}
-            pagination={{total, current: pageNo, showSizeChanger: true}}
-            loading={loading}
-            className={styles.table}
-            onRow={record => {
-              return {
-                onClick: () => {
-                  navigate({
-                    pathname: `/app/case/productList/productDetail/${record.productName}/${record.id}`,
-                  })
-                },
-                style: {cursor: 'pointer'}
+        <div style={{overflow:"auto"}}>
+          <Table
+              columns={columns}
+              dataSource={productList}
+              rowKey='id'
+              onChange={onChangeTable}
+              pagination={{total, current: pageNo, showSizeChanger: true}}
+              loading={loading}
+              className={styles.table}
+              onRow={record => {
+                return {
+                  onClick: () => {
+                    navigate({
+                      pathname: `/app/case/productList/productDetail/${record.productName}/${record.id}`,
+                    })
+                  },
+                  style: {cursor: 'pointer'}
+                }
               }
-            }
-            }
-        />
+              }
+          />
+        </div>
+
         <ProductModule type={type}
                        serviceList={serviceList}
                        productInfo={productInfo}

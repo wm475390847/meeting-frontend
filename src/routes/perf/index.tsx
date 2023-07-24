@@ -119,24 +119,27 @@ const PerfPage: React.FC = () => {
                 </div>
             </div>
 
-            <div className={styles.cardList}>
-                {perfList?.map((e, index) => (
-                    <CardModule key={index}
-                                title={e?.perfName}
-                                description={e?.jmxPath}
-                                onClickIcon={(value) => {
-                                    setClickIcon(value)
-                                    setPerfInfo(e)
-                                }}/>
-                ))}
+            <div style={{position: "absolute", overflow: "auto", height: '95%', width: '100%'}}>
+                <div className={styles.cardList}>
+                    {perfList?.map((e, index) => (
+                        <CardModule key={index}
+                                    title={e?.perfName}
+                                    description={e?.jmxPath}
+                                    onClickIcon={(value) => {
+                                        setClickIcon(value)
+                                        setPerfInfo(e)
+                                    }}/>
+                    ))}
+                </div>
+
+                {perfList &&
+                    <div className={styles.pagination}>
+                        <Pagination total={total} current={pageNo} pageSize={pageSize} onChange={handlePageChange}/>
+                        <Select defaultValue={`${pageSize} 条/页`} onChange={handlePageSizeChange} options={options}/>
+                    </div>
+                }
             </div>
 
-            {perfList &&
-                <div className={styles.pagination}>
-                    <Pagination total={total} current={pageNo} pageSize={pageSize} onChange={handlePageChange}/>
-                    <Select defaultValue={`${pageSize} 条/页`} onChange={handlePageSizeChange} options={options}/>
-                </div>
-            }
 
             <PerfModule productList={productList}
                         perfInfo={perfInfo}
