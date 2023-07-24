@@ -119,7 +119,7 @@ const PerfPage: React.FC = () => {
                 </div>
             </div>
 
-            <div style={{position: "absolute", overflow: "auto", height: '95%', width: '100%'}}>
+            <div style={{position: "absolute", overflow: "auto", height: '100%', width: '100%'}}>
                 <div className={styles.cardList}>
                     {perfList?.map((e, index) => (
                         <CardModule key={index}

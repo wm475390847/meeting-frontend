@@ -56,7 +56,7 @@ const CaseDataPage: React.FC = () => {
   }, [])
 
   return (
-      <div style={{position: "absolute", overflow: "auto", height: '95%', width: '100%'}}>
+      <div style={{position: "absolute", overflow: "auto", height: '100%', width: '100%'}}>
         <div className={styles.pieGroup}>
           <PieModule data={testCaseCountList} env='test'/>
           <PieModule data={prodCaseCountList} env='prod'/>
