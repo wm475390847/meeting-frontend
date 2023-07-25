@@ -441,7 +441,7 @@ export const getTaskReport: (data: { taskId: number, result?: boolean }) => Prom
     })
 }
 
-export const getTaskResultPercent: (taskId: number) => Promise<RequestOpt> = (taskId) => {
+export const getTaskResult: (taskId: number) => Promise<RequestOpt> = (taskId) => {
     return new Promise(async (resolve, reject) => {
         await client.get(`/conference/task/result/${taskId}`)
             .then((res: any) => {

@@ -9,7 +9,7 @@ import {QuestionCircleOutlined} from "@ant-design/icons";
 import {defaultImage} from "@/config/constants";
 
 type TaskReportTableModuleProps = {
-    result?: boolean
+    result: boolean
     taskId: number
 }
 
@@ -124,7 +124,7 @@ const TaskReportTableModule: React.FC<TaskReportTableModuleProps> = (prop) => {
     }
 
     useEffect(() => {
-        result && handleTaskReportList(result, taskId)
+        handleTaskReportList(result, taskId)
     }, [result])
 
     return (

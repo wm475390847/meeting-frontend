@@ -112,7 +112,7 @@ interface H5 {
   meetingEndTime: string
 }
 
-interface ResultPercent {
+interface Result {
   total: number
   success: number
   percent: number
@@ -257,13 +257,6 @@ interface PerfReportHistory {
   reportPath: string
   gmtCreate: string
   gmtModified: string
-}
-
-
-interface ResultPercent {
-  total: number
-  success: number
-  percent: number
 }
 
 interface Window {
