@@ -12,41 +12,47 @@ type DarModuleProps = {
 const BarModule: React.FC<DarModuleProps> = (props) => {
     const {data, xField, yField, seriesField, env} = props
 
-
-    const processedData = data.reverse().map(item => {
-        const {type, ...rest} = item;
-        return {
-            ...rest,
-            type,
-            color: type === 'success' ? 'blue' : 'red',
-        };
-    });
+    const sortedData =
+        data.sort((a, b) => {
+            if (a.type === "success" && b.type === "fail") {
+                return -1; // a排在b前面
+            } else if (a.type === "fail" && b.type === "success") {
+                return 1; // a排在b后面
+            } else {
+                return 0; // 保持原有顺序
+            }
+        });
 
     return (
-        <Bar
-            data={data.reverse()}
-            isStack={true}
-            xField={xField}
-            yField={yField}
-            seriesField={seriesField}
-            height={200}
-            width={500}
-            label={
-                {
-                    // 可手动配置 label 数据标签位置
-                    position: 'middle', // 'left', 'middle', 'right'
-                    // 可配置附加的布局方法
+        <div>
+            <span style={{fontWeight: 'bold'}}>{env}</span>
+            <Bar
+                data={sortedData}
+                isStack={true}
+                xField={xField}
+                yField={yField}
+                seriesField={seriesField}
+                label={{
+                    position: 'middle',
                     layout: [
-                        // 柱形图数据标签位置自动调整
-                        {type: 'interval-adjust-position'},
-                        // 数据标签防遮挡
-                        {type: 'interval-hide-overlap'},
-                        // 数据标签文颜色自动调整
-                        {type: 'adjust-color'},
+                        {type: 'interval-adjust-position'}, // 柱形图数据标签位置自动调整
+                        {type: 'interval-hide-overlap'}, // 数据标签防遮挡
+                        {type: 'adjust-color'},  // 数据标签文颜色自动调整
                     ],
-                }
-            }
-        />
+                }}
+                color={(val) => {
+                    if (val.type == "success") {
+                        return 'rgba(0, 0, 255, 0.5)'; // seriesField为"success"时，柱状图显示淡蓝色
+                    } else if (val.type === "fail") {
+                        return 'red'; // seriesField为"fail"时，柱状图显示红色
+                    } else {
+                        return 'gray'; // 其他情况下显示灰色
+                    }
+                }}
+                minBarWidth={30}
+                maxBarWidth={30}
+            />
+        </div>
     );
 };
 

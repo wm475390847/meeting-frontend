@@ -1,76 +1,141 @@
-import styles from './index.module.less'
 import React, {useEffect, useState} from 'react';
 import PieModule from '@/components/Pie';
-import {getCaseCount} from '@/services';
+import {getCaseData} from '@/services';
+import {Tabs} from "antd";
 import BarModule from "@/components/Bar";
 
 const CaseDataPage: React.FC = () => {
-  const [prodCaseCountList, setProdCaseCountList] = useState<PieData[]>([]);
-  const [testCaseCountList, setTestCaseCountList] = useState<PieData[]>([]);
+    const [prodPieDataList, setProdPieDataList] = useState<PieData[]>([]);
+    const [testPieDataList, setTestPieDataList] = useState<PieData[]>([]);
+    const [tabKey, setTabKey] = useState('A')
 
-  const handleGetCaseCount = () => {
-    getCaseCount()
-      .then(resp => {
-        const data: any[] = resp.data
-        data.forEach((e: any) => {
-          if (e.env == 'test') {
-            const a = e.caseCountList.map((item: any) => ({type: item.productName, value: item.count}));
-            setTestCaseCountList(a)
-          }
-          if (e.env == 'prod') {
-            const b = e.caseCountList.map((item: any) => ({type: item.productName, value: item.count}));
-            setProdCaseCountList(b)
-          }
+    const [prodBarDataList, setProdBarDataList] = useState<BarData[]>([]);
+    const [testBarDataList, setTestBarDataList] = useState<BarData[]>([]);
+
+    const handleGetCaseCount = () => {
+        getCaseData()
+            .then(resp => {
+                const data: any[] = resp.data
+                data.forEach((e: any) => {
+                    if (e.env == 'test') {
+                        const a = e.caseDataList.map((item: any) => ({type: item.productName, value: item.count}));
+                        setTestPieDataList(a)
+                        const result = getBarDataList(e)
+                        setTestBarDataList(result)
+                    }
+                    if (e.env == 'prod') {
+                        const b = e.caseDataList.map((item: any) => ({type: item.productName, value: item.count}));
+                        setProdPieDataList(b)
+                        const result = getBarDataList(e)
+                        setProdBarDataList(result)
+                    }
+                })
+            })
+    }
+
+    const getBarDataList = (item: any) => {
+        const result: BarData[] = [];
+        item.caseDataList.forEach((caseData: any) => {
+            caseData.fail != 0 && result.push(
+                {
+                    productName: caseData.productName,
+                    type: 'fail',
+                    count: caseData.fail
+                }
+            )
+            caseData.success != 0 && result.push(
+                {
+                    productName: caseData.productName,
+                    type: 'success',
+                    count: caseData.success
+                }
+            )
         })
-      })
-  }
+        return result;
+    }
 
-  const handleData = () => {
-    return [
-      {
-        productName: "WeLook",
-        count: 1200,
-        type: "success"
-      },
-      {
-        productName: "WeLook",
-        count: 10,
-        type: "fail"
-      },
-      {
-        productName: "MetaOs",
-        count: 1000,
-        type: "success"
-      },
-      {
-        productName: "MetaOs",
-        count: 11,
-        type: "fail"
-      }
-    ]
-  }
+    const barList =
+        [
+            {
+                data: testBarDataList,
+                env: "TEST环境"
+            },
+            {
+                data: prodBarDataList,
+                env: "PROD环境"
+            }
+        ]
 
+    const pieList =
+        [
+            {
+                data: testPieDataList,
+                env: "TEST环境"
+            },
+            {
+                data: prodPieDataList,
+                env: "PROD环境"
+            }
+        ]
 
-  useEffect(() => {
-    handleGetCaseCount()
-  }, [])
+    const tabItems = [
+        {label: '用例数量', key: 'A',},
+        {label: '执行结果', key: 'B',}
+    ];
 
-  return (
-      <div style={{position: "absolute", overflow: "auto", height: '100%', width: '100%'}}>
-        <div className={styles.pieGroup}>
-          <PieModule data={testCaseCountList} env='test'/>
-          <PieModule data={prodCaseCountList} env='prod'/>
-        </div>
-        <div className={styles.BarGroup}>
-          <BarModule
-              xField={"count"}
-              yField={"productName"}
-              seriesField={"type"}
-              data={handleData()}
-          />
-        </div>
-      </div>
-  );
-};
+    const onChange = (key: string) => {
+        setTabKey(key)
+    };
+
+    useEffect(() => {
+        handleGetCaseCount()
+    }, [])
+
+    return (
+        <>
+            <Tabs onChange={onChange} type="card" items={tabItems}/>
+            {tabKey === 'A' &&
+                <div
+                    style={{
+                        position: "absolute",
+                        overflow: "auto",
+                        height: '100%',
+                        width: '100%',
+                        display: 'flex',
+                        justifyContent: "space-around",
+                    }}
+                >
+                    {
+                        pieList.map((item) => (
+                            <PieModule data={item.data} env={item.env}/>
+                        ))
+                    }
+                </div>
+            }
+            {tabKey === 'B' &&
+                <div style={{
+                    position: "absolute",
+                    overflow: "auto",
+                    height: '90%',
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '50px'
+                }}>
+                    {barList.map((item) => (
+                        <BarModule
+                            key={item.env}
+                            xField={"count"}
+                            yField={"productName"}
+                            seriesField={"type"}
+                            data={item.data}
+                            env={item.env}
+                        />
+                    ))}
+                </div>
+            }
+        </>
+    );
+}
 
 export default CaseDataPage;

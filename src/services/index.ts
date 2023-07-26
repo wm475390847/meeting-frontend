@@ -35,9 +35,9 @@ export const getCaseList: (data: ISearchCaseListReq) => Promise<IPageRequest<Cas
     })
 }
 
-export const getCaseCount: () => Promise<RequestOpt> = () => {
+export const getCaseData: () => Promise<RequestOpt> = () => {
     return new Promise(async (resolve, reject) => {
-        await client.get(`/ttp/cases/count`)
+        await client.get(`/ttp/cases/data`)
             .then((res: any) => {
                 if (res.success) {
                     resolve(res)

@@ -9,9 +9,16 @@ interface RequestOpt {
   success: boolean
   total?: number
 }
+
 interface PieData {
   type: string
   value: number
+}
+
+interface BarData {
+  productName: string
+  type: string
+  count: number
 }
 
 interface IPageRequest<T> {
