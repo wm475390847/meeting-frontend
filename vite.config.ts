@@ -12,7 +12,7 @@ const themeVariables = lessToJS(
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => {
   return {
-    base: command === 'build' ? `//t.newscdn.cn/${name}/${version}/` : '',
+    base: command === 'build' ? `//s.newscdn.cn/${name}/${version}/` : '',
     build: {
       rollupOptions: {
         output: {

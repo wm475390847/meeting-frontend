@@ -1,13 +1,13 @@
 {
   "name": "meeting-frontend",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.1-test",
   "scripts": {
     "dev": "vite --mode developmen",
     "start": "npm run dev",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "ship": "npm run build && cship dist/* && cship dist/*/**"
+    "ship": "npm run build && cship -p dist/* && cship -p dist/*/**"
   },
   "dependencies": {
     "@ant-design/charts": "^1.4.2",

@@ -1,5 +1,5 @@
 import axios, {AxiosInstance, AxiosRequestConfig, AxiosResponse} from "axios";
-import {BASE_PATH, DOMAIN} from "@/config/constants";
+import {BASE_PATH, PROJECT_HOST} from "@/config/constants";
 import qs from 'qs';
 import {message} from "antd";
 import Cookies from "js-cookie";
@@ -16,7 +16,7 @@ export class HttpClient {
      */
     constructor(options: { http?: string }) {
         // 不传入的话使用默认的url
-        options.http = DOMAIN;
+        options.http = PROJECT_HOST;
         this.createAxios(options.http)
     }
 
