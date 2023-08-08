@@ -104,7 +104,7 @@ export class HttpClient {
         // 清除浏览器缓存
         localStorage.removeItem("userInfo")
         let url = location.href;
-        window.location.href = `http://sso.xinhuazhiyun.com/login.html?redirectUri=${encodeURIComponent(url)}`;
+        window.location.href = `https://sso.xinhuazhiyun.com/login.html?redirectUri=${encodeURIComponent(url)}`;
     }
 
     /**

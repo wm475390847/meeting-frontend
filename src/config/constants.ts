@@ -15,9 +15,6 @@ export const DOMAIN = 'qa-meeting.xinhuazhiyun.com'; // 项目主域名
 export const DOMAIN_ACCOUNT = 'account.shuwen.com'; // 账号中心主域名
 export const DOMAIN_API = 'api.shuwen.com'; //网关api
 
-// Sentry DSN 链接 => https://sentry.xinhuazhiyun.com/
-export const SENTRY_DSN = 'https://e315427b7f49425d82dd05e2c98075f2@sentry.xinhuazhiyun.com/50';
-
 // 是否是开发模式
 export const IS_DEV = [
   `dev.${DOMAIN}`,

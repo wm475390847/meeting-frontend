@@ -75,7 +75,7 @@ export const executeCase: (jobId: number, caseName: string) => Promise<RequestOp
         }
     }
     return new Promise(async (resolve, reject) => {
-        await client.post(`http://cloudwings.xinhuazhiyun.com/api/ci/executeJobByParams`, data, true)
+        await client.post(`https://cloudwings.xinhuazhiyun.com/api/ci/executeJobByParams`, data, true)
             .then((res: any) => {
                 if (res.success) {
                     resolve(res)

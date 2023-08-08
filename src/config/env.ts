@@ -1,5 +1,5 @@
 const testHost = 'test.qa-meeting.xinhuazhiyun.com';
-const prodHost = 'prod.qa-meeting.xinhuazhiyun.com';
+const prodHost = 'qa-meeting.xinhuazhiyun.com';
 
 class Env {
   mode = import.meta.env.MODE || 'development';
