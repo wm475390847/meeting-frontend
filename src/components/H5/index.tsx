@@ -25,7 +25,7 @@ const H5Module: React.FC<H5ModuleProps> = (props) => {
         onCancel && onCancel()
     }
 
-    const handleGetMeetingTime = (value: string) => {
+    const handleMeetingTime = (value: string) => {
         console.log(value);
         const [start, end] = value || [];
         setStartTime(start ? moment(start).valueOf() : undefined);
@@ -108,7 +108,7 @@ const H5Module: React.FC<H5ModuleProps> = (props) => {
                         direction="vertical"
                         size={12}
                     >
-                        <RangePicker onChange={handleGetMeetingTime} />
+                        <RangePicker onChange={handleMeetingTime}/>
                     </Space>
                 </Form.Item>
 

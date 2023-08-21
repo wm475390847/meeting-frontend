@@ -8,6 +8,7 @@ export const PageTitle = {
   caseList: '用例列表',
   interface: '接口测试',
   perf: '性能测试管理',
+  check: '自动校验'
 };
 
 export const BASE_PATH = '/meeting-backend'

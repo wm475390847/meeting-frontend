@@ -100,7 +100,7 @@ const FacePage: React.FC = () => {
         setLoading(true)
     }
 
-    const handleGetFaceList = () => {
+    const handleFaceList = () => {
         getFaceList({
             pageNo: pageNo,
             pageSize: pageSize,
@@ -132,7 +132,7 @@ const FacePage: React.FC = () => {
     }
 
     useEffect(() => {
-        loading && handleGetFaceList()
+        loading && handleFaceList()
     }, [pageNo, loading])
 
     return (

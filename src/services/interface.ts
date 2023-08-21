@@ -99,6 +99,11 @@ export interface ISearchTaskListReq {
   taskName?: string
 }
 
+export interface ISearchWriterListReq {
+  pageNo: number
+  pageSize: number
+}
+
 /**
  * 创建任务请求
  */

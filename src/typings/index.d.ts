@@ -271,6 +271,15 @@ interface Window {
   wx: any;
 }
 
+interface WriterData {
+  companyCode: string
+  companyName?: string
+  stockCode?: string
+  executeTime: string
+  year: number
+  type: string
+}
+
 declare module "*.module.less";
 declare module "*.svg";
 declare module "*.png";

@@ -8,6 +8,7 @@ import {
     ISearchPerfReq,
     ISearchProductListReq,
     ISearchTaskListReq,
+    ISearchWriterListReq,
     IUpdateFaceReq,
     IUpdateH5Req
 } from "./interface"
@@ -549,3 +550,56 @@ export const getUserInfo = () => {
             })
     })
 }
+
+/**
+ * 获取报告数据
+ * @returns
+ */
+export const createWriter: (data: WriterData) => Promise<RequestOpt> = (data) => {
+    return new Promise(async (resolve, reject) => {
+        await client.post(`/financial/report/create`, data)
+            .then((res: any) => {
+                if (res.success) {
+                    resolve(res)
+                } else {
+                    reject(res)
+                }
+            })
+    })
+}
+
+/**
+ * 获取报告数据
+ * @returns
+ */
+export const searchData: (id: number) => Promise<RequestOpt> = (id) => {
+    return new Promise(async (resolve, reject) => {
+        await client.get(`/financial/report/search/${id}`)
+            .then((res: any) => {
+                if (res.success) {
+                    resolve(res)
+                } else {
+                    reject(res)
+                }
+            })
+    })
+}
+
+/**
+ * 获取智能写作报告查询列表
+ * @param data
+ */
+export const getWriterList: (data: ISearchWriterListReq) => Promise<IPageRequest<WriterData>> = (data) => {
+    return new Promise(async (resolve, reject) => {
+        await client.get(`/financial/reports`, data)
+            .then((res: any) => {
+                if (res.success) {
+                    resolve(res.data)
+                } else {
+                    reject(res)
+                }
+            })
+    })
+}
+
+
