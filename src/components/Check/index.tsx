@@ -1,7 +1,7 @@
-import {createWriter} from "@/services";
-import {Button, Form, Input, message, Modal} from "antd";
+import {Button, DatePicker, DatePickerProps, Form, Input, message, Modal, Select} from "antd";
 import React, {useEffect, useState} from "react";
 import styles from './index.module.less'
+import {createWriter} from "@/services";
 
 type CheckModuleProps = {
     type: number
@@ -13,17 +13,28 @@ const CheckModule: React.FC<CheckModuleProps> = (props) => {
     const [form] = Form.useForm()
     const {type, onCancel, setLoading} = (props)
     const [open, setOpen] = useState<boolean>(false)
+    const [year, setYear] = useState<string>()
     const [buttonLoading, setButtonLoading] = useState(false)
+
+    const options = [
+        {value: 'H1', label: '半年报'},
+        {value: 'Q1', label: '一季度报'},
+        {value: 'Q3', label: '三季度报'}
+    ]
 
     const handleCancel = () => {
         setOpen(false)
         onCancel && onCancel()
     }
 
+    const onChange: DatePickerProps['onChange'] = (date, dateString) => {
+        setYear(dateString)
+    };
+
     const onSubmit = () => {
         form.validateFields().then(values => {
             setButtonLoading(true)
-            createWriter({...values})
+            createWriter({...values, year: year})
                 .then(res => {
                     if (res.success) {
                         message.success(res.message).then(r => r)
@@ -69,11 +80,12 @@ const CheckModule: React.FC<CheckModuleProps> = (props) => {
                 </Form.Item>
 
                 <Form.Item name='year' label="年份" rules={[{required: true, message: '年份不能为空'}]}>
-                    <Input placeholder='请输入年份'/>
+                    <DatePicker style={{width: '150px'}} picker="year" onChange={onChange}/>
                 </Form.Item>
 
-                <Form.Item name='type' label="类型" rules={[{required: true, message: '类型不能为空'}]}>
-                    <Input placeholder='请输入类型'/>
+                <Form.Item name='type' label="类型" rules={[{required: true, message: '类型不能为空'}]}
+                           initialValue={options[0].label}>
+                    <Select style={{width: '150px'}} className={styles.select} options={options}/>
                 </Form.Item>
 
             </Form>

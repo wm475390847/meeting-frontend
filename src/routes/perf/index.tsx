@@ -23,8 +23,6 @@ const PerfPage: React.FC = () => {
     const [pageSize, setPageSize] = useState(10);
     const [total, setTotal] = useState(0)
     const [productList, setProductList] = useState<ProductInfo[]>([])
-
-    // const perfListRef = useRef<PerfInfo[]>([])
     const handlePageChange = (page: number) => {
         setPageNo(page);
         setLoading(true)
@@ -54,7 +52,7 @@ const PerfPage: React.FC = () => {
         setLoading(true)
     }
 
-    const handleGetPerfList = () => {
+    const handlePerfList = () => {
         getPerfList({
             pageNo: pageNo,
             pageSize: pageSize,
@@ -75,7 +73,7 @@ const PerfPage: React.FC = () => {
             .catch(err => message.error(err.message))
     }
 
-    const handleGetProductList = () => {
+    const handleProductList = () => {
         getProductList({})
             .then(data => {
                 setProductList(data.records)
@@ -84,8 +82,8 @@ const PerfPage: React.FC = () => {
 
     useEffect(() => {
         if (loading) {
-            handleGetPerfList()
-            handleGetProductList()
+            handlePerfList()
+            handleProductList()
         }
     }, [pageNo, loading])
 
@@ -132,7 +130,7 @@ const PerfPage: React.FC = () => {
                     ))}
                 </div>
 
-                {perfList &&
+                {perfList && perfList.length != 0 &&
                     <div className={styles.pagination}>
                         <Pagination total={total} current={pageNo} pageSize={pageSize} onChange={handlePageChange}/>
                         <Select defaultValue={`${pageSize} 条/页`} onChange={handlePageSizeChange} options={options}/>

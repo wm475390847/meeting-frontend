@@ -92,7 +92,7 @@ const FaceModule: React.FC<FaceModuleProps> = (props) => {
         })
     }
 
-    const handleGetValue = () => {
+    const handleValue = () => {
         const metaData = face?.metaData
         setFaceResult(metaData && JSON.parse(metaData))
     }
@@ -100,7 +100,7 @@ const FaceModule: React.FC<FaceModuleProps> = (props) => {
     useEffect(() => {
         if (type) {
             setOpen(true)
-            handleGetValue()
+            handleValue()
         }
     }, [type])
 

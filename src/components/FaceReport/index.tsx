@@ -23,7 +23,7 @@ const FaceReportModule: React.FC<FaceReportModuleProps> = (props) => {
         onCancel && onCancel()
     }
 
-    const handleGetResult = () => {
+    const handleResult = () => {
         getFaceResult(faceInfo?.id as number)
             .then(rep => setFaceResult(rep.data))
             .catch(err => message.error(err.message))
@@ -40,7 +40,7 @@ const FaceReportModule: React.FC<FaceReportModuleProps> = (props) => {
     }, [faceInfo])
 
     useEffect(() => {
-        open && handleGetResult()
+        open && handleResult()
     }, [open])
 
     return (

@@ -49,7 +49,7 @@ export default defineConfig(({ command }) => {
       port: 3000,
       proxy: {
         '/meeting-backend': {
-          target: 'https://test.qa-meeting.xinhuazhiyun.com',
+          target: 'https://qa-meeting.xinhuazhiyun.com',
           changeOrigin: true,
           // rewrite: (path) => path.replace(/^\/meeting-backend/, '')
         },

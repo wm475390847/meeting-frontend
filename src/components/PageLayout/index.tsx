@@ -30,7 +30,7 @@ export const PageLayoutModule: React.FC<LayoutPropModuleProps> = ({routes}) => {
   const {productName} = useParams<{ productName: string }>();
 
   useEffect(() => {
-    handleGetUserInfo();
+    handleUserInfo();
     const _pathArr: any = location.pathname.split('/');
     if (_pathArr.length === 3) {
       setSelectKey(_pathArr[2]);
@@ -41,7 +41,7 @@ export const PageLayoutModule: React.FC<LayoutPropModuleProps> = ({routes}) => {
     handleMenuItems()
   }, []);
 
-  const handleGetUserInfo = () => {
+  const handleUserInfo = () => {
     // 看看缓存里面有没有用户信息，有的话就不重复调用了
     const userInfo = localStorage.getItem("userInfo");
     if (!userInfo) {
@@ -63,7 +63,7 @@ export const PageLayoutModule: React.FC<LayoutPropModuleProps> = ({routes}) => {
     }
   }
 
-  const handleGetTitle = (selectKey: string) => {
+  const handleTitle = (selectKey: string) => {
     if (selectKey) {
       const pathArr: string[] = selectKey.split("/");
       const lastItem = pathArr.pop()
@@ -72,12 +72,12 @@ export const PageLayoutModule: React.FC<LayoutPropModuleProps> = ({routes}) => {
     return null;
   }
 
-  const handleGetPath = (name: string, routes: RouteBase[]): string | null => {
+  const handlePath = (name: string, routes: RouteBase[]): string | null => {
     for (const route of routes) {
       if (route.name === name) {
         return route.path;
       } else if (route.children && route.children.length > 0) {
-        const childPath = handleGetPath(name, route.children);
+        const childPath = handlePath(name, route.children);
         if (childPath) {
           return childPath;
         }
@@ -86,9 +86,9 @@ export const PageLayoutModule: React.FC<LayoutPropModuleProps> = ({routes}) => {
     return null;
   };
 
-  const handleGetItems = (selectKey: string) => {
-    const title = handleGetTitle(selectKey as any);
-    const path = handleGetPath(title as string, routes);
+  const handleItems = (selectKey: string) => {
+    const title = handleTitle(selectKey as any);
+    const path = handlePath(title as string, routes);
     const arr = [];
     if (path) {
       arr.push({
@@ -221,7 +221,7 @@ export const PageLayoutModule: React.FC<LayoutPropModuleProps> = ({routes}) => {
 
           <Breadcrumb className={styles.breadcrumb}
                       itemRender={handleItemRender}
-                      items={handleGetItems(selectKey as any)}
+                      items={handleItems(selectKey as any)}
           />
 
           <Content className={styles.content}>

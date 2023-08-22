@@ -116,7 +116,7 @@ const ProductListPage: React.FC = () => {
     setLoading(false)
   }
 
-  const handleGetProductList = () => {
+  const handleProductList = () => {
     getProductList({
       pageNo: pageNo,
       pageSize: pageSize
@@ -141,7 +141,7 @@ const ProductListPage: React.FC = () => {
   /**
    *获取业务列表
    */
-  const handleGetProductGroup = () => {
+  const handleProductGroup = () => {
     getServiceList()
         .then(res => {
           setServiceList(res)
@@ -150,8 +150,8 @@ const ProductListPage: React.FC = () => {
 
   useEffect(() => {
     if (loading) {
-      handleGetProductList()
-      handleGetProductGroup()
+      handleProductList()
+      handleProductGroup()
     }
   }, [pageNo, loading])
 

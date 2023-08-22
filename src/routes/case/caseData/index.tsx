@@ -12,7 +12,7 @@ const CaseDataPage: React.FC = () => {
     const [prodBarDataList, setProdBarDataList] = useState<BarData[]>([]);
     const [testBarDataList, setTestBarDataList] = useState<BarData[]>([]);
 
-    const handleGetCaseCount = () => {
+    const handleCaseCount = () => {
         getCaseData()
             .then(resp => {
                 const data: any[] = resp.data
@@ -20,20 +20,20 @@ const CaseDataPage: React.FC = () => {
                     if (e.env == 'test') {
                         const a = e.caseDataList.map((item: any) => ({type: item.productName, value: item.count}));
                         setTestPieDataList(a)
-                        const result = getBarDataList(e)
+                        const result = handleBarDataList(e)
                         setTestBarDataList(result)
                     }
                     if (e.env == 'prod') {
                         const b = e.caseDataList.map((item: any) => ({type: item.productName, value: item.count}));
                         setProdPieDataList(b)
-                        const result = getBarDataList(e)
+                        const result = handleBarDataList(e)
                         setProdBarDataList(result)
                     }
                 })
             })
     }
 
-    const getBarDataList = (item: any) => {
+    const handleBarDataList = (item: any) => {
         const result: BarData[] = [];
         item.caseDataList.forEach((caseData: any) => {
             caseData.fail != 0 && result.push(
@@ -88,7 +88,7 @@ const CaseDataPage: React.FC = () => {
     };
 
     useEffect(() => {
-        handleGetCaseCount()
+        handleCaseCount()
     }, [])
 
     return (

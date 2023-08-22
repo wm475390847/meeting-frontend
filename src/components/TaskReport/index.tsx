@@ -24,7 +24,7 @@ const TaskReportModal: React.FC<TaskReportModalProps> = (props) => {
         onCancel && onCancel()
     }
 
-    const handleGetPercent = () => {
+    const handlePercent = () => {
         getTaskResult(taskInfo?.id as number)
             .then(rep => setResult(rep.data))
             .catch(err => message.error(err.message))
@@ -35,7 +35,7 @@ const TaskReportModal: React.FC<TaskReportModalProps> = (props) => {
     }, [taskInfo])
 
     useEffect(() => {
-        open && handleGetPercent()
+        open && handlePercent()
     }, [open])
 
     return (

@@ -52,7 +52,7 @@ const PerfReportModule: React.FC<PerfReportModuleProps> = (props) => {
         onCancel && onCancel()
     }
 
-    const handleGetPerfReportList = () => {
+    const handlePerfReportList = () => {
         getPerfReportList(perfId as number)
             .then(rep => setPerfReportHistoryList(rep.data))
             .catch(err => message.error(err.message))
@@ -63,7 +63,7 @@ const PerfReportModule: React.FC<PerfReportModuleProps> = (props) => {
     }, [perfId])
 
     useEffect(() => {
-        open && handleGetPerfReportList()
+        open && handlePerfReportList()
     }, [open])
 
     return (

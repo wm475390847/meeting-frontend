@@ -1,12 +1,12 @@
-import {Button, Input, message, Popconfirm, Progress, Select, Table} from "antd";
-import React, {useEffect, useMemo, useState} from "react";
-import {useLocation, useNavigate, useParams} from "react-router-dom";
-import {ColumnsType} from "antd/lib/table";
-import moment from "moment";
-import {deleteCase, executeCase, getCaseList} from "@/services";
-import CodeViewModule from "@/components/TextBox"
-import ToolTipModule from "@/components/ToolTip";
-import styles from "./index.module.less"
+import {Button, Input, message, Popconfirm, Progress, Select, Table} from 'antd';
+import React, {useEffect, useMemo, useState} from 'react';
+import {useLocation, useNavigate, useParams} from 'react-router-dom';
+import {ColumnsType} from 'antd/lib/table';
+import moment from 'moment';
+import {deleteCase, executeCase, getCaseList} from '@/services';
+import CodeViewModule from '@/components/TextBox'
+import ToolTipModule from '@/components/ToolTip';
+import styles from './index.module.less'
 
 interface SearchParams {
   caseResult?: boolean
@@ -33,68 +33,68 @@ const CaseListPage: React.FC = () => {
   const columns = useMemo<ColumnsType<any>>(() => {
     return [
       {
-        title: "序号",
-        width: "6%",
+        title: '序号',
+        width: '6%',
         render: (_text, _record, index) => (pageNo as number - 1) * (pageSize as number) + index + 1
       },
       {
-        title: "用例名称",
-        key: "caseName",
-        dataIndex: "caseName",
-        width: "15%",
+        title: '用例名称',
+        key: 'caseName',
+        dataIndex: 'caseName',
+        width: '15%',
         ellipsis: true,
         render: (text) => <ToolTipModule linkText={text} buttonText={text}/>
       },
       {
-        title: "描述",
-        key: "caseDesc",
-        dataIndex: "caseDesc",
-        width: "20%",
+        title: '描述',
+        key: 'caseDesc',
+        dataIndex: 'caseDesc',
+        width: '20%',
         ellipsis: true,
         render: (text) => <ToolTipModule linkText={text} buttonText={text}/>
       },
       {
-        title: "结果",
-        key: "caseResult",
-        dataIndex: "caseResult",
-        width: "6%",
+        title: '结果',
+        key: 'caseResult',
+        dataIndex: 'caseResult',
+        width: '6%',
         render: (text) => {
           return (
-              text ? < Progress type="circle" percent={100} size={30}/> :
-                  < Progress status="exception" type="circle" percent={100} size={30}/>
+              text ? < Progress type='circle' percent={100} size={30}/> :
+                  < Progress status='exception' type='circle' percent={100} size={30}/>
           )
         }
       },
       {
-        title: "环境",
-        key: "env",
-        dataIndex: "env",
-        width: "6%"
+        title: '环境',
+        key: 'env',
+        dataIndex: 'env',
+        width: '6%'
       },
       {
-        title: "作者",
-        key: "caseOwner",
-        dataIndex: "caseOwner",
-        width: "7%"
+        title: '作者',
+        key: 'caseOwner',
+        dataIndex: 'caseOwner',
+        width: '7%'
       },
       {
-        title: "执行时间",
-        key: "executeTime",
-        dataIndex: "executeTime",
-        width: "15%",
-        render: (text) => <div>{moment(text).format("YYYY-MM-DD HH:mm:ss")}</div>
+        title: '执行时间',
+        key: 'executeTime',
+        dataIndex: 'executeTime',
+        width: '15%',
+        render: (text) => <div>{moment(text).format('YYYY-MM-DD HH:mm:ss')}</div>
       },
       {
-        title: "操作",
-        dataIndex: "action",
-        key: "action",
-        width: "20%",
+        title: '操作',
+        dataIndex: 'action',
+        key: 'action',
+        width: '20%',
         render: (_, record) => {
           return (
               <div className={styles.buttonGroup}>
-                <Button disabled={record.caseResult} type="primary"
+                <Button disabled={record.caseResult} type='primary'
                         onClick={() => setReason(record.caseReason)}>查看</Button>
-                <Popconfirm title="确定删除？" placement="top" okText="是" cancelText="否"
+                <Popconfirm title='确定删除？' placement='top' okText='是' cancelText='否'
                             onConfirm={() => handleDeleteCase(record.id)}>
                   <Button loading={buttonLoading}>删除</Button>
                 </Popconfirm>
@@ -128,26 +128,26 @@ const CaseListPage: React.FC = () => {
   const handleExecuteCase = (ciJobId: number, caseName: string) => {
     executeCase(ciJobId, caseName)
         .then(() => {
-          message.info("执行成功").then(r => r)
+          message.info('执行成功').then(r => r)
           setLoading(true)
         })
-        .catch(() => message.error("执行失败"))
+        .catch(() => message.error('执行失败'))
         .finally(() => setButtonLoading(false))
   }
 
   const resultOptions = [
-    {value: "", label: "全部"},
-    {value: "true", label: "成功"},
-    {value: "false", label: "失败"}
+    {value: '', label: '全部'},
+    {value: 'true', label: '成功'},
+    {value: 'false', label: '失败'}
   ]
 
   const envOptions = [
-    {value: "", label: "全部"},
-    {value: "test", label: "测试环境"},
-    {value: "prod", label: "生产环境"}
+    {value: "", label: '全部'},
+    {value: 'test', label: '测试环境'},
+    {value: 'prod', label: '生产环境'}
   ]
 
-  const handleGetCaseList = (searchParams: SearchParams) => {
+  const handleCaseList = (searchParams: SearchParams) => {
     getCaseList({
       pageNo: pageNo,
       pageSize: pageSize,
@@ -165,21 +165,21 @@ const CaseListPage: React.FC = () => {
     const params = Object.entries(sc as any)
         .filter(([, value]) => value !== '') // Exclude properties with empty values
         .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value as any)}`)
-        .join("&");
-    console.log("向路由中放入搜索参数:", params)
+        .join('&');
+    console.log('向路由中放入搜索参数:', params)
     navigate({
       pathname: location.pathname,
       search: params
     })
   }
 
-  const handleGetResult = () => {
+  const handleResult = () => {
     const result = resultOptions.find(option => option.value === searchParams?.caseResult as unknown as string)?.label
     return result === undefined ? '全部' : result
   }
 
-  const handleGetEnv = () => {
-    return !searchParams ? "全部" : searchParams.env === undefined ? '全部' : searchParams.env
+  const handleEnv = () => {
+    return !searchParams ? '全部' : searchParams.env === undefined ? '全部' : searchParams.env
   }
 
   /**
@@ -187,19 +187,19 @@ const CaseListPage: React.FC = () => {
    */
   useEffect(() => {
     const searchParams: SearchParams = {};
-    const env = search.get("env");
+    const env = search.get('env');
     if (env !== null) {
       searchParams.env = env;
     }
-    const caseName = search.get("caseName");
+    const caseName = search.get('caseName');
     if (caseName !== null) {
       searchParams.caseName = caseName;
     }
-    const caseOwner = search.get("caseOwner");
+    const caseOwner = search.get('caseOwner');
     if (caseOwner !== null) {
       searchParams.caseOwner = caseOwner;
     }
-    const caseResult = search.get("caseResult");
+    const caseResult = search.get('caseResult');
     if (caseResult !== null) {
       searchParams.caseResult = caseResult as unknown as boolean;
     }
@@ -210,14 +210,14 @@ const CaseListPage: React.FC = () => {
    * 监听搜索变化
    */
   useEffect(() => {
-    searchParams && handleGetCaseList(searchParams)
+    searchParams && handleCaseList(searchParams)
   }, [searchParams])
 
   /**
    * 监听页面刷新&页码变化
    */
   useEffect(() => {
-    loading && searchParams && handleGetCaseList(searchParams)
+    loading && searchParams && handleCaseList(searchParams)
   }, [pageNo, loading])
 
   return (
@@ -227,10 +227,10 @@ const CaseListPage: React.FC = () => {
             <span className={styles.span}>结果：</span>
             <Select
                 className={styles.select}
-                placeholder="请选择执行结果"
-                value={handleGetResult()}
+                placeholder='请选择执行结果'
+                value={handleResult()}
                 defaultValue={resultOptions[0].label}
-                onSelect={(e: any) => handleProvinceChange("caseResult", e)}
+                onSelect={(e: any) => handleProvinceChange('caseResult', e)}
                 options={resultOptions}
             >
             </Select>
@@ -240,9 +240,9 @@ const CaseListPage: React.FC = () => {
             <span className={styles.span}>环境：</span>
             <Select
                 className={styles.select}
-                value={handleGetEnv()}
+                value={handleEnv()}
                 defaultValue={envOptions[0].label}
-                onSelect={(e: any) => handleProvinceChange("env", e)}
+                onSelect={(e: any) => handleProvinceChange('env', e)}
                 options={envOptions}
             >
             </Select>
@@ -252,9 +252,9 @@ const CaseListPage: React.FC = () => {
             <span className={styles.span}>用例名称：</span>
             <Search
                 className={styles.search}
-                placeholder="请输入用例名称"
+                placeholder='请输入用例名称'
                 value={searchParams?.caseName}
-                onSearch={(e: any) => handleProvinceChange("caseName", e)}
+                onSearch={(e: any) => handleProvinceChange('caseName', e)}
                 enterButton
                 allowClear
             />
@@ -264,9 +264,9 @@ const CaseListPage: React.FC = () => {
             <span className={styles.span}>用例作者：</span>
             <Search
                 className={styles.search}
-                placeholder="请输入作者"
+                placeholder='请输入作者'
                 value={searchParams?.caseOwner}
-                onSearch={(e: any) => handleProvinceChange("caseOwner", e)}
+                onSearch={(e: any) => handleProvinceChange('caseOwner', e)}
                 enterButton
                 allowClear
             />
@@ -277,7 +277,7 @@ const CaseListPage: React.FC = () => {
           <Table
               columns={columns}
               dataSource={caseList}
-              rowKey="id"
+              rowKey='id'
               onChange={onChangeTable}
               pagination={{total, current: pageNo, showSizeChanger: true}}
               loading={loading}
