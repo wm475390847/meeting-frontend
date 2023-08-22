@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import {defineConfig} from 'vite'
 import react from '@vitejs/plugin-react'
 import lessToJS from 'less-vars-to-js'
 
@@ -12,7 +12,7 @@ const themeVariables = lessToJS(
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => {
   return {
-    base: command === 'build' ? `//t.newscdn.cn/${name}/${version}/` : '',
+    base: command === 'build' ? `//s.newscdn.cn/${name}/${version}/` : '',
     build: {
       rollupOptions: {
         output: {
@@ -49,7 +49,7 @@ export default defineConfig(({ command }) => {
       port: 3000,
       proxy: {
         '/meeting-backend': {
-          target: 'http://test.qa-meeting.xinhuazhiyun.com',
+          target: 'https://qa-meeting.xinhuazhiyun.com',
           changeOrigin: true,
           // rewrite: (path) => path.replace(/^\/meeting-backend/, '')
         },

@@ -1,4 +1,4 @@
-import {getTaskResultPercent} from "@/services";
+import {getTaskResult} from "@/services";
 import {Collapse, Divider, Form, message, Modal} from "antd";
 import React, {useEffect, useState} from "react";
 import TaskReportTableModule from "../TaskReportTable";
@@ -13,7 +13,7 @@ const TaskReportModal: React.FC<TaskReportModalProps> = (props) => {
     const {onCancel, taskInfo} = props
     const {Panel} = Collapse
     const [open, setOpen] = useState(true)
-    const [resultPercent, setResultPercent] = useState<ResultPercent>()
+    const [result, setResult] = useState<Result>()
 
     const onChange = (key: string | string[]) => {
 
@@ -24,9 +24,9 @@ const TaskReportModal: React.FC<TaskReportModalProps> = (props) => {
         onCancel && onCancel()
     }
 
-    const handleGetPercent = () => {
-        getTaskResultPercent(taskInfo?.id as number)
-            .then(rep => setResultPercent(rep.data))
+    const handlePercent = () => {
+        getTaskResult(taskInfo?.id as number)
+            .then(rep => setResult(rep.data))
             .catch(err => message.error(err.message))
     }
 
@@ -35,7 +35,7 @@ const TaskReportModal: React.FC<TaskReportModalProps> = (props) => {
     }, [taskInfo])
 
     useEffect(() => {
-        open && handleGetPercent()
+        open && handlePercent()
     }, [open])
 
     return (
@@ -50,29 +50,29 @@ const TaskReportModal: React.FC<TaskReportModalProps> = (props) => {
         >
             <div className={styles.form}>
                 <Form.Item className={`${styles.formItem} ${styles.total}`} label="总数">
-                    {resultPercent?.total}
+                    {result?.total}
                 </Form.Item>
                 <Form.Item className={`${styles.formItem} ${styles.success}`} label="成功">
-                    {resultPercent?.success}
+                    {result?.success}
                 </Form.Item>
                 <Form.Item className={`${styles.formItem} ${styles.fail}`} label="失败">
-                    {resultPercent ? resultPercent.total - resultPercent.success : 0}
+                    {result ? result.total - result.success : 0}
                 </Form.Item>
                 <Form.Item className={`${styles.formItem} ${styles.total}`} label="成功率">
-                    {resultPercent?.percent as number * 100}%
+                    {result?.percent as number * 100}%
                 </Form.Item>
             </div>
             <Divider/>
             < Collapse ghost destroyInactivePanel={true} onChange={onChange}
                        bordered={true}>
                 {
-                    resultPercent && resultPercent.total - resultPercent.success != 0 &&
+                    result && result.total - result.success != 0 &&
                     <Panel header='失败' key='2'>
                         <TaskReportTableModule result={false} taskId={taskInfo?.id as number}/>
                     </Panel>
                 }
                 {
-                    resultPercent && resultPercent.success != 0 &&
+                    result && result.success != 0 &&
                     <Panel header='成功' key='1'>
                         <TaskReportTableModule result={true} taskId={taskInfo?.id as number}/>
                     </Panel>

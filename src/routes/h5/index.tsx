@@ -115,7 +115,7 @@ const H5Page: React.FC = () => {
             .finally(() => setButtonLoading(false))
     }
 
-    const handleGetH5List = () => {
+    const handleH5List = () => {
         getH5List({
             pageNo: pageNo,
             pageSize: pageSize,
@@ -155,7 +155,7 @@ const H5Page: React.FC = () => {
     }
 
     useEffect(() => {
-        loading && handleGetH5List()
+        loading && handleH5List()
     }, [pageNo, loading])
 
     useEffect(() => {

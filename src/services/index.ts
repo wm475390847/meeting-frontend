@@ -8,6 +8,7 @@ import {
     ISearchPerfReq,
     ISearchProductListReq,
     ISearchTaskListReq,
+    ISearchWriterListReq,
     IUpdateFaceReq,
     IUpdateH5Req
 } from "./interface"
@@ -23,7 +24,7 @@ const client = new HttpClient({})
  */
 export const getCaseList: (data: ISearchCaseListReq) => Promise<IPageRequest<CaseInfo>> = (data) => {
     return new Promise(async (resolve, reject) => {
-        await client.get(`/ttp/cases`, data)
+        await client.get(`/conference/cases`, data)
             .then((res: any) => {
                 if (res.success) {
                     resolve(res.data)
@@ -35,9 +36,9 @@ export const getCaseList: (data: ISearchCaseListReq) => Promise<IPageRequest<Cas
     })
 }
 
-export const getCaseCount: () => Promise<RequestOpt> = () => {
+export const getCaseData: () => Promise<RequestOpt> = () => {
     return new Promise(async (resolve, reject) => {
-        await client.get(`/ttp/cases/count`)
+        await client.get(`/conference/cases/data`)
             .then((res: any) => {
                 if (res.success) {
                     resolve(res)
@@ -51,7 +52,7 @@ export const getCaseCount: () => Promise<RequestOpt> = () => {
 
 export const deleteCase: (id: number) => Promise<RequestOpt> = (id) => {
     return new Promise(async (resolve, reject) => {
-        await client.delete(`/ttp/cases/${id}`)
+        await client.delete(`/conference/cases/${id}`)
             .then((res: any) => {
                 if (res.success) {
                     resolve(res)
@@ -75,7 +76,7 @@ export const executeCase: (jobId: number, caseName: string) => Promise<RequestOp
         }
     }
     return new Promise(async (resolve, reject) => {
-        await client.post(`http://cloudwings.xinhuazhiyun.com/api/ci/executeJobByParams`, data, true)
+        await client.post(`https://cloudwings.xinhuazhiyun.com/api/ci/executeJobByParams`, data, true)
             .then((res: any) => {
                 if (res.success) {
                     resolve(res)
@@ -92,7 +93,7 @@ export const executeCase: (jobId: number, caseName: string) => Promise<RequestOp
  */
 export const getProductList: (data: ISearchProductListReq) => Promise<IPageRequest<ProductInfo>> = (data) => {
     return new Promise(async (resolve, reject) => {
-        await client.get(`/ttp/products`, data)
+        await client.get(`/conference/products`, data)
             .then((res: any) => {
                 if (res.success) {
                     resolve(res.data)
@@ -110,7 +111,7 @@ export const getProductList: (data: ISearchProductListReq) => Promise<IPageReque
  */
 export const deleteProduct: (id: number) => Promise<RequestOpt> = (id) => {
     return new Promise(async (resolve, reject) => {
-        await client.delete(`/ttp/products/${id}`)
+        await client.delete(`/conference/products/${id}`)
             .then((res: any) => {
                 if (res.success) {
                     resolve(res)
@@ -128,7 +129,7 @@ export const deleteProduct: (id: number) => Promise<RequestOpt> = (id) => {
  */
 export const createProduct: (data: { productName: string, serviceId: number }) => Promise<RequestOpt> = (data) => {
     return new Promise(async (resolve, reject) => {
-        await client.post(`/ttp/products`, data)
+        await client.post(`/conference/products`, data)
             .then((res: any) => {
                 if (res.success) {
                     resolve(res)
@@ -150,7 +151,7 @@ export const updateProduct: (data: {
     serviceId: number
 }) => Promise<RequestOpt> = (data) => {
     return new Promise(async (resolve, reject) => {
-        await client.put(`/ttp/products`, data)
+        await client.put(`/conference/products`, data)
             .then((res: any) => {
                 if (res.success) {
                     resolve(res)
@@ -167,7 +168,7 @@ export const updateProduct: (data: {
  */
 export const getServiceList: () => Promise<ServiceInfo[]> = () => {
     return new Promise(async (resolve, reject) => {
-        await client.get(`/ttp/services`)
+        await client.get(`/conference/services`)
             .then((res: any) => {
                 if (res.success) {
                     resolve(res.data)
@@ -185,7 +186,7 @@ export const getServiceList: () => Promise<ServiceInfo[]> = () => {
  */
 export const createPerf: (data: ICreatePerfReq) => Promise<RequestOpt> = (data) => {
     return new Promise(async (resolve, reject) => {
-        await client.post(`/ttp/perf`, data)
+        await client.post(`/conference/perf`, data)
             .then((res: any) => {
                 if (res.success) {
                     resolve(res)
@@ -203,7 +204,7 @@ export const createPerf: (data: ICreatePerfReq) => Promise<RequestOpt> = (data) 
  */
 export const updatePerf: (data: ICreatePerfReq) => Promise<RequestOpt> = (data) => {
     return new Promise(async (resolve, reject) => {
-        await client.put(`/ttp/perf`, data)
+        await client.put(`/conference/perf`, data)
             .then((res: any) => {
                 if (res.success) {
                     resolve(res)
@@ -221,7 +222,7 @@ export const updatePerf: (data: ICreatePerfReq) => Promise<RequestOpt> = (data) 
  */
 export const getPerfList: (data: ISearchPerfReq) => Promise<IPageRequest<PerfInfo>> = (data) => {
     return new Promise(async (resolve, reject) => {
-        await client.get(`/ttp/perf`, data)
+        await client.get(`/conference/perf`, data)
             .then((res: any) => {
                 if (res.success) {
                     resolve(res.data)
@@ -239,7 +240,7 @@ export const getPerfList: (data: ISearchPerfReq) => Promise<IPageRequest<PerfInf
  */
 export const getPerfReportList: (perfId: number) => Promise<RequestOpt> = (perfId) => {
     return new Promise(async (resolve, reject) => {
-        await client.get(`/ttp/perf/reports/${perfId}`)
+        await client.get(`/conference/perf/reports/${perfId}`)
             .then((res: any) => {
                 if (res.success) {
                     resolve(res)
@@ -257,7 +258,7 @@ export const getPerfReportList: (perfId: number) => Promise<RequestOpt> = (perfI
  */
 export const deletePerf: (id: number) => Promise<RequestOpt> = (id) => {
     return new Promise(async (resolve, reject) => {
-        await client.delete(`/ttp/perf/${id}`)
+        await client.delete(`/conference/perf/${id}`)
             .then((res: any) => {
                 if (res.success) {
                     resolve(res)
@@ -441,7 +442,7 @@ export const getTaskReport: (data: { taskId: number, result?: boolean }) => Prom
     })
 }
 
-export const getTaskResultPercent: (taskId: number) => Promise<RequestOpt> = (taskId) => {
+export const getTaskResult: (taskId: number) => Promise<RequestOpt> = (taskId) => {
     return new Promise(async (resolve, reject) => {
         await client.get(`/conference/task/result/${taskId}`)
             .then((res: any) => {
@@ -549,3 +550,56 @@ export const getUserInfo = () => {
             })
     })
 }
+
+/**
+ * 获取报告数据
+ * @returns
+ */
+export const createWriter: (data: WriterData) => Promise<RequestOpt> = (data) => {
+    return new Promise(async (resolve, reject) => {
+        await client.post(`/financial/report/create`, data)
+            .then((res: any) => {
+                if (res.success) {
+                    resolve(res)
+                } else {
+                    reject(res)
+                }
+            })
+    })
+}
+
+/**
+ * 获取报告数据
+ * @returns
+ */
+export const searchData: (id: number) => Promise<RequestOpt> = (id) => {
+    return new Promise(async (resolve, reject) => {
+        await client.get(`/financial/report/search/${id}`)
+            .then((res: any) => {
+                if (res.success) {
+                    resolve(res)
+                } else {
+                    reject(res)
+                }
+            })
+    })
+}
+
+/**
+ * 获取智能写作报告查询列表
+ * @param data
+ */
+export const getWriterList: (data: ISearchWriterListReq) => Promise<IPageRequest<WriterData>> = (data) => {
+    return new Promise(async (resolve, reject) => {
+        await client.get(`/financial/reports`, data)
+            .then((res: any) => {
+                if (res.success) {
+                    resolve(res.data)
+                } else {
+                    reject(res)
+                }
+            })
+    })
+}
+
+

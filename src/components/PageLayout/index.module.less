@@ -26,6 +26,10 @@
       color: #ffffff;
     }
 
+    .ant-menu-item:hover {
+      color: inherit !important;
+    }
+
     .ant-layout-sider-trigger {
       background-color: #282f3d !important;
     }
@@ -61,13 +65,16 @@
 
   .breadcrumb {
     margin: 20px 15px 20px;
+
+    .item {
+      cursor: pointer;
+    }
   }
 
   .content {
     margin: 0 15px 0;
     padding: 24px;
     border-radius: 15px;
-    overflow: auto;
 
     .watermark {
       height: 100%;
@@ -84,7 +91,6 @@
       &.separator::after {
         content: " · ";
         display: inline-block;
-        white-space-collapse: preserve;
       }
     }
   }

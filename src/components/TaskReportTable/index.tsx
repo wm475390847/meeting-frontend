@@ -6,10 +6,10 @@ import {Button, Image, message, Popover} from "antd";
 import {getExecuteHistory, getTaskReport as getTaskReportList} from "@/services";
 import styles from './index.module.less'
 import {QuestionCircleOutlined} from "@ant-design/icons";
-import {defaultImage} from "@/constants";
+import {defaultImage} from "@/config/constants";
 
 type TaskReportTableModuleProps = {
-    result?: boolean
+    result: boolean
     taskId: number
 }
 
@@ -124,7 +124,7 @@ const TaskReportTableModule: React.FC<TaskReportTableModuleProps> = (prop) => {
     }
 
     useEffect(() => {
-        result && handleTaskReportList(result, taskId)
+        handleTaskReportList(result, taskId)
     }, [result])
 
     return (

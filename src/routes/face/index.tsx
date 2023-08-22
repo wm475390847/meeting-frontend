@@ -5,7 +5,7 @@ import {deleteFace, executeFace, getFaceList} from "@/services"
 import FaceReportModal from "@/components/FaceReport"
 import ToolTipModule from "@/components/ToolTip"
 import styles from './index.module.less'
-import {defaultImage} from "@/constants"
+import {defaultImage} from "@/config/constants"
 import FaceModule from "@/components/Face"
 
 const FacePage: React.FC = () => {
@@ -100,7 +100,7 @@ const FacePage: React.FC = () => {
         setLoading(true)
     }
 
-    const handleGetFaceList = () => {
+    const handleFaceList = () => {
         getFaceList({
             pageNo: pageNo,
             pageSize: pageSize,
@@ -132,7 +132,7 @@ const FacePage: React.FC = () => {
     }
 
     useEffect(() => {
-        loading && handleGetFaceList()
+        loading && handleFaceList()
     }, [pageNo, loading])
 
     return (

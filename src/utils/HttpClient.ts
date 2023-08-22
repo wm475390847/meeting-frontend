@@ -1,5 +1,5 @@
 import axios, {AxiosInstance, AxiosRequestConfig, AxiosResponse} from "axios";
-import {BASE_PATH, DOMAIN} from "@/constants";
+import {BASE_PATH, PROJECT_HOST} from "@/config/constants";
 import qs from 'qs';
 import {message} from "antd";
 import Cookies from "js-cookie";
@@ -16,16 +16,16 @@ export class HttpClient {
      */
     constructor(options: { http?: string }) {
         // 不传入的话使用默认的url
-        options.http = DOMAIN;
+        options.http = PROJECT_HOST;
         this.createAxios(options.http)
     }
 
     /**
      * 创建一个请求
-     * @param baseURL 基础url
      * @returns 请求工具
+     * @param _baseURL
      */
-    protected createAxios(baseURL: string) {
+    protected createAxios(_baseURL: string) {
         // 创建一个 Axios 实例
         const request = axios.create({
             headers: {
@@ -99,9 +99,12 @@ export class HttpClient {
     }
 
     public logout() {
-        Cookies.remove('dingtalk_sso_jwt', { path: '/', domain: '.xinhuazhiyun.com' });
+        // 清除cookie
+        Cookies.remove('dingtalk_sso_jwt', {path: '/', domain: '.xinhuazhiyun.com'});
+        // 清除浏览器缓存
+        localStorage.removeItem("userInfo")
         let url = location.href;
-        window.location.href = `http://sso.xinhuazhiyun.com/login.html?redirectUri=${encodeURIComponent(url)}`;
+        window.location.href = `https://sso.xinhuazhiyun.com/login.html?redirectUri=${encodeURIComponent(url)}`;
     }
 
     /**

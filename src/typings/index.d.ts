@@ -9,9 +9,16 @@ interface RequestOpt {
   success: boolean
   total?: number
 }
+
 interface PieData {
   type: string
   value: number
+}
+
+interface BarData {
+  productName: string
+  type: string
+  count: number
 }
 
 interface IPageRequest<T> {
@@ -112,7 +119,7 @@ interface H5 {
   meetingEndTime: string
 }
 
-interface ResultPercent {
+interface Result {
   total: number
   success: number
   percent: number
@@ -259,16 +266,18 @@ interface PerfReportHistory {
   gmtModified: string
 }
 
-
-interface ResultPercent {
-  total: number
-  success: number
-  percent: number
-}
-
 interface Window {
   md5: any;
   wx: any;
+}
+
+interface WriterData {
+  companyCode: string
+  companyName?: string
+  stockCode?: string
+  executeTime: string
+  year: number
+  type: string
 }
 
 declare module "*.module.less";

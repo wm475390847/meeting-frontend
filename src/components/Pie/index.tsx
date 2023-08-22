@@ -1,5 +1,5 @@
-import {Pie} from "@ant-design/charts";
 import React from "react";
+import {Pie} from "@ant-design/charts";
 
 type PieModuleProps = {
     data: PieData[]
@@ -37,7 +37,7 @@ const PieModule: React.FC<PieModuleProps> = (props) => {
 
         statistic: {
             title: {
-                customHtml: env + '总计'
+                customHtml: '总计'
             },
             content: {
                 style: {
@@ -54,7 +54,11 @@ const PieModule: React.FC<PieModuleProps> = (props) => {
     };
 
     return (
-        <Pie {...config as any} />
+
+        <div style={{width: '35%', display: 'flex', flexDirection: 'column'}}>
+            <span style={{fontWeight: 'bold'}}> {env}</span>
+            <Pie {...config as any}/>
+        </div>
     );
 };
 

@@ -1,39 +1,141 @@
-import styles from './index.module.less'
 import React, {useEffect, useState} from 'react';
 import PieModule from '@/components/Pie';
-import {getCaseCount} from '@/services';
+import {getCaseData} from '@/services';
+import {Tabs} from "antd";
+import BarModule from "@/components/Bar";
 
 const CaseDataPage: React.FC = () => {
-  const [prodCaseCountList, setProdCaseCountList] = useState<PieData[]>([]);
-  const [testCaseCountList, setTestCaseCountList] = useState<PieData[]>([]);
+    const [prodPieDataList, setProdPieDataList] = useState<PieData[]>([]);
+    const [testPieDataList, setTestPieDataList] = useState<PieData[]>([]);
+    const [tabKey, setTabKey] = useState('A')
 
-  const handleGetCaseCount = () => {
-    getCaseCount()
-      .then(resp => {
-        const data: any[] = resp.data
-        data.forEach((e: any) => {
-          if (e.env == 'test') {
-            const a = e.caseCountList.map((item: any) => ({ type: item.productName, value: item.count }));
-            setTestCaseCountList(a)
-          }
-          if (e.env == 'prod') {
-            const b = e.caseCountList.map((item: any) => ({ type: item.productName, value: item.count }));
-            setProdCaseCountList(b)
-          }
+    const [prodBarDataList, setProdBarDataList] = useState<BarData[]>([]);
+    const [testBarDataList, setTestBarDataList] = useState<BarData[]>([]);
+
+    const handleCaseCount = () => {
+        getCaseData()
+            .then(resp => {
+                const data: any[] = resp.data
+                data.forEach((e: any) => {
+                    if (e.env == 'test') {
+                        const a = e.caseDataList.map((item: any) => ({type: item.productName, value: item.count}));
+                        setTestPieDataList(a)
+                        const result = handleBarDataList(e)
+                        setTestBarDataList(result)
+                    }
+                    if (e.env == 'prod') {
+                        const b = e.caseDataList.map((item: any) => ({type: item.productName, value: item.count}));
+                        setProdPieDataList(b)
+                        const result = handleBarDataList(e)
+                        setProdBarDataList(result)
+                    }
+                })
+            })
+    }
+
+    const handleBarDataList = (item: any) => {
+        const result: BarData[] = [];
+        item.caseDataList.forEach((caseData: any) => {
+            caseData.fail != 0 && result.push(
+                {
+                    productName: caseData.productName,
+                    type: 'fail',
+                    count: caseData.fail
+                }
+            )
+            caseData.success != 0 && result.push(
+                {
+                    productName: caseData.productName,
+                    type: 'success',
+                    count: caseData.success
+                }
+            )
         })
-      })
-  }
+        return result;
+    }
 
-  useEffect(() => {
-    handleGetCaseCount()
-  }, [])
+    const barList =
+        [
+            {
+                data: testBarDataList,
+                env: "TEST环境"
+            },
+            {
+                data: prodBarDataList,
+                env: "PROD环境"
+            }
+        ]
 
-  return (
-    <div className={styles.pieGroup}>
-      <PieModule data={testCaseCountList} env='test' />
-      <PieModule data={prodCaseCountList} env='prod' />
-    </div>
-  );
-};
+    const pieList =
+        [
+            {
+                data: testPieDataList,
+                env: "TEST环境"
+            },
+            {
+                data: prodPieDataList,
+                env: "PROD环境"
+            }
+        ]
+
+    const tabItems = [
+        {label: '用例数量', key: 'A',},
+        {label: '执行结果', key: 'B',}
+    ];
+
+    const onChange = (key: string) => {
+        setTabKey(key)
+    };
+
+    useEffect(() => {
+        handleCaseCount()
+    }, [])
+
+    return (
+        <>
+            <Tabs onChange={onChange} type="card" items={tabItems}/>
+            {tabKey === 'A' &&
+                <div
+                    style={{
+                        position: "absolute",
+                        overflow: "auto",
+                        height: '100%',
+                        width: '100%',
+                        display: 'flex',
+                        justifyContent: "space-around",
+                    }}
+                >
+                    {
+                        pieList.map((item) => (
+                            <PieModule data={item.data} env={item.env}/>
+                        ))
+                    }
+                </div>
+            }
+            {tabKey === 'B' &&
+                <div style={{
+                    position: "absolute",
+                    overflow: "auto",
+                    height: '90%',
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '50px'
+                }}>
+                    {barList.map((item) => (
+                        <BarModule
+                            key={item.env}
+                            xField={"count"}
+                            yField={"productName"}
+                            seriesField={"type"}
+                            data={item.data}
+                            env={item.env}
+                        />
+                    ))}
+                </div>
+            }
+        </>
+    );
+}
 
 export default CaseDataPage;
