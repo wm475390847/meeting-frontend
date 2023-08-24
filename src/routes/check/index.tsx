@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo, useState} from "react"
-import {Button, message, Table} from 'antd'
+import {Button, message, Popconfirm, Table} from 'antd'
 import styles from './index.module.less'
-import {getWriterList, searchData} from "@/services";
+import {deleteReport, getReportList, searchReport} from "@/services";
 import JsonViewerModule from "@/components/JsonViewer";
 import {ColumnsType} from "antd/lib/table";
 import moment from "moment/moment";
@@ -14,7 +14,7 @@ const WriterPage: React.FC = () => {
     const [pageNo, setPageNo] = useState(1)
     const [pageSize, setPageSize] = useState(10)
     const [reportData, setReportData] = useState<any>()
-    const [writerList, setWriterList] = useState<WriterData[]>()
+    const [writerList, setWriterList] = useState<WriterReport[]>()
     const [type, setType] = useState(0)
 
     const columns = useMemo<ColumnsType<any>>(() => {
@@ -69,10 +69,14 @@ const WriterPage: React.FC = () => {
                 render: (_, record) => {
                     return (
                         <div className={styles.buttonGroup}>
-                            <Button type="primary" onClick={() => handleWriterData(record.id)}
+                            <Button type="primary" onClick={() => handleReport(record.id)}
                                     loading={buttonLoading}>查询</Button>
                             <Button onClick={() => setReportData(record.reportData)}
                                     loading={buttonLoading}>查看数据</Button>
+                            <Popconfirm title='确定删除？' placement="top" okText="是" cancelText="否"
+                                        onConfirm={() => handleDeleteReport(record.id)}>
+                                <Button loading={buttonLoading}>删除</Button>
+                            </Popconfirm>
                         </div>
                     )
                 }
@@ -87,19 +91,28 @@ const WriterPage: React.FC = () => {
         setLoading(true)
     }
 
-    const handleWriterData = (id: number) => {
-        setButtonLoading(true)
-        searchData(id)
+    const handleDeleteReport = (id: number) => {
+        deleteReport(id)
             .then(res => {
                 message.success(res.message).then(r => r)
                 setLoading(true)
             })
-            .catch(err => message.error(err.message).then(r => r))
+            .catch(err => message.error(err.message))
+    }
+
+    const handleReport = (id: number) => {
+        setButtonLoading(true)
+        searchReport(id)
+            .then(res => {
+                message.success(res.message).then(r => r)
+                setLoading(true)
+            })
+            .catch(err => message.error(err.message))
             .finally(() => setButtonLoading(false))
     }
 
-    const handleWriterList = () => {
-        getWriterList({
+    const handleReportList = () => {
+        getReportList({
             pageNo: pageNo,
             pageSize: pageSize,
         }).then(data => {
@@ -110,7 +123,7 @@ const WriterPage: React.FC = () => {
     }
 
     useEffect(() => {
-        loading && handleWriterList()
+        loading && handleReportList()
     }, [pageNo, loading])
 
     return (

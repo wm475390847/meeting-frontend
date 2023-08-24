@@ -1,7 +1,7 @@
 import {Button, DatePicker, DatePickerProps, Form, Input, message, Modal, Select} from "antd";
 import React, {useEffect, useState} from "react";
 import styles from './index.module.less'
-import {createWriter} from "@/services";
+import {createReport} from "@/services";
 
 type CheckModuleProps = {
     type: number
@@ -27,6 +27,13 @@ const CheckModule: React.FC<CheckModuleProps> = (props) => {
         onCancel && onCancel()
     }
 
+    const handleDisableDate = (current: { year: () => number; }) => {
+        // 获取当前年份
+        const currentYear = new Date().getFullYear();
+        // 禁用当前年份之后的所有年份
+        return current && current.year() > currentYear;
+    }
+
     const onChange: DatePickerProps['onChange'] = (date, dateString) => {
         setYear(dateString)
     };
@@ -34,7 +41,7 @@ const CheckModule: React.FC<CheckModuleProps> = (props) => {
     const onSubmit = () => {
         form.validateFields().then(values => {
             setButtonLoading(true)
-            createWriter({...values, year: year})
+            createReport({...values, year: year})
                 .then(res => {
                     if (res.success) {
                         message.success(res.message).then(r => r)
@@ -68,7 +75,7 @@ const CheckModule: React.FC<CheckModuleProps> = (props) => {
                 className={styles.form}
             >
                 <Form.Item name='companyCode' label="公司编码" rules={[{required: true, message: '公司编码不能为空'}]}>
-                    <Input placeholder='请输入公司编码'/>
+                    <Input placeholder='请输入CompanyCode'/>
                 </Form.Item>
 
                 <Form.Item name='companyName' label="公司名称">
@@ -80,7 +87,8 @@ const CheckModule: React.FC<CheckModuleProps> = (props) => {
                 </Form.Item>
 
                 <Form.Item name='year' label="年份" rules={[{required: true, message: '年份不能为空'}]}>
-                    <DatePicker style={{width: '150px'}} picker="year" onChange={onChange}/>
+                    <DatePicker style={{width: '150px'}} picker="year" onChange={onChange}
+                                disabledDate={handleDisableDate}/>
                 </Form.Item>
 
                 <Form.Item name='type' label="类型" rules={[{required: true, message: '类型不能为空'}]}

@@ -8,7 +8,7 @@ import {
     ISearchPerfReq,
     ISearchProductListReq,
     ISearchTaskListReq,
-    ISearchWriterListReq,
+    ISearchReportListReq,
     IUpdateFaceReq,
     IUpdateH5Req
 } from "./interface"
@@ -552,10 +552,10 @@ export const getUserInfo = () => {
 }
 
 /**
- * 获取报告数据
+ * 创建报告
  * @returns
  */
-export const createWriter: (data: WriterData) => Promise<RequestOpt> = (data) => {
+export const createReport: (data: WriterReport) => Promise<RequestOpt> = (data) => {
     return new Promise(async (resolve, reject) => {
         await client.post(`/financial/report/create`, data)
             .then((res: any) => {
@@ -569,12 +569,12 @@ export const createWriter: (data: WriterData) => Promise<RequestOpt> = (data) =>
 }
 
 /**
- * 获取报告数据
+ * 查询报告
  * @returns
  */
-export const searchData: (id: number) => Promise<RequestOpt> = (id) => {
+export const searchReport: (id: number) => Promise<RequestOpt> = (id) => {
     return new Promise(async (resolve, reject) => {
-        await client.get(`/financial/report/search/${id}`)
+        await client.get(`/financial/report/${id}`)
             .then((res: any) => {
                 if (res.success) {
                     resolve(res)
@@ -586,10 +586,27 @@ export const searchData: (id: number) => Promise<RequestOpt> = (id) => {
 }
 
 /**
- * 获取智能写作报告查询列表
+ * 删除报告
+ * @returns
+ */
+export const deleteReport: (id: number) => Promise<RequestOpt> = (id) => {
+    return new Promise(async (resolve, reject) => {
+        await client.delete(`/financial/report/${id}`)
+            .then((res: any) => {
+                if (res.success) {
+                    resolve(res)
+                } else {
+                    reject(res)
+                }
+            })
+    })
+}
+
+/**
+ * 查询报告列表
  * @param data
  */
-export const getWriterList: (data: ISearchWriterListReq) => Promise<IPageRequest<WriterData>> = (data) => {
+export const getReportList: (data: ISearchReportListReq) => Promise<IPageRequest<WriterReport>> = (data) => {
     return new Promise(async (resolve, reject) => {
         await client.get(`/financial/reports`, data)
             .then((res: any) => {

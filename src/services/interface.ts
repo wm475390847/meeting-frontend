@@ -99,7 +99,7 @@ export interface ISearchTaskListReq {
   taskName?: string
 }
 
-export interface ISearchWriterListReq {
+export interface ISearchReportListReq {
   pageNo: number
   pageSize: number
 }

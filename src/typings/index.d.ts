@@ -271,7 +271,7 @@ interface Window {
   wx: any;
 }
 
-interface WriterData {
+interface WriterReport {
   companyCode: string
   companyName?: string
   stockCode?: string
