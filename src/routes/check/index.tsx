@@ -28,7 +28,7 @@ const WriterPage: React.FC = () => {
                 title: '公司编码',
                 dataIndex: 'companyCode',
                 key: 'companyCode',
-                width: '10%',
+                width: '6%',
             },
             {
                 title: '公司名称',
@@ -40,19 +40,19 @@ const WriterPage: React.FC = () => {
                 title: '股票代码',
                 dataIndex: 'stockCode',
                 key: 'stockCode',
-                width: '10%',
+                width: '6%',
             },
             {
                 title: '年份',
                 dataIndex: 'year',
                 key: 'year',
-                width: '10%',
+                width: '6%',
             },
             {
                 title: '报告类型',
                 dataIndex: 'type',
                 key: 'type',
-                width: '10%',
+                width: '6%',
             },
             {
                 title: '执行时间',
@@ -65,7 +65,7 @@ const WriterPage: React.FC = () => {
                 title: '操作',
                 dataIndex: 'action',
                 key: 'action',
-                width: '15%',
+                width: '20%',
                 render: (_, record) => {
                     return (
                         <div className={styles.buttonGroup}>
