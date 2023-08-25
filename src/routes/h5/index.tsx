@@ -4,8 +4,8 @@ import {Button, DatePicker, Input, message, Popconfirm, Space, Table} from 'antd
 import moment from "moment"
 import ToolTipModule from "@/components/ToolTip"
 import {batchUpdate, deleteH5, getH5List} from "@/services"
-import H5Module from "@/components/H5"
 import styles from './index.module.less'
+import PopupModule from "@/components/H5";
 
 console.log("大丈夫生于天地之间，岂能郁郁久居人下！快逃");
 
@@ -61,7 +61,7 @@ const H5Page: React.FC = () => {
                 title: '会议时间',
                 dataIndex: 'meetingTime',
                 key: 'meetingTime',
-                width: '10%',
+                width: '15%',
                 sorter: (a, b) => moment(a.meetingStartTime).unix() - moment(b.meetingStartTime).unix(),
                 render: (_, record) =>
                     moment(record.meetingStartTime).format('YYYY-MM-DD') === moment(record.meetingEndTime).format('YYYY-MM-DD')
@@ -162,6 +162,20 @@ const H5Page: React.FC = () => {
         setLoading(true)
     }, [searchH5])
 
+    // const popupData = {
+    //     title: '创建',
+    //     content: [
+    //         {
+    //             name: 'h5Name',
+    //             label: 'H5名称',
+    //             module: {type: Input, props: {placeholder: '请输入H5名称'}},
+    //             rule: [{required: true, message: 'H5名称不能为空'}]
+    //         },
+    //         {name: 'h5Url', label: 'H5Url', rule: [{required: true, message: 'H5Url不能为空'}]},
+    //         {name: 'time', label: '时间', module: {type: DatePicker.RangePicker}}
+    //     ]
+    // }
+
     return (
         <>
             <div className={styles.action}>
@@ -173,6 +187,7 @@ const H5Page: React.FC = () => {
                 </div>
                 <div className={styles.buttonGroup}>
                     <Button type='primary' onClick={() => setType(1)}>新增H5</Button>
+                    {/*<Button type='primary' onClick={() => setOpen(true)}>测试通用</Button>*/}
                     <Popconfirm title="确定批量更新？" placement="top" okText="是" cancelText="否"
                                 onConfirm={() => handleBatchUpdate()}>
                         <Button>更新H5</Button>
@@ -190,7 +205,14 @@ const H5Page: React.FC = () => {
                 className={styles.table}
             />
             {/*H5组件 */}
-            <H5Module type={type} h5Info={h5} setLoading={setLoading} onCancel={() => setType(0)}/>
+            <PopupModule type={type} h5Info={h5} setLoading={setLoading} onCancel={() => setType(0)}/>
+            {/*<PopupModuleA open={open}*/}
+            {/*              popupData={popupData as unknown as PopupData}*/}
+            {/*              onCancel={() => {*/}
+            {/*                  setOpen(false)*/}
+            {/*              }}*/}
+            {/*              setLoading={setLoading}*/}
+            {/*/>*/}
         </>
     )
 }

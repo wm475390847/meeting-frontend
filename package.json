@@ -1,7 +1,7 @@
 {
   "name": "meeting-frontend",
   "private": true,
-  "version": "0.0.7-test",
+  "version": "0.0.8-test",
   "scripts": {
     "dev": "vite --mode developmen",
     "start": "npm run dev",

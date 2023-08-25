@@ -7,8 +7,8 @@ import {
     ISearchH5Req,
     ISearchPerfReq,
     ISearchProductListReq,
-    ISearchTaskListReq,
     ISearchReportListReq,
+    ISearchTaskListReq,
     IUpdateFaceReq,
     IUpdateH5Req
 } from "./interface"
@@ -592,6 +592,24 @@ export const searchReport: (id: number) => Promise<RequestOpt> = (id) => {
 export const deleteReport: (id: number) => Promise<RequestOpt> = (id) => {
     return new Promise(async (resolve, reject) => {
         await client.delete(`/financial/report/${id}`)
+            .then((res: any) => {
+                if (res.success) {
+                    resolve(res)
+                } else {
+                    reject(res)
+                }
+            })
+    })
+}
+
+
+/**
+ * 修改报告
+ * @returns
+ */
+export const updateReport: (data: WriterReport) => Promise<RequestOpt> = (data) => {
+    return new Promise(async (resolve, reject) => {
+        await client.put(`/financial/report`, data)
             .then((res: any) => {
                 if (res.success) {
                     resolve(res)

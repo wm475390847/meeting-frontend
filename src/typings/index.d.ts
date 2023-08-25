@@ -272,6 +272,7 @@ interface Window {
 }
 
 interface WriterReport {
+  id: number
   companyCode: string
   companyName?: string
   stockCode?: string

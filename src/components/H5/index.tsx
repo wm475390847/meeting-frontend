@@ -1,61 +1,55 @@
 import {createH5, updateH5} from "@/services";
-import {Button, DatePicker, Form, Input, message, Modal, Space} from "antd";
-import moment from "moment";
+import {Button, DatePicker, Form, Input, message, Modal} from "antd";
 import React, {useEffect, useState} from "react";
-import styles from './index.module.less'
+import styles from './index.module.less';
+import dayjs from 'dayjs';
 
-type H5ModuleProps = {
+type PopupModuleProps = {
     type: number
     h5Info?: H5
     onCancel?: () => void
     setLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const H5Module: React.FC<H5ModuleProps> = (props) => {
+const PopupModule: React.FC<PopupModuleProps> = (props) => {
     const [form] = Form.useForm()
-    const { type, h5Info, onCancel, setLoading } = (props)
+    const {type, h5Info, onCancel, setLoading} = (props)
     const [open, setOpen] = useState<boolean>(false)
     const [buttonLoading, setButtonLoading] = useState(false)
-    const RangePicker: any = DatePicker.RangePicker;
     const [startTime, setStartTime] = useState<number>()
     const [endTime, setEndTime] = useState<number>()
+    const RangePicker: any = DatePicker.RangePicker;
 
     const handleCancel = () => {
         setOpen(false)
         onCancel && onCancel()
     }
 
-    const handleMeetingTime = (value: string) => {
-        console.log(value);
+    const onChangeMeetingTime = (value: string) => {
         const [start, end] = value || [];
-        setStartTime(start ? moment(start).valueOf() : undefined);
-        setEndTime(end ? moment(end).valueOf() : undefined);
+        setStartTime(start ? dayjs(start).valueOf() : undefined);
+        setEndTime(end ? dayjs(end).valueOf() : undefined);
     }
 
     const onSubmit = () => {
         form.validateFields().then(values => {
+            setButtonLoading(true)
             if (type === 1) {
-                setButtonLoading(true)
-                createH5({ ...values, meetingStartTime: startTime, meetingEndTime: endTime })
+                createH5({...values, meetingStartTime: startTime, meetingEndTime: endTime})
                     .then(res => {
-                        if (res.success) {
                             message.success(res.message).then(r => r)
                             setLoading(true)
                             handleCancel()
-                        }
                     })
                     .catch(err => message.error(err.message))
                     .finally(() => setButtonLoading(false))
             }
             if (type === 2) {
-                setButtonLoading(true)
                 updateH5({ ...values, meetingStartTime: startTime, meetingEndTime: endTime, id: h5Info!.id })
                     .then(res => {
-                        if (res.success) {
-                            message.success(res.message)
-                            setLoading(true)
-                            handleCancel()
-                        }
+                        message.success(res.message).then(r => r)
+                        setLoading(true)
+                        handleCancel()
                     })
                     .catch(err => message.error(err.message))
                     .finally(() => setButtonLoading(false))
@@ -70,15 +64,17 @@ const H5Module: React.FC<H5ModuleProps> = (props) => {
     useEffect(() => {
         if (open && type === 2 && h5Info) {
             setTimeout(() => {
-                form.setFieldsValue({
-                    meetingName: h5Info.meetingName,
-                    meetingTime: [
-                        moment(h5Info.meetingStartTime).toISOString,
-                        moment(h5Info.meetingEndTime).toISOString
-                    ],
-                    h5Name: h5Info.h5Name,
-                    h5Url: h5Info.h5Url,
-                })
+                const initialValue =
+                    {
+                        meetingName: h5Info.meetingName,
+                        meetingTime: [
+                            dayjs(h5Info.meetingStartTime, 'YYYY-MM-DD'),
+                            dayjs(h5Info.meetingEndTime, 'YYYY-MM-DD')
+                        ],
+                        h5Name: h5Info.h5Name,
+                        h5Url: h5Info.h5Url,
+                    }
+                form.setFieldsValue(initialValue)
             }, 500);
         }
     }, [open])
@@ -93,35 +89,34 @@ const H5Module: React.FC<H5ModuleProps> = (props) => {
             width={500}
         >
             <Form
-                labelCol={{ span: 5 }}
-                wrapperCol={{ span: 16, offset: 1 }}
+                labelCol={{span: 5}}
+                wrapperCol={{span: 16, offset: 1}}
                 form={form}
                 preserve={false}
                 className={styles.form}
             >
-                <Form.Item name='meetingName' label="会议名称" rules={[{ required: true, message: '会议名称不能为空' }]} >
-                    <Input placeholder='请输入会议名称' />
+                <Form.Item name='meetingName' label="会议名称" rules={[{required: true, message: '会议名称不能为空'}]}>
+                    <Input placeholder='请输入会议名称'/>
                 </Form.Item>
 
-                <Form.Item name='meetingTime' label="会议时间" >
-                    <Space
-                        direction="vertical"
-                        size={12}
-                    >
-                        <RangePicker onChange={handleMeetingTime}/>
-                    </Space>
+                <Form.Item name='meetingTime' label="会议时间">
+                    <RangePicker
+                        format='YYYY-MM-DD'
+                        style={{width: '300px'}}
+                        onChange={onChangeMeetingTime}
+                    />
                 </Form.Item>
 
-                <Form.Item name='h5Name' label="H5名称" rules={[{ required: true, message: 'H5名称不能为空' }]}>
-                    <Input placeholder='请输入H5名称' />
+                <Form.Item name='h5Name' label="H5名称" rules={[{required: true, message: 'H5名称不能为空'}]}>
+                    <Input placeholder='请输入H5名称'/>
                 </Form.Item>
 
-                <Form.Item name='h5Url' label="H5Url" rules={[{ required: true, message: 'H5Url不能为空' }]}>
-                    <Input placeholder='请输入H5Url' />
+                <Form.Item name='h5Url' label="H5Url" rules={[{required: true, message: 'H5Url不能为空'}]}>
+                    <Input placeholder='请输入H5Url'/>
                 </Form.Item>
             </Form>
         </Modal >
     );
 }
 
-export default H5Module
+export default PopupModule

@@ -5,7 +5,7 @@ import {deleteReport, getReportList, searchReport} from "@/services";
 import JsonViewerModule from "@/components/JsonViewer";
 import {ColumnsType} from "antd/lib/table";
 import moment from "moment/moment";
-import CheckModule from "@/components/Check";
+import PopupModule from "@/components/Check";
 
 const WriterPage: React.FC = () => {
     const [loading, setLoading] = useState(true)
@@ -15,6 +15,7 @@ const WriterPage: React.FC = () => {
     const [pageSize, setPageSize] = useState(10)
     const [reportData, setReportData] = useState<any>()
     const [writerList, setWriterList] = useState<WriterReport[]>()
+    const [writerReport, setWriterReport] = useState<WriterReport>()
     const [type, setType] = useState(0)
 
     const columns = useMemo<ColumnsType<any>>(() => {
@@ -71,6 +72,11 @@ const WriterPage: React.FC = () => {
                         <div className={styles.buttonGroup}>
                             <Button type="primary" onClick={() => handleReport(record.id)}
                                     loading={buttonLoading}>查询</Button>
+                            <Button onClick={() => {
+                                setType(2);
+                                setWriterReport(record)
+                            }}
+                                    loading={buttonLoading}>编辑</Button>
                             <Button onClick={() => setReportData(record.reportData)}
                                     loading={buttonLoading}>查看数据</Button>
                             <Popconfirm title='确定删除？' placement="top" okText="是" cancelText="否"
@@ -143,7 +149,14 @@ const WriterPage: React.FC = () => {
                 className={styles.table}
             />
             <JsonViewerModule data={reportData} onCancel={() => setReportData(undefined)}/>
-            <CheckModule type={type} setLoading={setLoading} onCancel={() => setType(0)}/>
+            <PopupModule type={type}
+                         writerReport={writerReport}
+                         setLoading={setLoading}
+                         onCancel={() => {
+                             setType(0)
+                             setWriterReport(undefined)
+                         }}
+            />
         </div>
     )
 }
