@@ -59,14 +59,14 @@ const WriterPage: React.FC = () => {
                 title: '执行时间',
                 dataIndex: 'executeTime',
                 key: 'executeTime',
-                width: '15%',
+                width: '12%',
                 render: (_, record) => record.executeTime && moment(record.executeTime).format('YYYY-MM-DD HH:mm:ss')
             },
             {
                 title: '操作',
                 dataIndex: 'action',
                 key: 'action',
-                width: '20%',
+                width: '24%',
                 render: (_, record) => {
                     return (
                         <div className={styles.buttonGroup}>
