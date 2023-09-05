@@ -1,3 +1,22 @@
+import {ReactNode} from "react";
+
+export interface Module {
+  type: ReactNode,
+  props: object
+}
+
+export interface Content {
+  name: string
+  label: string
+  module: Module
+  rule: object[]
+}
+
+export interface PopupData {
+  title: string
+  content: Content[]
+}
+
 export interface ISearchCaseListReq {
   pageSize: number
   pageNo: number
@@ -99,26 +118,9 @@ export interface ISearchTaskListReq {
   taskName?: string
 }
 
-export interface ISearchWriterListReq {
+export interface ISearchReportListReq {
   pageNo: number
   pageSize: number
-}
-
-/**
- * 创建任务请求
- */
-export interface ICreateTaskReq {
-  caseIds: number[]
-  taskName: string
-}
-
-/**
- * 修改任务请求
- */
-export interface IUpdateTaskReq {
-  caseIds?: number[]
-  taskName?: string
-  id: number
 }
 
 /**

@@ -1,11 +1,11 @@
 import React, {useEffect, useMemo, useState} from "react"
-import {Button, message, Table} from 'antd'
+import {Button, message, Popconfirm, Table} from 'antd'
 import styles from './index.module.less'
-import {getWriterList, searchData} from "@/services";
+import {deleteReport, getReportList, searchReport} from "@/services";
 import JsonViewerModule from "@/components/JsonViewer";
 import {ColumnsType} from "antd/lib/table";
 import moment from "moment/moment";
-import CheckModule from "@/components/Check";
+import PopupModule from "@/components/Check";
 
 const WriterPage: React.FC = () => {
     const [loading, setLoading] = useState(true)
@@ -14,7 +14,8 @@ const WriterPage: React.FC = () => {
     const [pageNo, setPageNo] = useState(1)
     const [pageSize, setPageSize] = useState(10)
     const [reportData, setReportData] = useState<any>()
-    const [writerList, setWriterList] = useState<WriterData[]>()
+    const [writerList, setWriterList] = useState<WriterReport[]>()
+    const [writerReport, setWriterReport] = useState<WriterReport>()
     const [type, setType] = useState(0)
 
     const columns = useMemo<ColumnsType<any>>(() => {
@@ -28,7 +29,7 @@ const WriterPage: React.FC = () => {
                 title: '公司编码',
                 dataIndex: 'companyCode',
                 key: 'companyCode',
-                width: '10%',
+                width: '6%',
             },
             {
                 title: '公司名称',
@@ -40,39 +41,48 @@ const WriterPage: React.FC = () => {
                 title: '股票代码',
                 dataIndex: 'stockCode',
                 key: 'stockCode',
-                width: '10%',
+                width: '6%',
             },
             {
                 title: '年份',
                 dataIndex: 'year',
                 key: 'year',
-                width: '10%',
+                width: '6%',
             },
             {
                 title: '报告类型',
                 dataIndex: 'type',
                 key: 'type',
-                width: '10%',
+                width: '6%',
             },
             {
                 title: '执行时间',
                 dataIndex: 'executeTime',
                 key: 'executeTime',
-                width: '15%',
+                width: '12%',
                 render: (_, record) => record.executeTime && moment(record.executeTime).format('YYYY-MM-DD HH:mm:ss')
             },
             {
                 title: '操作',
                 dataIndex: 'action',
                 key: 'action',
-                width: '15%',
+                width: '24%',
                 render: (_, record) => {
                     return (
                         <div className={styles.buttonGroup}>
-                            <Button type="primary" onClick={() => handleWriterData(record.id)}
+                            <Button type="primary" onClick={() => handleReport(record.id)}
                                     loading={buttonLoading}>查询</Button>
+                            <Button onClick={() => {
+                                setType(2);
+                                setWriterReport(record)
+                            }}
+                                    loading={buttonLoading}>编辑</Button>
                             <Button onClick={() => setReportData(record.reportData)}
                                     loading={buttonLoading}>查看数据</Button>
+                            <Popconfirm title='确定删除？' placement="top" okText="是" cancelText="否"
+                                        onConfirm={() => handleDeleteReport(record.id)}>
+                                <Button loading={buttonLoading}>删除</Button>
+                            </Popconfirm>
                         </div>
                     )
                 }
@@ -87,19 +97,28 @@ const WriterPage: React.FC = () => {
         setLoading(true)
     }
 
-    const handleWriterData = (id: number) => {
-        setButtonLoading(true)
-        searchData(id)
+    const handleDeleteReport = (id: number) => {
+        deleteReport(id)
             .then(res => {
                 message.success(res.message).then(r => r)
                 setLoading(true)
             })
-            .catch(err => message.error(err.message).then(r => r))
+            .catch(err => message.error(err.message))
+    }
+
+    const handleReport = (id: number) => {
+        setButtonLoading(true)
+        searchReport(id)
+            .then(res => {
+                message.success(res.message).then(r => r)
+                setLoading(true)
+            })
+            .catch(err => message.error(err.message))
             .finally(() => setButtonLoading(false))
     }
 
-    const handleWriterList = () => {
-        getWriterList({
+    const handleReportList = () => {
+        getReportList({
             pageNo: pageNo,
             pageSize: pageSize,
         }).then(data => {
@@ -110,7 +129,7 @@ const WriterPage: React.FC = () => {
     }
 
     useEffect(() => {
-        loading && handleWriterList()
+        loading && handleReportList()
     }, [pageNo, loading])
 
     return (
@@ -130,7 +149,14 @@ const WriterPage: React.FC = () => {
                 className={styles.table}
             />
             <JsonViewerModule data={reportData} onCancel={() => setReportData(undefined)}/>
-            <CheckModule type={type} setLoading={setLoading} onCancel={() => setType(0)}/>
+            <PopupModule type={type}
+                         writerReport={writerReport}
+                         setLoading={setLoading}
+                         onCancel={() => {
+                             setType(0)
+                             setWriterReport(undefined)
+                         }}
+            />
         </div>
     )
 }
